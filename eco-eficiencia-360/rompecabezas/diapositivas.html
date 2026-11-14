@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instructivo Rompecabezas Ecoeficiencia 360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Plan: un solo mundo visual para proyección — turquesa oscuro del logo de la Imprenta, papel Crush Citrus, acento cítrico.
+   Layout: escenario 16:9 de 1600×900 que escala a la pantalla; una escena por paso. Piezas = troquel real (10 polígonos). */
+:root{
+  --bg:#0B3337;
+  --surface:#124348;
+  --line:#2D6368;
+  --text:#F1EEDF;
+  --muted:#B2CFCC;
+  --paper:#ECE5C9;
+  --ink:#1D2B22;
+  --citrus:#F4B23E;
+  --leaf:#7CC3BD;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);overflow:hidden}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--citrus);outline-offset:3px;border-radius:6px}
+
+.viewport{position:fixed;inset:0;overflow:hidden;background:var(--bg)}
+.stage{width:1600px;height:900px;position:absolute;left:50%;top:50%;transform-origin:center center;transform:translate(-50%,-50%)}
+
+/* ---------- chrome ---------- */
+.topbar{position:absolute;left:80px;right:80px;top:40px;display:flex;align-items:center;justify-content:space-between;font-size:20px;color:var(--muted)}
+.brand{display:flex;align-items:center;gap:14px}
+.brand b{color:var(--text);font-family:var(--display);font-weight:700;font-size:22px}
+.brand .dot{width:12px;height:12px;border-radius:50%;background:var(--citrus)}
+.stepcount{font-variant-numeric:tabular-nums}
+.bottombar{position:absolute;left:80px;right:80px;bottom:36px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.dots{display:flex;gap:8px}
+.dots button{width:38px;height:8px;border-radius:4px;border:0;background:var(--line);padding:0}
+.dots button.on{background:var(--citrus)}
+.dots button.done{background:var(--leaf)}
+.nav{display:flex;gap:12px}
+.btn{border:2px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:12px 26px;font-size:20px;font-weight:700;display:inline-flex;align-items:center;gap:10px;transition:border-color .2s}
+.btn:hover{border-color:var(--citrus)}
+.btn.primary{background:var(--citrus);border-color:var(--citrus);color:var(--ink)}
+.btn[disabled]{opacity:.35;cursor:default}
+.btn.ghost{background:transparent}
+.hint{font-size:16px;color:var(--muted)}
+
+/* ---------- escenas ---------- */
+.scene{position:absolute;left:80px;right:80px;top:110px;bottom:110px;display:none}
+.scene.on{display:flex;animation:fade .45s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.scene.on{animation:none}*{transition:none!important;animation:none!important}}
+.eyebrow{font-size:20px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--citrus);margin:0 0 14px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.03}
+h1{font-size:84px;font-weight:800}
+h2{font-size:58px;font-weight:800}
+.lead{font-size:28px;line-height:1.4;color:var(--muted);max-width:31ch;margin:22px 0 0}
+.col{display:flex;flex-direction:column;justify-content:center}
+.steps{list-style:none;margin:30px 0 0;padding:0;display:flex;flex-direction:column;gap:18px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:52px 1fr;gap:18px;align-items:start;font-size:26px;line-height:1.35}
+.steps li::before{counter-increment:s;content:counter(s);width:52px;height:52px;border-radius:50%;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;font-family:var(--display);font-weight:800;color:var(--citrus);font-size:24px}
+.steps li b{color:var(--text)}
+.steps li span{color:var(--muted)}
+.controls{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+
+/* ---------- piezas (troquel real) ---------- */
+.puzzle{position:relative;flex:none}
+.pw{position:absolute;left:0;top:0;width:560px;height:560px;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45));transition:transform .75s cubic-bezier(.2,.8,.2,1),filter .3s}
+.pc{position:absolute;inset:0;border:0;padding:0;pointer-events:auto;background:url(img/rompecabezas.jpg) 0 0/100% 100% no-repeat,var(--paper);background-blend-mode:multiply}
+.pw.placed{filter:drop-shadow(0 0 .6px rgba(29,43,34,.9))}
+.pw.placed .pc{cursor:default}
+.pw:not(.placed):hover{filter:drop-shadow(0 0 0 var(--citrus)) drop-shadow(0 0 3px var(--citrus)) drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.pw.just{animation:glow 1.1s ease}
+@keyframes glow{0%{filter:drop-shadow(0 0 14px var(--citrus))}100%{filter:drop-shadow(0 0 .6px rgba(29,43,34,.9))}}
+.static .pw{transition:none}
+
+/* portada */
+.logo-badge{width:118px;height:auto;background:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 14px 34px rgba(0,0,0,.35);margin-bottom:30px;align-self:flex-start}
+#s0{align-items:center;gap:70px}
+#s0 .col{flex:1}
+
+/* kit */
+#s1{gap:80px;align-items:center}
+.kit-figure{flex:none;width:600px;position:relative;height:600px}
+.measure{position:absolute;left:40px;top:40px;width:400px;height:400px}
+.measure .img{position:absolute;inset:0;border-radius:4px;background:url(img/rompecabezas.jpg) 0 0/100% 100% no-repeat,var(--paper);background-blend-mode:multiply;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.measure .cuts{position:absolute;inset:0;width:100%;height:100%}
+.measure .cuts polygon{fill:none;stroke:#D2453A;stroke-width:.45}
+.dim{position:absolute;color:var(--citrus);font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+.dim.h{left:0;right:0;top:-30px;border-top:2px solid var(--citrus);text-align:center}
+.dim.h span{background:var(--bg);padding:0 10px;position:relative;top:-15px}
+.dim.v{top:0;bottom:0;left:-30px;border-left:2px solid var(--citrus)}
+.dim.v span{position:absolute;top:50%;left:-15px;transform:translate(-50%,-50%) rotate(-90deg);background:var(--bg);padding:0 10px;white-space:nowrap}
+.card-mini{position:absolute;right:0;bottom:20px;width:300px;transform:rotate(4deg);border-radius:6px;box-shadow:0 20px 40px rgba(0,0,0,.45);background:#fff}
+.card-mini img{display:block;width:100%;border-radius:6px}
+.card-mini .fold{position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed rgba(0,0,0,.25)}
+.legend{position:absolute;left:40px;bottom:30px;font-size:18px;color:var(--muted);display:flex;gap:18px;align-items:center}
+.legend i{display:inline-block;width:22px;border-top:3px solid #D2453A;vertical-align:middle;margin-right:6px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 24px}
+.fact .n{font-family:var(--display);font-weight:800;font-size:50px;color:var(--citrus);line-height:1;font-variant-numeric:tabular-nums}
+.fact p{margin:8px 0 0;font-size:20px;line-height:1.35;color:var(--muted)}
+.fact p b{color:var(--text)}
+
+/* prepara */
+#s2{gap:40px;align-items:center}
+
+/* armar */
+#s3{gap:44px;align-items:center}
+.readout{width:420px;flex:none;display:flex;flex-direction:column;justify-content:center}
+.readout .card{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--citrus);border-radius:16px;padding:24px 28px;min-height:240px}
+.readout .card .k{font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:var(--citrus);font-weight:700}
+.readout .card .t{font-family:var(--display);font-size:40px;font-weight:800;line-height:1.08;margin-top:10px;text-wrap:balance}
+.readout .card .d{font-size:22px;color:var(--muted);margin-top:10px;line-height:1.35}
+.counter{font-size:20px;color:var(--muted);margin-top:16px;font-variant-numeric:tabular-nums}
+.board{position:absolute;left:0;top:0;width:560px;height:560px;border-radius:4px;border:2px dashed var(--line)}
+.board-note{position:absolute;left:0;top:572px;font-size:17px;color:var(--muted)}
+.tray-label{position:absolute;left:620px;top:0;font-size:17px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+/* tarjeta */
+#s4{gap:60px;align-items:center}
+.tarjeta{flex:none;width:860px;position:relative}
+.tarjeta img{display:block;width:100%;border-radius:8px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.tarjeta .tag{position:absolute;top:-16px;left:24px;background:var(--citrus);color:var(--ink);font-weight:700;font-size:17px;padding:6px 14px;border-radius:999px}
+
+/* conectar palabras */
+#s5{flex-direction:column;justify-content:center}
+.match{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.mcard{perspective:1200px;height:150px;border:0;padding:0;background:none;text-align:left}
+.mcard .in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.mcard.open .in{transform:rotateX(180deg)}
+.mcard .f,.mcard .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;padding:20px 24px;display:flex;flex-direction:column;justify-content:center}
+.mcard .f{background:var(--paper);color:var(--ink)}
+.mcard .f .w{font-family:var(--display);font-weight:800;font-size:36px;letter-spacing:.02em;text-transform:uppercase}
+.mcard .f .q{font-size:17px;color:#5B6A4C;margin-top:6px}
+.mcard .b{background:var(--surface);border:2px solid var(--citrus);transform:rotateX(180deg)}
+.mcard .b .w{font-size:16px;letter-spacing:.12em;text-transform:uppercase;color:var(--citrus);font-weight:700}
+.mcard .b .s{font-size:25px;line-height:1.25;margin-top:6px}
+.mcard .b .s b{color:var(--citrus)}
+.row-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px}
+
+/* actitudes */
+#s6{flex-direction:column;justify-content:center}
+.att-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+.att{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px 28px}
+.att h3{font-size:29px;font-weight:800;color:var(--text)}
+.att h3 span{color:var(--citrus);font-variant-numeric:tabular-nums;margin-right:8px}
+.att p{margin:10px 0 0;font-size:21px;line-height:1.35;color:var(--muted)}
+
+/* reto */
+#s7{gap:80px;align-items:center}
+.timer{flex:none;width:470px;display:flex;flex-direction:column;align-items:center;gap:22px}
+.ring{position:relative;width:410px;height:410px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:22}
+.ring .trk{stroke:var(--surface)}
+.ring .val{stroke:var(--citrus);stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+.ring .time{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:104px;font-variant-numeric:tabular-nums}
+.ring.done .val{stroke:var(--leaf)}
+.ring.done .time{color:var(--leaf)}
+.chips{display:flex;gap:10px}
+.chip{border:2px solid var(--line);background:transparent;color:var(--text);border-radius:999px;padding:8px 18px;font-size:19px;font-weight:700}
+.chip.on{border-color:var(--citrus);color:var(--citrus)}
+
+/* llévalo */
+#s8{gap:60px;align-items:stretch}
+#s8 .col{flex:1}
+.cards3{flex:1.15;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.tipcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px 28px;display:grid;grid-template-columns:60px 1fr;gap:20px;align-items:center}
+.tipcard .ic{width:60px;height:60px;border-radius:16px;display:grid;place-items:center}
+.tipcard .ic svg{width:34px;height:34px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tipcard h3{font-size:27px;font-weight:800}
+.tipcard p{margin:6px 0 0;font-size:20px;line-height:1.35;color:var(--muted)}
+.bin{display:inline-block;width:14px;height:14px;border-radius:3px;background:#fff;border:1px solid #999;vertical-align:-1px;margin-right:4px}
+
+/* cierre */
+#s9{align-items:center;gap:70px}
+#s9 h1{font-size:96px}
+#s9 h1 em{font-style:normal;color:var(--citrus)}
+.signature{margin-top:34px;font-size:22px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="viewport">
+<div class="stage" id="stage">
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span><b>Ecoeficiencia 360</b><span>· Imprenta Nacional de Colombia</span></div>
+    <div class="stepcount" id="stepcount">1 / 10</div>
+  </div>
+
+  <!-- 0 · Portada -->
+  <section class="scene on" id="s0" aria-label="Portada">
+    <div class="col">
+      <img class="logo-badge" src="img/logo-imprenta.png" alt="Imprenta Nacional de Colombia">
+      <p class="eyebrow">Kit de empoderamiento · Instructivo</p>
+      <h1>Arma la Política Ambiental en tus manos</h1>
+      <p class="lead">10 piezas, 9 palabras y una tarjeta guía. Cada pieza es un compromiso de la Imprenta.</p>
+    </div>
+    <div class="puzzle static" id="coverPuzzle" style="width:560px;height:560px" aria-hidden="true"></div>
+  </section>
+
+  <!-- 1 · El kit -->
+  <section class="scene" id="s1" aria-label="Qué hay en tu kit">
+    <div class="kit-figure" aria-hidden="true">
+      <div class="measure">
+        <div class="dim h"><span>12 cm</span></div>
+        <div class="dim v"><span>12 cm</span></div>
+        <div class="img"></div>
+        <svg class="cuts" viewBox="0 0 100 100" preserveAspectRatio="none" id="cutsSvg"></svg>
+      </div>
+      <div class="card-mini"><img src="img/tarjeta.jpg" alt=""><span class="fold"></span></div>
+      <div class="legend"><span><i></i>Línea de corte</span></div>
+    </div>
+    <div class="col" style="flex:1">
+      <p class="eyebrow">Qué tienes en tus manos</p>
+      <h2>Tu kit trae tres cosas</h2>
+      <p class="lead" style="max-width:36ch"><b style="color:var(--text)">Un sobre</b> con el sello de la Imprenta, <b style="color:var(--text)">un rompecabezas de 12 × 12 cm</b> en 10 piezas y <b style="color:var(--text)">una tarjeta que se dobla en dos</b> con la Política Ambiental y las 6 actitudes. Está impreso en papel Crush, que reemplaza parte de la pulpa de árbol por residuos de cítricos y otros alimentos.</p>
+      <div class="facts">
+        <div class="fact"><div class="n">15%</div><p><b>Residuos agroindustriales</b> en lugar de pulpa virgen de árbol</p></div>
+        <div class="fact"><div class="n">40%</div><p><b>Fibra reciclada</b> de papel posconsumo</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · Prepara -->
+  <section class="scene" id="s2" aria-label="Prepárate">
+    <div class="col" style="flex:1">
+      <p class="eyebrow">Paso 1 · Prepárate</p>
+      <h2>Antes de empezar</h2>
+      <ol class="steps">
+        <li><div><b>Abre el sobre</b> <span>sobre una superficie plana, con espacio de unos 20 × 20 cm.</span></div></li>
+        <li><div><b>Aparta la tarjeta doblada</b> <span>y guarda el sobre: ahí vuelve tu kit cuando termines.</span></div></li>
+        <li><div><b>Pon las 10 piezas con el dibujo hacia arriba</b> <span>y sepáralas un poco entre sí.</span></div></li>
+        <li><div><b>Ubica primero las 4 esquinas.</b> <span>Son las piezas con dos lados rectos.</span></div></li>
+      </ol>
+    </div>
+    <div class="puzzle static" id="scatterPuzzle" style="width:560px;height:560px" aria-hidden="true"></div>
+  </section>
+
+  <!-- 3 · Arma -->
+  <section class="scene" id="s3" aria-label="Arma el rompecabezas">
+    <div class="readout">
+      <p class="eyebrow">Paso 2 · Arma</p>
+      <h2 style="font-size:52px">Esquinas, bordes y centro</h2>
+      <div class="card" aria-live="polite">
+        <div class="k" id="readK">Empieza aquí</div>
+        <div class="t" id="readT">Toca una pieza o usa “Colocar pieza”</div>
+        <div class="d" id="readD">Cada pieza trae una palabra. Al colocarla verás el compromiso que representa.</div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" id="placeNext">Colocar pieza</button>
+        <button class="btn ghost" id="placeAll">Armar todo</button>
+        <button class="btn ghost" id="resetPuzzle">Reiniciar</button>
+      </div>
+      <div class="counter" id="counter">0 de 10 piezas</div>
+    </div>
+    <div class="puzzle" id="playPuzzle" style="width:1000px;height:600px">
+      <div class="board" aria-hidden="true"></div>
+      <div class="board-note">12 × 12 cm · forma real del corte</div>
+      <div class="tray-label">Piezas sueltas</div>
+    </div>
+  </section>
+
+  <!-- 4 · Tarjeta -->
+  <section class="scene" id="s4" aria-label="Abre la tarjeta">
+    <div class="col" style="flex:1">
+      <p class="eyebrow">Paso 3 · La tarjeta guía</p>
+      <h2>Desdobla y lee</h2>
+      <ol class="steps">
+        <li><div><b>Abre la tarjeta</b> <span>por el doblez.</span></div></li>
+        <li><div><b>Lee los 9 compromisos</b> <span>de la Imprenta Nacional.</span></div></li>
+        <li><div><b>Lee las 6 actitudes</b> <span>que cada persona puede practicar.</span></div></li>
+      </ol>
+    </div>
+    <div class="tarjeta"><span class="tag">Tarjeta guía</span><img src="img/tarjeta.jpg" alt="Tarjeta Eco-Eficiencia 360: los 9 compromisos de la Imprenta Nacional de Colombia y las 6 actitudes ambientales"></div>
+  </section>
+
+  <!-- 5 · Conecta -->
+  <section class="scene" id="s5" aria-label="Conecta las palabras">
+    <div class="row-head">
+      <div>
+        <p class="eyebrow">Paso 4 · Conecta</p>
+        <h2>9 palabras, 9 compromisos</h2>
+      </div>
+      <div class="controls" style="margin:0"><button class="btn primary" id="revealAll">Mostrar todas</button><button class="btn ghost" id="hideAll">Ocultar</button></div>
+    </div>
+    <div class="match" id="matchGrid"></div>
+  </section>
+
+  <!-- 6 · Actitudes -->
+  <section class="scene" id="s6" aria-label="Las 6 actitudes">
+    <p class="eyebrow">En la tarjeta · 6 actitudes ambientales</p>
+    <h2>Lo que cada uno aporta</h2>
+    <div class="att-grid" id="attGrid"></div>
+  </section>
+
+  <!-- 7 · Reto -->
+  <section class="scene" id="s7" aria-label="Reto en sala">
+    <div class="col" style="flex:1">
+      <p class="eyebrow">Reto en sala</p>
+      <h2>Ármalo y elige tu par</h2>
+      <ol class="steps">
+        <li><div><b>Arma el rompecabezas</b> <span>antes de que termine el tiempo.</span></div></li>
+        <li><div><b>Señala 1 palabra</b> <span>que puedas mover desde tu puesto de trabajo.</span></div></li>
+        <li><div><b>Elige 1 actitud de la tarjeta</b> <span>que te ayude a cumplirla.</span></div></li>
+        <li><div><b>Cuéntaselo a quien tengas al lado</b> <span>en una frase: “Esta semana voy a…”</span></div></li>
+      </ol>
+    </div>
+    <div class="timer">
+      <div class="ring" id="ring">
+        <svg viewBox="0 0 440 440" aria-hidden="true"><circle class="trk" cx="220" cy="220" r="200"/><circle class="val" id="ringVal" cx="220" cy="220" r="200"/></svg>
+        <div class="time" id="time" role="timer">3:00</div>
+      </div>
+      <div class="chips" role="group" aria-label="Duración">
+        <button class="chip" data-min="2">2 min</button>
+        <button class="chip on" data-min="3">3 min</button>
+        <button class="chip" data-min="5">5 min</button>
+      </div>
+      <div class="controls" style="margin-top:0">
+        <button class="btn primary" id="tStart">Iniciar</button>
+        <button class="btn ghost" id="tReset">Reiniciar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · Llévalo -->
+  <section class="scene" id="s8" aria-label="Llévalo contigo">
+    <div class="col">
+      <p class="eyebrow">Paso 5 · Es tuyo</p>
+      <h2>Llévalo contigo</h2>
+      <p class="lead">Este kit no se entrega ni se califica. Es un recordatorio diario de lo que la Imprenta se compromete a hacer, y de lo que tú puedes hacer.</p>
+    </div>
+    <div class="cards3">
+      <div class="tipcard"><div class="ic" style="background:rgba(244,178,62,.16)"><svg viewBox="0 0 24 24" stroke="#F4B23E"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg></div><div><h3>Dale color</h3><p>El dibujo está listo para colorear, solo o con tu familia.</p></div></div>
+      <div class="tipcard"><div class="ic" style="background:rgba(124,195,189,.16)"><svg viewBox="0 0 24 24" stroke="#7CC3BD"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div><div><h3>Ponlo a la vista</h3><p>En tu puesto o tu locker, junto a la tarjeta, con tu palabra elegida a la vista.</p></div></div>
+      <div class="tipcard"><div class="ic" style="background:rgba(255,255,255,.08)"><svg viewBox="0 0 24 24" stroke="#F1EEDF"><path d="M5 7h14l-1.2 13H6.2z"/><path d="M3 7h18M9 7V4h6v3"/></svg></div><div><h3>Ciérrale el ciclo</h3><p>No lo plastifiques. Cuando termine su vida útil, va limpio y seco a la caneca <span class="bin"></span>blanca de aprovechables.</p></div></div>
+    </div>
+  </section>
+
+  <!-- 9 · Cierre -->
+  <section class="scene" id="s9" aria-label="Cierre">
+    <div class="col" style="flex:1">
+      <p class="eyebrow">Ecoeficiencia 360</p>
+      <h1>¡Juntos podemos aprender <em>para cuidar!</em></h1>
+      <p class="signature">Política Ambiental 2026 · Imprenta Nacional de Colombia</p>
+    </div>
+    <div class="puzzle static" id="endPuzzle" style="width:520px;height:520px" aria-hidden="true"></div>
+  </section>
+
+  <div class="bottombar">
+    <div class="dots" id="dots" role="tablist" aria-label="Pasos"></div>
+    <div class="hint">Usa ← → o la barra espaciadora</div>
+    <div class="nav">
+      <button class="btn ghost" id="fsBtn" title="Pantalla completa" aria-label="Pantalla completa">⛶</button>
+      <button class="btn" id="prevBtn">← Atrás</button>
+      <button class="btn primary" id="nextBtn">Siguiente →</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+  /* ---------- troquel real: 10 piezas en % del cuadrado de 12 cm ---------- */
+  const SHAPES = [
+    [[0,0],[47.4,0],[43.6,15.8],[39.9,31.6],[0,23.9]],
+    [[0,23.9],[39.9,31.6],[49.1,47.7],[21.1,48.8],[0,49.6]],
+    [[47.4,0],[78.1,0],[61.8,19.6],[43.6,15.8]],
+    [[78.1,0],[100,0],[100,27.6],[73.7,22.1],[61.8,19.6]],
+    [[43.6,15.8],[61.8,19.6],[73.7,22.1],[70.7,40.5],[69.6,47.6],[49.1,47.7],[39.9,31.6]],
+    [[73.7,22.1],[100,27.6],[100,72],[70.7,40.5]],
+    [[70.7,40.5],[100,72],[100,100],[61,100],[69.6,47.6]],
+    [[21.1,48.8],[49.1,47.7],[69.6,47.6],[61,100],[26.3,100],[24,77.2]],
+    [[0,49.6],[21.1,48.8],[24,77.2],[0,82.5]],
+    [[0,82.5],[24,77.2],[26.3,100],[0,100]]
+  ];
+  /* palabra de cada pieza → compromiso de la tarjeta */
+  const INFO = [
+    {w:'Conciencia',        c:'Fortalecer',  s:'la cultura ambiental de todos.'},
+    {w:'Metas',             c:'Medir',       s:'con metas e indicadores ambientales.'},
+    {w:'Ahorro',            c:'Ahorrar',     s:'agua, energía y recursos.'},
+    {w:'Compra verde',      c:'Comprar',     s:'con criterios ambientales.'},
+    {w:'Clima',             c:'Cuidar el clima', s:'con movilidad sostenible.'},
+    {w:'Prevención',        c:'Prevenir',    s:'la contaminación y mitigar nuestros impactos.'},
+    {w:'Mejora continua',   c:'Mejorar',     s:'continuamente nuestro desempeño.'},
+    {w:'Economía circular', c:'Aprovechar',  s:'los residuos con economía circular.'},
+    {w:'Cumplimiento',      c:'Cumplir',     s:'la normativa ambiental.'},
+    {w:null}
+  ];
+  const ATT = [
+    ['Conoce para cuidar','Conoce la Política Ambiental de la Imprenta para actuar con eficacia.'],
+    ['Sé respetuoso','Valora los recursos naturales e industriales y a las personas de tu entorno.'],
+    ['Promueve el amor ambiental','Cuida y protege los recursos que tienes a tu disposición.'],
+    ['Participa','Suma tu aporte a las acciones ambientales dentro y fuera de la Imprenta.'],
+    ['Sé honesto','Reconoce si estás cuidando o afectando tu entorno, y mejora.'],
+    ['Sé responsable','Asume un rol activo y constante con el entorno.']
+  ];
+  const B = 560;
+  const clip = sh => 'polygon(' + sh.map(([x,y])=>`${x}% ${y}%`).join(',') + ')';
+  const center = sh => { let xs=sh.map(p=>p[0]), ys=sh.map(p=>p[1]); return [(Math.min(...xs)+Math.max(...xs))/2, (Math.min(...ys)+Math.max(...ys))/2]; };
+
+  function makePieces(host, size, interactive){
+    const k = size/B;
+    return SHAPES.map((sh,i)=>{
+      const w = document.createElement('div'); w.className='pw';
+      w.style.width = w.style.height = size+'px';
+      const [cx,cy] = center(sh);
+      w.style.transformOrigin = `${cx}% ${cy}%`;
+      const p = document.createElement(interactive?'button':'div'); p.className='pc';
+      p.style.clipPath = p.style.webkitClipPath = clip(sh);
+      if(interactive) p.setAttribute('aria-label', INFO[i].w ? `Pieza ${INFO[i].w}` : 'Pieza de la planta');
+      w.appendChild(p); host.appendChild(w);
+      return {i, w, p, cx:cx*size/100, cy:cy*size/100, k};
+    });
+  }
+  function explode(list, size, amount, rotate){
+    list.forEach(o=>{
+      const dx=(o.cx-size/2)*amount, dy=(o.cy-size/2)*amount;
+      const r = rotate ? ((o.i*47)%21)-10 : 0;
+      o.w.style.transform = `translate(${dx}px,${dy}px) rotate(${r}deg)`;
+    });
+  }
+  const cover = makePieces(document.getElementById('coverPuzzle'), 560, false); explode(cover, 560, .06, false);
+  const scat  = makePieces(document.getElementById('scatterPuzzle'), 560, false);
+  scat.forEach((o,n)=>{ const dx=(o.cx-280)*.32, dy=(o.cy-280)*.32, r=((n*47)%25)-12; o.w.style.transform=`translate(${dx}px,${dy}px) scale(.78) rotate(${r}deg)`; });
+  const endP = makePieces(document.getElementById('endPuzzle'), 520, false); explode(endP, 520, 0, false);
+
+  /* líneas de corte en la figura del kit */
+  document.getElementById('cutsSvg').innerHTML = SHAPES.map(sh=>`<polygon points="${sh.map(p=>p.join(',')).join(' ')}"/>`).join('');
+
+  /* ---------- escalado ---------- */
+  const stage = document.getElementById('stage');
+  function fit(){
+    const vw = document.documentElement.clientWidth || innerWidth, vh = document.documentElement.clientHeight || innerHeight;
+    if(!vw || !vh) return;
+    stage.style.transform = `translate(-50%,-50%) scale(${Math.min(vw/1600, vh/900)})`;
+  }
+  addEventListener('resize', fit); addEventListener('load', fit); addEventListener('orientationchange', fit);
+  try{ new ResizeObserver(fit).observe(document.documentElement); }catch(e){}
+  fit(); requestAnimationFrame(fit);
+
+  /* ---------- rompecabezas interactivo ---------- */
+  const play = makePieces(document.getElementById('playPuzzle'), B, true);
+  const ORDER = [0,3,9,6, 1,2,5,8, 7,4];            // esquinas, bordes, centro
+  const SLOTS = [[715,105],[905,105],[715,215],[905,215],[715,325],[905,325],[715,435],[905,435],[715,540],[905,540]];
+  const TRAY = [6,2,8,0,4,9,1,7,3,5];                // orden mezclado en la bandeja
+  const ROT = [8,-10,5,-6,11,-4,7,-9,3,-12];
+  const placed = new Set();
+  function trayTransform(o){
+    const s = TRAY.indexOf(o.i), [sx,sy] = SLOTS[s];
+    return `translate(${sx-o.cx}px,${sy-o.cy}px) rotate(${ROT[s]}deg) scale(.5)`;
+  }
+  const readK=document.getElementById('readK'), readT=document.getElementById('readT'), readD=document.getElementById('readD');
+  function phase(n){ return n<4 ? 'Esquina' : n<8 ? 'Borde' : 'Centro'; }
+  function layout(){
+    play.forEach(o=>{
+      const on = placed.has(o.i);
+      o.w.classList.toggle('placed', on);
+      o.w.style.transform = on ? 'none' : trayTransform(o);
+      o.w.style.zIndex = on ? 1 : 5;
+    });
+    document.getElementById('counter').textContent = `${placed.size} de 10 piezas`;
+    document.getElementById('placeNext').disabled = document.getElementById('placeAll').disabled = placed.size===10;
+  }
+  function place(i){
+    if(placed.has(i)) return;
+    const n = placed.size; placed.add(i); layout();
+    const o = play[i]; o.w.classList.remove('just'); void o.w.offsetWidth; o.w.classList.add('just');
+    const inf = INFO[i];
+    if(inf.w){ readK.textContent = `${phase(ORDER.indexOf(i))} · ${placed.size} de 10`; readT.textContent = inf.w; readD.innerHTML = `<b style="color:var(--text)">${inf.c}</b> ${inf.s}`; }
+    else { readK.textContent = `Esquina · ${placed.size} de 10`; readT.textContent = 'La planta'; readD.textContent = 'La única pieza sin palabra: aquí entras tú, con las 6 actitudes de la tarjeta.'; }
+    if(placed.size===10) setTimeout(()=>{ readK.textContent='¡Rompecabezas completo!'; readT.textContent='9 palabras, 9 compromisos'; readD.textContent='Ahora abre la tarjeta guía y conecta cada palabra con su compromiso.'; }, 1100);
+  }
+  play.forEach(o=>o.p.addEventListener('click', ()=>place(o.i)));
+  document.getElementById('placeNext').addEventListener('click', ()=>{ const nx = ORDER.find(i=>!placed.has(i)); if(nx!==undefined) place(nx); });
+  let auto=null;
+  document.getElementById('placeAll').addEventListener('click', ()=>{ clearInterval(auto); auto=setInterval(()=>{ const nx=ORDER.find(i=>!placed.has(i)); if(nx===undefined){clearInterval(auto);return;} place(nx); }, 450); });
+  document.getElementById('resetPuzzle').addEventListener('click', ()=>{ clearInterval(auto); placed.clear(); layout(); readK.textContent='Empieza aquí'; readT.textContent='Toca una pieza o usa “Colocar pieza”'; readD.textContent='Cada pieza trae una palabra. Al colocarla verás el compromiso que representa.'; });
+  layout();
+
+  /* ---------- conectar palabras ---------- */
+  const mg = document.getElementById('matchGrid');
+  mg.innerHTML = INFO.filter(x=>x.w).map((x,n)=>`<button class="mcard" aria-label="${x.w}: toca para ver el compromiso"><div class="in"><div class="f"><div class="w">${x.w}</div><div class="q">Toca para ver el compromiso</div></div><div class="b"><div class="w">${x.w}</div><div class="s"><b>${x.c}</b> ${x.s}</div></div></div></button>`).join('');
+  mg.querySelectorAll('.mcard').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('open')));
+  document.getElementById('revealAll').addEventListener('click',()=>mg.querySelectorAll('.mcard').forEach((c,n)=>setTimeout(()=>c.classList.add('open'), n*120)));
+  document.getElementById('hideAll').addEventListener('click',()=>mg.querySelectorAll('.mcard').forEach(c=>c.classList.remove('open')));
+
+  document.getElementById('attGrid').innerHTML = ATT.map((a,n)=>`<div class="att"><h3><span>${n+1}</span>${a[0]}</h3><p>${a[1]}</p></div>`).join('');
+
+  /* ---------- temporizador ---------- */
+  const C = 2*Math.PI*200, ringVal=document.getElementById('ringVal'), timeEl=document.getElementById('time'), ring=document.getElementById('ring'), tStart=document.getElementById('tStart');
+  ringVal.style.strokeDasharray = C;
+  let total=180, left=180, tick=null;
+  function drawT(){ timeEl.textContent = `${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`; ringVal.style.strokeDashoffset = C*(1-left/total); ring.classList.toggle('done', left===0); }
+  function stopT(){ clearInterval(tick); tick=null; tStart.textContent = (left>0 && left<total) ? 'Continuar' : 'Iniciar'; }
+  tStart.addEventListener('click', ()=>{
+    if(tick){ stopT(); return; }
+    if(left===0) left=total;
+    tStart.textContent='Pausar';
+    tick=setInterval(()=>{ left=Math.max(0,left-1); drawT(); if(left===0){ stopT(); timeEl.textContent='¡Listo!'; } },1000);
+    drawT();
+  });
+  document.getElementById('tReset').addEventListener('click', ()=>{ stopT(); left=total; drawT(); tStart.textContent='Iniciar'; });
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click', ()=>{ document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); stopT(); total=left=(+c.dataset.min)*60; drawT(); tStart.textContent='Iniciar'; }));
+  drawT();
+
+  /* ---------- navegación ---------- */
+  const scenes=[...document.querySelectorAll('.scene')], dots=document.getElementById('dots');
+  scenes.forEach((s,i)=>{ const d=document.createElement('button'); d.setAttribute('role','tab'); d.setAttribute('aria-label',`Paso ${i+1}: ${s.getAttribute('aria-label')}`); d.addEventListener('click',()=>go(i)); dots.appendChild(d); });
+  let cur=0; const prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  function go(i){
+    cur=Math.max(0,Math.min(scenes.length-1,i));
+    scenes.forEach((s,k)=>s.classList.toggle('on',k===cur));
+    [...dots.children].forEach((d,k)=>{ d.classList.toggle('on',k===cur); d.classList.toggle('done',k<cur); d.setAttribute('aria-selected',k===cur); });
+    document.getElementById('stepcount').textContent=`${cur+1} / ${scenes.length}`;
+    prevBtn.disabled=cur===0;
+    nextBtn.textContent = cur===scenes.length-1 ? 'Volver al inicio' : 'Siguiente →';
+  }
+  prevBtn.addEventListener('click',()=>go(cur-1));
+  nextBtn.addEventListener('click',()=>go(cur===scenes.length-1?0:cur+1));
+  document.addEventListener('keydown',e=>{
+    if(e.target.closest('button') && (e.key===' '||e.key==='Enter')) return;
+    if(['ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); go(cur+1); }
+    if(['ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); go(cur-1); }
+    if(e.key==='Home') go(0); if(e.key==='End') go(scenes.length-1);
+  });
+  document.getElementById('fsBtn').addEventListener('click',()=>{ try{ if(document.fullscreenElement) document.exitFullscreen(); else { const p=document.documentElement.requestFullscreen(); if(p&&p.catch) p.catch(()=>{}); } }catch(err){} });
+  let tx=null, ty=null;
+  document.addEventListener('touchstart',e=>{ tx=e.touches[0].clientX; ty=e.touches[0].clientY; },{passive:true});
+  document.addEventListener('touchend',e=>{ if(tx===null) return; const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty; if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5) go(cur+(dx<0?1:-1)); tx=null; },{passive:true});
+  document.addEventListener('fullscreenchange', fit);
+  go(0);
+})();
+</script>
+</body>
+</html>
