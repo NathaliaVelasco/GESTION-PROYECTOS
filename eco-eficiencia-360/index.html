@@ -41,7 +41,7 @@ header.top img{height:86px;width:auto}
 .progress{margin-left:auto;text-align:right;font-size:14px;color:var(--muted);min-width:110px;padding-right:18px;border-right:1px solid var(--line)}
 .progress b{display:block;font-family:var(--display);font-weight:600;font-size:26px;color:var(--ink);font-variant-numeric:tabular-nums}
 
-nav.menu{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0 8px}
+nav.menu{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:26px 0 8px}
 nav.menu a{display:flex;flex-direction:column;gap:6px;padding:18px 18px 16px;border-radius:4px;background:var(--card);border:2px solid var(--line);color:var(--ink);text-decoration:none;position:relative;transition:transform .15s,border-color .15s}
 nav.menu a:hover{transform:translateY(-2px)}
 nav.menu a:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
@@ -55,6 +55,24 @@ nav.menu a[data-k="respel"] .num{background:var(--red)}
 nav.menu a[data-k="asistencia"] .num{background:var(--green)}
 nav.menu a.on[data-k="asistencia"]{border-color:var(--green);background:#e3f4ea}
 #asistencia{--c:var(--green);--cs:#e3f4ea}
+#casa{--c:var(--blue);--cs:#e3f0f7}
+nav.menu a[data-k="casa"] .num{background:var(--blue)}
+nav.menu a.on[data-k="casa"]{border-color:var(--blue);background:#e3f0f7}
+.tema{display:flex;align-items:center;gap:12px;margin:40px 0 6px}
+.tema span{flex:0 0 40px;height:40px;border-radius:50%;background:var(--c);color:#fff;font-family:var(--display);font-weight:600;font-size:18px;display:grid;place-items:center}
+.tema h3{margin:0}
+.tema h3::before{display:none}
+.fact{background:var(--cs);border-left:5px solid var(--c);border-radius:4px;padding:12px 16px;max-width:72ch;margin:10px 0 16px}
+.compost{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;counter-reset:c;padding:0;margin:0;list-style:none}
+.compost li{counter-increment:c;display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.compost li::before{content:counter(c);flex:0 0 28px;height:28px;border-radius:50%;background:var(--c);color:#fff;font-weight:700;display:grid;place-items:center}
+.res td:first-child{font-weight:700;white-space:nowrap}
+.bolsas{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+.bolsas div{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 8px;font-size:15px}
+.bolsas i{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--ink)}
+.agua{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.agua div{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:10px;padding:10px 14px}
+.next-mod{margin-top:30px}
 .final{display:grid;grid-template-columns:1fr 170px;gap:24px;align-items:end}
 .final .fig img{width:170px;height:auto;display:block}
 .score-big{font-family:var(--display);font-weight:600;font-size:clamp(48px,9vw,76px);line-height:1;font-variant-numeric:tabular-nums}
@@ -174,9 +192,10 @@ footer .row .s1{height:96px;width:auto}
 footer .row .s2{height:70px;width:auto;margin-left:auto}
 footer .wrap{padding-top:24px;padding-bottom:28px}
 
-@media (max-width:980px) and (min-width:761px){nav.menu{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:980px) and (min-width:761px){nav.menu{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:760px){
-  nav.menu,.g3,.att,.stats,.flow,.brk{grid-template-columns:1fr}
+  nav.menu,.g3,.att,.stats,.flow,.brk,.compost,.agua{grid-template-columns:1fr}
+  .res td:first-child{white-space:normal}
   .final{grid-template-columns:1fr}
   .final .fig{display:none}
   .g2,.tips{grid-template-columns:1fr}
@@ -224,7 +243,8 @@ footer .wrap{padding-top:24px;padding-bottom:28px}
     <a href="#politica" data-k="politica"><span class="num">1</span><span class="t">Política Ambiental</span><span class="d">9 compromisos y 6 actitudes</span><span class="st" id="st-politica">3 preguntas pendientes</span></a>
     <a href="#energia" data-k="energia"><span class="num">2</span><span class="t">Programa de Uso y Ahorro de Energía 2026</span><span class="d">Metas, acciones y hábitos</span><span class="st" id="st-energia">3 preguntas pendientes</span></a>
     <a href="#respel" data-k="respel"><span class="num">3</span><span class="t">Plan de Gestión Integral de Residuos Peligrosos</span><span class="d">Qué son, cómo se manejan, qué hacer</span><span class="st" id="st-respel">3 preguntas pendientes</span></a>
-    <a href="#asistencia" data-k="asistencia"><span class="num">4</span><span class="t">Asistencia y puntaje final</span><span class="d">Clave del mediador al final del taller</span><span class="st" id="st-asistencia">Asistencia pendiente</span></a>
+    <a href="#casa" data-k="casa"><span class="num">4</span><span class="t">En casa: acciones para la vida diaria</span><span class="d">Compost, residuos especiales y agua</span><span class="st">Lleva lo aprendido a tu hogar</span></a>
+    <a href="#asistencia" data-k="asistencia"><span class="num">5</span><span class="t">Asistencia y puntaje final</span><span class="d">Clave del mediador al final del taller</span><span class="st" id="st-asistencia">Asistencia pendiente</span></a>
   </nav>
 
   <!-- ============ 1. POLÍTICA ============ -->
@@ -387,9 +407,65 @@ footer .wrap{padding-top:24px;padding-bottom:28px}
 
     <div class="quiz-wrap"><div class="fig" id="fig-respel"></div><div class="quiz" data-quiz="respel"></div></div>
   </section>
-  <!-- ============ 4. ASISTENCIA ============ -->
-  <section class="mod" id="asistencia">
+  <!-- ============ 4. EN CASA ============ -->
+  <section class="mod" id="casa">
     <div class="eyebrow">Módulo 4</div>
+    <h2>En casa: acciones prácticas para la vida diaria</h2>
+    <p class="lead">El cuidado del ambiente no termina al salir de la Imprenta. Estas tres prácticas son sencillas, cuestan poco y puedes empezar hoy con tu familia.</p>
+
+    <div class="tema"><span>1</span><h3>Haz compost en casa</h3></div>
+    <p>El compost es un abono que se obtiene de residuos de origen orgánico, como cáscaras de frutas y verduras, que se descomponen por un proceso biológico. Convierte lo que botarías en un mejorador del suelo para tus plantas o tu huerta. Los agricultores lo llaman <b>"oro negro"</b>.</p>
+    <div class="fact">Cerca de un tercio de los alimentos que se producen en el mundo se desperdicia. La mayoría termina en rellenos sanitarios, donde genera metano, un gas de efecto invernadero unas 25 veces más potente que el dióxido de carbono.</div>
+    <ol class="compost">
+      <li>Elige un recipiente (balde, caja o cajón de madera) y hazle varios agujeros para que respire.</li>
+      <li>Pica tus residuos orgánicos en trozos pequeños para que se descompongan más rápido.</li>
+      <li>Pon en el fondo una capa de residuos secos (hojas secas, cartón sin tinta) y tierra.</li>
+      <li>Agrega encima una capa de residuos frescos: cáscaras, restos de frutas y verduras, cáscaras de huevo, borra de café.</li>
+      <li>Mezcla cada vez que agregues residuos y tapa el recipiente con un pedazo de tela.</li>
+      <li>Riega un poco y remueve una vez a la semana para oxigenar la mezcla y evitar malos olores.</li>
+      <li>Repite el proceso durante unos 3 meses. Cuando huela a tierra húmeda y se vea oscuro, tu compost está listo.</li>
+      <li>Evita poner carnes, huesos, lácteos, grasas y excrementos de mascotas: atraen plagas y generan olores.</li>
+    </ol>
+
+    <div class="tema"><span>2</span><h3>Decide bien qué hacer con los residuos especiales</h3></div>
+    <p>Algunos residuos de la casa no pueden ir a la bolsa de la basura común porque contaminan el agua y el suelo o ponen en riesgo a quienes los recogen. En Colombia existen programas de recolección gratuitos para cada uno.</p>
+    <div class="bolsas" aria-label="Código de colores para separar en casa">
+      <div><i style="background:#fff"></i>Blanca: aprovechables limpios y secos</div>
+      <div><i style="background:#2aa04a"></i>Verde: orgánicos aprovechables</div>
+      <div><i style="background:#1a1a1a"></i>Negra: no aprovechables</div>
+    </div>
+    <div class="tbl" style="margin-top:12px"><table class="res">
+      <thead><tr><th>Residuo</th><th>Por qué importa</th><th>Qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td>Medicamentos vencidos</td><td>Contaminan fuentes de agua y afectan la vida silvestre. Si se botan enteros, pueden terminar adulterados o falsificados.</td><td>No los botes a la basura ni al sanitario. Llévalos, en su empaque, a los contenedores del programa <b>Punto Azul</b> en droguerías y supermercados.</td></tr>
+        <tr><td>Vidrio</td><td>Es 100 % reciclable, pero roto puede herir a los recicladores.</td><td>Entrégalo limpio y seco en la bolsa blanca. Si está roto, envuélvelo en papel o cartón y márcalo "vidrio roto".</td></tr>
+        <tr><td>Aceite de cocina usado</td><td>Un litro de aceite puede contaminar cerca de 40.000 litros de agua y tapa las tuberías.</td><td>Nunca lo eches por el lavaplatos ni el sanitario. Déjalo enfriar, guárdalo en una botella plástica bien cerrada y llévalo a un punto de recolección de aceite usado.</td></tr>
+        <tr><td>Plaguicidas domésticos</td><td>Sus restos y envases son tóxicos para las personas, las mascotas y el agua.</td><td>No reutilices los envases ni botes los sobrantes por el desagüe. Entrega los envases en los puntos del programa <b>Cierra el Ciclo</b>.</td></tr>
+        <tr><td>Pilas y baterías</td><td>Contienen sustancias tóxicas, como metales pesados, que contaminan el suelo y el agua.</td><td>Guárdalas en un frasco plástico seco y llévalas a los contenedores del programa <b>Pilas con el Ambiente</b> en almacenes y centros comerciales.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="tema"><span>3</span><h3>Revisa el consumo de agua en casa</h3></div>
+    <p>Empieza por conocer cuánto consumes: revisa en tu factura los metros cúbicos (m³) de cada periodo y compáralos. Para saber si hay fugas, cierra todas las llaves y mira el contador durante unos minutos. Si se mueve, hay una fuga que reparar.</p>
+    <div class="agua">
+      <div>Arregla las llaves y sanitarios que goteen.</div>
+      <div>Acorta el tiempo que pasas en la ducha.</div>
+      <div>Cierra la llave mientras te cepillas los dientes.</div>
+      <div>En la lavadora, ajusta el nivel de agua a cada carga de ropa.</div>
+      <div>No arrojes papel higiénico al sanitario.</div>
+      <div>No juegues con el agua.</div>
+      <div>Junta agua para lavar los platos en lugar de dejar la llave abierta.</div>
+      <div>Lava el carro con balde, no con manguera.</div>
+      <div>Riega las plantas temprano en la mañana o en la noche.</div>
+      <div>Aprovecha el agua lluvia para regar las plantas.</div>
+    </div>
+    <p class="doc" style="margin-top:8px">Consejos basados en la campaña "10 consejos para ahorrar agua en tu casa" del Ministerio de Ambiente.</p>
+
+    <div class="next-mod"><a class="btn solid" href="#asistencia">Ver mi puntaje final</a></div>
+  </section>
+  <!-- ============ 5. ASISTENCIA ============ -->
+  <section class="mod" id="asistencia">
+    <div class="eyebrow">Módulo 5</div>
     <h2>Asistencia y puntaje final</h2>
     <p class="lead">Al terminar el taller, pídele al mediador que escriba su clave en este espacio. Así se suman tus 28 puntos de asistencia.</p>
     <div class="final">
@@ -536,9 +612,9 @@ function paint(k){
       fb.innerHTML = '<b>'+(good?'¡Correcto! +8 puntos. ':'La respuesta correcta es la '+LET[it.a]+'. ')+'</b>'+it.e; }
   });
   document.getElementById('sc-'+k).textContent = done ? (ok*8)+' de 24 puntos' : '';
-  const order = ["politica","energia","respel","asistencia"], next = order[order.indexOf(k)+1];
+  const order = ["politica","energia","respel","casa","asistencia"], next = order[order.indexOf(k)+1];
   const nx = document.getElementById('nx-'+k);
-  nx.innerHTML = done===3 ? '<a class="btn solid" href="#'+next+'">'+(next==='asistencia'?'Ver mi puntaje final':'Siguiente módulo')+'</a>' : '';
+  nx.innerHTML = done===3 ? '<a class="btn solid" href="#'+next+'">'+(next==='asistencia'?'Ver mi puntaje final':next==='casa'?'Siguiente: acciones en casa':'Siguiente módulo')+'</a>' : '';
   const fig = document.getElementById('fig-'+k);
   if(done===3){ fig.innerHTML = '<div class="bubble">'+(ok===3?'¡Perfecto! 24 puntos':'¡Bien! '+(ok*8)+' puntos')+'</div><img src="'+IMG.hombre+'" alt="Colaborador de la Imprenta con el pulgar arriba">'; }
   else { fig.innerHTML = '<div class="bubble">'+(done? 'Vas '+done+' de 3' : '¿Lo tienes claro? Valídalo')+'</div><img src="'+IMG.mujer+'" alt="Colaboradora de la Imprenta revisando una lista">'; }
@@ -582,7 +658,7 @@ async function asistir(e){
 }
 function route(){
   const h = (location.hash||'').slice(1);
-  const k = (QUIZ[h] || h==='asistencia') ? h : 'politica';
+  const k = (QUIZ[h] || h==='asistencia' || h==='casa') ? h : 'politica';
   document.querySelectorAll('section.mod').forEach(s=>s.classList.toggle('on', s.id===k));
   document.querySelectorAll('nav.menu a').forEach(a=>{ const on = a.dataset.k===k; a.classList.toggle('on', on); a.setAttribute('aria-current', on?'page':'false'); });
 }
