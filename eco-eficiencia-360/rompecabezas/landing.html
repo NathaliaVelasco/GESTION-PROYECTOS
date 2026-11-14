@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rompecabezas Ecoeficiencia 360</title>
+<meta name="description" content="Instructivo del rompecabezas de la Política Ambiental 2026 de la Imprenta Nacional de Colombia. Ecoeficiencia 360.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Plan: misma identidad del instructivo en sala — turquesa oscuro del logo, papel Crush Citrus, acento cítrico.
+   Layout: landing en dos partes (pasos 1–5 y 6–10), secciones en dos columnas que se apilan en el celular. */
+:root{
+  --bg:#0B3337;
+  --bg-2:#0E3B40;
+  --surface:#124348;
+  --line:#2D6368;
+  --text:#F1EEDF;
+  --muted:#B2CFCC;
+  --paper:#ECE5C9;
+  --ink:#1D2B22;
+  --citrus:#F4B23E;
+  --leaf:#7CC3BD;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:clamp(17px,1.25vw,20px);line-height:1.5}
+img{max-width:100%}
+main{overflow-x:clip}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--citrus);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.04;text-wrap:balance}
+h1{font-size:clamp(40px,5.6vw,80px);font-weight:800}
+h2{font-size:clamp(32px,3.8vw,54px);font-weight:800}
+h3{font-size:clamp(21px,1.8vw,27px);font-weight:800}
+.eyebrow{font-size:clamp(14px,1.1vw,17px);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--citrus);margin:0 0 12px}
+.lead{font-size:clamp(19px,1.6vw,25px);line-height:1.45;color:var(--muted);max-width:34ch;margin:18px 0 0}
+.lead b{color:var(--text)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+
+/* barra superior */
+.top{position:sticky;top:0;z-index:20;background:rgba(11,51,55,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.top .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:18px}
+.top .brand img{height:38px;width:auto;background:#fff;border-radius:8px;padding:4px 6px}
+.tabs{display:flex;gap:6px;background:var(--surface);border-radius:999px;padding:4px}
+.tabs a{color:var(--muted);text-decoration:none;font-weight:700;font-size:15px;padding:7px 14px;border-radius:999px;white-space:nowrap}
+.tabs a.on{background:var(--citrus);color:var(--ink)}
+@media (max-width:560px){.top .brand span{display:none}}
+
+/* secciones */
+.part{display:none}
+.part.on{display:block}
+.sec{padding:clamp(56px,8vw,110px) 0;border-bottom:1px solid rgba(45,99,104,.5)}
+.sec:nth-child(even){background:var(--bg-2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center}
+.grid2.wide-right{grid-template-columns:.85fr 1.15fr}
+@media (max-width:900px){.grid2,.grid2.wide-right{grid-template-columns:1fr}}
+.num{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;border:2px solid var(--citrus);color:var(--citrus);font-family:var(--display);font-weight:800;font-size:20px;margin-bottom:18px}
+
+.steps{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:16px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;font-size:clamp(18px,1.45vw,22px);line-height:1.4}
+.steps li::before{counter-increment:s;content:counter(s);width:44px;height:44px;border-radius:50%;background:var(--surface);border:2px solid var(--line);display:grid;place-items:center;font-family:var(--display);font-weight:800;color:var(--citrus);font-size:20px}
+.steps b{color:var(--text)}
+.steps span{color:var(--muted)}
+
+.btn{border:2px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:11px 22px;font-size:17px;font-weight:700;display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.btn:hover{border-color:var(--citrus)}
+.btn.primary{background:var(--citrus);border-color:var(--citrus);color:var(--ink)}
+.btn.ghost{background:transparent}
+.btn[disabled]{opacity:.35;cursor:default}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+
+/* hero */
+.hero{padding:clamp(40px,6vw,90px) 0 clamp(56px,7vw,100px)}
+.logo-badge{display:block;width:clamp(92px,8vw,118px);height:auto;background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 14px 34px rgba(0,0,0,.35);margin-bottom:28px}
+
+/* escalado de figuras de tamaño fijo */
+.fit{position:relative;width:100%}
+.fit > .inner{position:absolute;left:0;top:0;transform-origin:0 0}
+
+/* piezas */
+.pw{position:absolute;left:0;top:0;width:560px;height:560px;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45));transition:transform .75s cubic-bezier(.2,.8,.2,1),filter .3s}
+.pc{position:absolute;inset:0;border:0;padding:0;pointer-events:auto;background:url(img/rompecabezas.jpg) 0 0/100% 100% no-repeat,var(--paper);background-blend-mode:multiply}
+.pw.placed{filter:drop-shadow(0 0 .6px rgba(29,43,34,.9))}
+.pw.placed .pc{cursor:default}
+.pw:not(.placed):hover{filter:drop-shadow(0 0 3px var(--citrus)) drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.pw.just{animation:glow 1.1s ease}
+@keyframes glow{0%{filter:drop-shadow(0 0 14px var(--citrus))}100%{filter:drop-shadow(0 0 .6px rgba(29,43,34,.9))}}
+.static .pw{transition:none}
+.board{position:absolute;left:0;top:0;width:560px;height:560px;border-radius:4px;border:2px dashed var(--line)}
+.tray-label{position:absolute;font-size:16px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+/* kit */
+.measure{position:absolute;left:40px;top:40px;width:400px;height:400px}
+.measure .img{position:absolute;inset:0;border-radius:4px;background:url(img/rompecabezas.jpg) 0 0/100% 100% no-repeat,var(--paper);background-blend-mode:multiply;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.measure svg{position:absolute;inset:0;width:100%;height:100%}
+.measure polygon{fill:none;stroke:#D2453A;stroke-width:.45}
+.dim{position:absolute;color:var(--citrus);font-weight:700;font-size:22px}
+.dim.h{left:0;right:0;top:-30px;border-top:2px solid var(--citrus);text-align:center}
+.dim.h span{background:var(--bg);padding:0 10px;position:relative;top:-15px}
+.dim.v{top:0;bottom:0;left:-30px;border-left:2px solid var(--citrus)}
+.dim.v span{position:absolute;top:50%;left:-15px;transform:translate(-50%,-50%) rotate(-90deg);background:var(--bg);padding:0 10px;white-space:nowrap}
+.sec:nth-child(even) .dim span{background:var(--bg-2)}
+.card-mini{position:absolute;right:0;bottom:20px;width:300px;transform:rotate(4deg);border-radius:6px;box-shadow:0 20px 40px rgba(0,0,0,.45);background:#fff}
+.card-mini img{display:block;width:100%;border-radius:6px}
+.card-mini .fold{position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed rgba(0,0,0,.25)}
+.legend{position:absolute;left:40px;bottom:30px;font-size:18px;color:var(--muted)}
+.legend i{display:inline-block;width:22px;border-top:3px solid #D2453A;vertical-align:middle;margin-right:6px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 22px}
+.fact .n{font-family:var(--display);font-weight:800;font-size:clamp(36px,3.4vw,48px);color:var(--citrus);line-height:1}
+.fact p{margin:8px 0 0;font-size:17px;line-height:1.35;color:var(--muted)}
+.fact p b{color:var(--text)}
+
+/* armar */
+.readcard{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--citrus);border-radius:16px;padding:22px 24px;min-height:190px}
+.readcard .k{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--citrus);font-weight:700}
+.readcard .t{font-family:var(--display);font-size:clamp(28px,2.6vw,38px);font-weight:800;line-height:1.08;margin-top:8px}
+.readcard .d{font-size:clamp(17px,1.4vw,21px);color:var(--muted);margin-top:8px;line-height:1.4}
+.readcard .d b{color:var(--text)}
+.counter{font-size:17px;color:var(--muted);margin-top:14px}
+
+/* tarjeta */
+.tarjeta{position:relative}
+.tarjeta img{display:block;width:100%;border-radius:8px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.tarjeta .tag{position:absolute;top:-14px;left:20px;background:var(--citrus);color:var(--ink);font-weight:700;font-size:15px;padding:5px 12px;border-radius:999px}
+
+/* paso a la parte 2 */
+.next{padding:clamp(56px,7vw,96px) 0;text-align:center;background:linear-gradient(180deg,var(--bg),#082A2D)}
+.next h2{margin:0 auto;max-width:18ch}
+.next p{color:var(--muted);margin:14px auto 28px;max-width:46ch}
+.next .btn{font-size:clamp(18px,1.5vw,22px);padding:16px 30px}
+
+/* conectar */
+.match{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.mcard{perspective:1200px;height:150px;border:0;padding:0;background:none;text-align:left;color:inherit}
+.mcard .in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.mcard.open .in{transform:rotateX(180deg)}
+.mcard .f,.mcard .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;padding:18px 22px;display:flex;flex-direction:column;justify-content:center}
+.mcard .f{background:var(--paper);color:var(--ink)}
+.mcard .f .w{font-family:var(--display);font-weight:800;font-size:clamp(26px,2.4vw,32px);text-transform:uppercase}
+.mcard .f .q{font-size:15px;color:#5B6A4C;margin-top:4px}
+.mcard .b{background:var(--surface);border:2px solid var(--citrus);transform:rotateX(180deg)}
+.mcard .b .w{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--citrus);font-weight:700}
+.mcard .b .s{font-size:clamp(18px,1.6vw,22px);line-height:1.3;margin-top:6px}
+.mcard .b .s b{color:var(--citrus)}
+@media (max-width:820px){.match{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.match{grid-template-columns:1fr}}
+.row-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+
+/* actitudes */
+.att-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:28px}
+.att{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px 24px}
+.att h3 span{color:var(--citrus);margin-right:8px}
+.att p{margin:8px 0 0;color:var(--muted)}
+
+/* reto */
+.timer{display:flex;flex-direction:column;align-items:center;gap:18px}
+.ring{position:relative;width:min(380px,78vw);aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:22}
+.ring .trk{stroke:var(--surface)}
+.ring .val{stroke:var(--citrus);stroke-linecap:round;transition:stroke-dashoffset .9s linear}
+.ring .time{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:clamp(56px,7vw,96px);font-variant-numeric:tabular-nums}
+.ring.done .val{stroke:var(--leaf)}
+.ring.done .time{color:var(--leaf)}
+.chips{display:flex;gap:8px}
+.chip{border:2px solid var(--line);background:transparent;color:var(--text);border-radius:999px;padding:7px 16px;font-size:16px;font-weight:700}
+.chip.on{border-color:var(--citrus);color:var(--citrus)}
+
+/* llévalo */
+.cards3{display:flex;flex-direction:column;gap:14px}
+.tipcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 24px;display:grid;grid-template-columns:56px 1fr;gap:18px;align-items:center}
+.tipcard .ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center}
+.tipcard .ic svg{width:32px;height:32px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tipcard p{margin:4px 0 0;color:var(--muted)}
+.bin{display:inline-block;width:13px;height:13px;border-radius:3px;background:#fff;border:1px solid #999;vertical-align:-1px;margin-right:4px}
+
+/* cierre */
+.closing h2{font-size:clamp(40px,5.4vw,80px)}
+.closing h2 em{font-style:normal;color:var(--citrus)}
+.signature{margin-top:26px;color:var(--muted)}
+footer{padding:28px 0;color:var(--muted);font-size:15px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><img src="img/logo-imprenta.png" alt="Imprenta Nacional de Colombia"><span>Ecoeficiencia 360</span></div>
+    <nav class="tabs" aria-label="Partes del instructivo">
+      <a href="#parte-1" id="tab1">1 · Arma tu kit</a>
+      <a href="#parte-2" id="tab2">2 · Conecta y actúa</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ===================== PARTE 1 ===================== -->
+<div class="part" id="p1">
+
+  <!-- 1 · Portada -->
+  <section class="sec hero" id="inicio">
+    <div class="wrap grid2">
+      <div>
+        <img class="logo-badge" src="img/logo-imprenta.png" alt="Imprenta Nacional de Colombia">
+        <p class="eyebrow">Kit de empoderamiento · Instructivo</p>
+        <h1>Arma la Política Ambiental en tus manos</h1>
+        <p class="lead">10 piezas, 9 palabras y una tarjeta guía. Cada pieza es un compromiso de la Imprenta.</p>
+        <div class="controls"><a class="btn primary" href="#kit">Empezar ↓</a></div>
+      </div>
+      <div class="fit" data-w="560" data-h="560"><div class="inner static" id="coverPuzzle" style="width:560px;height:560px" aria-hidden="true"></div></div>
+    </div>
+  </section>
+
+  <!-- 2 · Kit -->
+  <section class="sec" id="kit">
+    <div class="wrap grid2">
+      <div class="fit" data-w="600" data-h="600" aria-hidden="true"><div class="inner" style="width:600px;height:600px">
+        <div class="measure">
+          <div class="dim h"><span>12 cm</span></div>
+          <div class="dim v"><span>12 cm</span></div>
+          <div class="img"></div>
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" id="cutsSvg"></svg>
+        </div>
+        <div class="card-mini"><img src="img/tarjeta.jpg" alt=""><span class="fold"></span></div>
+        <div class="legend"><i></i>Línea de corte</div>
+      </div></div>
+      <div>
+        <p class="eyebrow">Qué tienes en tus manos</p>
+        <h2>Tu kit trae tres cosas</h2>
+        <p class="lead"><b>Un sobre</b> con el sello de la Imprenta, <b>un rompecabezas de 12 × 12 cm</b> en 10 piezas y <b>una tarjeta que se dobla en dos</b> con la Política Ambiental y las 6 actitudes. Está impreso en papel Crush, que reemplaza parte de la pulpa de árbol por residuos de cítricos y otros alimentos.</p>
+        <div class="facts">
+          <div class="fact"><div class="n">15%</div><p><b>Residuos agroindustriales</b> en lugar de pulpa virgen de árbol</p></div>
+          <div class="fact"><div class="n">40%</div><p><b>Fibra reciclada</b> de papel posconsumo</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · Prepárate -->
+  <section class="sec" id="preparate">
+    <div class="wrap grid2">
+      <div>
+        <p class="eyebrow">Paso 1 · Prepárate</p>
+        <h2>Antes de empezar</h2>
+        <ol class="steps">
+          <li><div><b>Abre el sobre</b> <span>sobre una superficie plana, con espacio de unos 20 × 20 cm.</span></div></li>
+          <li><div><b>Aparta la tarjeta doblada</b> <span>y guarda el sobre: ahí vuelve tu kit cuando termines.</span></div></li>
+          <li><div><b>Pon las 10 piezas con el dibujo hacia arriba</b> <span>y sepáralas un poco entre sí.</span></div></li>
+          <li><div><b>Ubica primero las 4 esquinas.</b> <span>Son las piezas con dos lados rectos.</span></div></li>
+        </ol>
+      </div>
+      <div class="fit" data-w="560" data-h="560"><div class="inner static" id="scatterPuzzle" style="width:560px;height:560px" aria-hidden="true"></div></div>
+    </div>
+  </section>
+
+  <!-- 4 · Arma -->
+  <section class="sec" id="arma">
+    <div class="wrap grid2 wide-right">
+      <div>
+        <p class="eyebrow">Paso 2 · Arma</p>
+        <h2>Esquinas, bordes y centro</h2>
+        <div class="readcard" aria-live="polite">
+          <div class="k" id="readK">Empieza aquí</div>
+          <div class="t" id="readT">Toca una pieza o usa “Colocar pieza”</div>
+          <div class="d" id="readD">Cada pieza trae una palabra. Al colocarla verás el compromiso que representa.</div>
+        </div>
+        <div class="controls">
+          <button class="btn primary" id="placeNext">Colocar pieza</button>
+          <button class="btn ghost" id="placeAll">Armar todo</button>
+          <button class="btn ghost" id="resetPuzzle">Reiniciar</button>
+        </div>
+        <div class="counter" id="counter">0 de 10 piezas</div>
+      </div>
+      <div class="fit" id="playFit" data-w="1000" data-h="600"><div class="inner" id="playPuzzle" style="width:1000px;height:600px">
+        <div class="board" aria-hidden="true"></div>
+        <div class="tray-label" id="trayLabel">Piezas sueltas</div>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- 5 · Tarjeta -->
+  <section class="sec" id="tarjeta">
+    <div class="wrap grid2 wide-right">
+      <div>
+        <p class="eyebrow">Paso 3 · La tarjeta guía</p>
+        <h2>Desdobla y lee</h2>
+        <ol class="steps">
+          <li><div><b>Abre la tarjeta</b> <span>por el doblez.</span></div></li>
+          <li><div><b>Lee los 9 compromisos</b> <span>de la Imprenta Nacional.</span></div></li>
+          <li><div><b>Lee las 6 actitudes</b> <span>que cada persona puede practicar.</span></div></li>
+        </ol>
+      </div>
+      <div class="tarjeta"><span class="tag">Tarjeta guía</span><img src="img/tarjeta.jpg" alt="Tarjeta Eco-Eficiencia 360: los 9 compromisos de la Imprenta Nacional de Colombia y las 6 actitudes ambientales"></div>
+    </div>
+  </section>
+
+  <section class="next">
+    <div class="wrap">
+      <p class="eyebrow">Ya armaste tu kit</p>
+      <h2>Ahora conecta cada palabra con su compromiso</h2>
+      <p>En la segunda parte relacionas el dibujo con la tarjeta, eliges tu compromiso y haces el reto en sala.</p>
+      <a class="btn primary" href="#parte-2">Siguiente: Conecta y actúa →</a>
+    </div>
+  </section>
+</div>
+
+<!-- ===================== PARTE 2 ===================== -->
+<div class="part" id="p2">
+
+  <!-- 6 · Conecta -->
+  <section class="sec" id="conecta">
+    <div class="wrap">
+      <div class="row-head">
+        <div>
+          <p class="eyebrow">Paso 4 · Conecta</p>
+          <h2>9 palabras, 9 compromisos</h2>
+          <p class="lead" style="max-width:44ch">Busca cada palabra en tu rompecabezas y encuéntrala en la tarjeta. Toca una tarjeta para comprobar.</p>
+        </div>
+        <div class="controls" style="margin:0"><button class="btn primary" id="revealAll">Mostrar todas</button><button class="btn ghost" id="hideAll">Ocultar</button></div>
+      </div>
+      <div class="match" id="matchGrid"></div>
+    </div>
+  </section>
+
+  <!-- 7 · Actitudes -->
+  <section class="sec" id="actitudes">
+    <div class="wrap">
+      <p class="eyebrow">En la tarjeta · 6 actitudes ambientales</p>
+      <h2>Lo que cada uno aporta</h2>
+      <div class="att-grid" id="attGrid"></div>
+    </div>
+  </section>
+
+  <!-- 8 · Reto -->
+  <section class="sec" id="reto">
+    <div class="wrap grid2">
+      <div>
+        <p class="eyebrow">Reto en sala</p>
+        <h2>Ármalo y elige tu par</h2>
+        <ol class="steps">
+          <li><div><b>Arma el rompecabezas</b> <span>antes de que termine el tiempo.</span></div></li>
+          <li><div><b>Señala 1 palabra</b> <span>que puedas mover desde tu puesto de trabajo.</span></div></li>
+          <li><div><b>Elige 1 actitud de la tarjeta</b> <span>que te ayude a cumplirla.</span></div></li>
+          <li><div><b>Cuéntaselo a quien tengas al lado</b> <span>en una frase: “Esta semana voy a…”</span></div></li>
+        </ol>
+      </div>
+      <div class="timer">
+        <div class="ring" id="ring">
+          <svg viewBox="0 0 440 440" aria-hidden="true"><circle class="trk" cx="220" cy="220" r="200"/><circle class="val" id="ringVal" cx="220" cy="220" r="200"/></svg>
+          <div class="time" id="time" role="timer">3:00</div>
+        </div>
+        <div class="chips" role="group" aria-label="Duración">
+          <button class="chip" data-min="2">2 min</button>
+          <button class="chip on" data-min="3">3 min</button>
+          <button class="chip" data-min="5">5 min</button>
+        </div>
+        <div class="controls" style="margin-top:0">
+          <button class="btn primary" id="tStart">Iniciar</button>
+          <button class="btn ghost" id="tReset">Reiniciar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · Llévalo -->
+  <section class="sec" id="llevalo">
+    <div class="wrap grid2">
+      <div>
+        <p class="eyebrow">Paso 5 · Es tuyo</p>
+        <h2>Llévalo contigo</h2>
+        <p class="lead">Este kit no se entrega ni se califica. Es un recordatorio diario de lo que la Imprenta se compromete a hacer, y de lo que tú puedes hacer.</p>
+      </div>
+      <div class="cards3">
+        <div class="tipcard"><div class="ic" style="background:rgba(244,178,62,.16)"><svg viewBox="0 0 24 24" stroke="#F4B23E"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg></div><div><h3>Dale color</h3><p>El dibujo está listo para colorear, solo o con tu familia.</p></div></div>
+        <div class="tipcard"><div class="ic" style="background:rgba(124,195,189,.16)"><svg viewBox="0 0 24 24" stroke="#7CC3BD"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div><div><h3>Ponlo a la vista</h3><p>En tu puesto o tu locker, junto a la tarjeta, con tu palabra elegida a la vista.</p></div></div>
+        <div class="tipcard"><div class="ic" style="background:rgba(255,255,255,.08)"><svg viewBox="0 0 24 24" stroke="#F1EEDF"><path d="M5 7h14l-1.2 13H6.2z"/><path d="M3 7h18M9 7V4h6v3"/></svg></div><div><h3>Ciérrale el ciclo</h3><p>No lo plastifiques. Cuando termine su vida útil, va limpio y seco a la caneca <span class="bin"></span>blanca de aprovechables.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · Cierre -->
+  <section class="sec closing" id="cierre">
+    <div class="wrap grid2">
+      <div>
+        <img class="logo-badge" src="img/logo-imprenta.png" alt="Imprenta Nacional de Colombia">
+        <h2>¡Juntos podemos aprender <em>para cuidar!</em></h2>
+        <p class="signature">Política Ambiental 2026 · Imprenta Nacional de Colombia</p>
+        <div class="controls"><a class="btn ghost" href="#parte-1">← Volver a la parte 1</a></div>
+      </div>
+      <div class="fit" data-w="560" data-h="560"><div class="inner static" id="endPuzzle" style="width:560px;height:560px" aria-hidden="true"></div></div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer><div class="wrap"><span>Ecoeficiencia 360 · Imprenta Nacional de Colombia</span><span>Una experiencia Simoné</span></div></footer>
+
+<script>
+(function(){
+  const SHAPES = [
+    [[0,0],[47.4,0],[43.6,15.8],[39.9,31.6],[0,23.9]],
+    [[0,23.9],[39.9,31.6],[49.1,47.7],[21.1,48.8],[0,49.6]],
+    [[47.4,0],[78.1,0],[61.8,19.6],[43.6,15.8]],
+    [[78.1,0],[100,0],[100,27.6],[73.7,22.1],[61.8,19.6]],
+    [[43.6,15.8],[61.8,19.6],[73.7,22.1],[70.7,40.5],[69.6,47.6],[49.1,47.7],[39.9,31.6]],
+    [[73.7,22.1],[100,27.6],[100,72],[70.7,40.5]],
+    [[70.7,40.5],[100,72],[100,100],[61,100],[69.6,47.6]],
+    [[21.1,48.8],[49.1,47.7],[69.6,47.6],[61,100],[26.3,100],[24,77.2]],
+    [[0,49.6],[21.1,48.8],[24,77.2],[0,82.5]],
+    [[0,82.5],[24,77.2],[26.3,100],[0,100]]
+  ];
+  const INFO = [
+    {w:'Conciencia',c:'Fortalecer',s:'la cultura ambiental de todos.'},
+    {w:'Metas',c:'Medir',s:'con metas e indicadores ambientales.'},
+    {w:'Ahorro',c:'Ahorrar',s:'agua, energía y recursos.'},
+    {w:'Compra verde',c:'Comprar',s:'con criterios ambientales.'},
+    {w:'Clima',c:'Cuidar el clima',s:'con movilidad sostenible.'},
+    {w:'Prevención',c:'Prevenir',s:'la contaminación y mitigar nuestros impactos.'},
+    {w:'Mejora continua',c:'Mejorar',s:'continuamente nuestro desempeño.'},
+    {w:'Economía circular',c:'Aprovechar',s:'los residuos con economía circular.'},
+    {w:'Cumplimiento',c:'Cumplir',s:'la normativa ambiental.'},
+    {w:null}
+  ];
+  const ATT = [
+    ['Conoce para cuidar','Conoce la Política Ambiental de la Imprenta para actuar con eficacia.'],
+    ['Sé respetuoso','Valora los recursos naturales e industriales y a las personas de tu entorno.'],
+    ['Promueve el amor ambiental','Cuida y protege los recursos que tienes a tu disposición.'],
+    ['Participa','Suma tu aporte a las acciones ambientales dentro y fuera de la Imprenta.'],
+    ['Sé honesto','Reconoce si estás cuidando o afectando tu entorno, y mejora.'],
+    ['Sé responsable','Asume un rol activo y constante con el entorno.']
+  ];
+  const B = 560;
+  const clip = sh => 'polygon(' + sh.map(([x,y])=>`${x}% ${y}%`).join(',') + ')';
+  const center = sh => { const xs=sh.map(p=>p[0]), ys=sh.map(p=>p[1]); return [(Math.min(...xs)+Math.max(...xs))/2,(Math.min(...ys)+Math.max(...ys))/2]; };
+
+  /* ---------- figuras escaladas al ancho disponible ---------- */
+  function fitAll(){
+    document.querySelectorAll('.fit').forEach(f=>{
+      const w=+f.dataset.w, h=+f.dataset.h, cw=f.clientWidth; if(!cw) return;
+      const s=Math.min(1, cw/w); f.firstElementChild.style.transform=`scale(${s})`; f.style.height=(h*s)+'px';
+    });
+  }
+
+  function makePieces(host, interactive){
+    return SHAPES.map((sh,i)=>{
+      const w=document.createElement('div'); w.className='pw';
+      const [cx,cy]=center(sh); w.style.transformOrigin=`${cx}% ${cy}%`;
+      const p=document.createElement(interactive?'button':'div'); p.className='pc';
+      p.style.clipPath=p.style.webkitClipPath=clip(sh);
+      if(interactive) p.setAttribute('aria-label', INFO[i].w?`Pieza ${INFO[i].w}`:'Pieza de la planta');
+      w.appendChild(p); host.appendChild(w);
+      return {i,w,p,cx:cx*B/100,cy:cy*B/100};
+    });
+  }
+  makePieces(document.getElementById('coverPuzzle'),false).forEach(o=>{ o.w.style.transform=`translate(${(o.cx-280)*.06}px,${(o.cy-280)*.06}px)`; });
+  makePieces(document.getElementById('scatterPuzzle'),false).forEach((o,n)=>{ o.w.style.transform=`translate(${(o.cx-280)*.32}px,${(o.cy-280)*.32}px) scale(.78) rotate(${((n*47)%25)-12}deg)`; });
+  makePieces(document.getElementById('endPuzzle'),false);
+  document.getElementById('cutsSvg').innerHTML = SHAPES.map(sh=>`<polygon points="${sh.map(p=>p.join(',')).join(' ')}"/>`).join('');
+
+  /* ---------- rompecabezas interactivo (bandeja al lado o debajo según el ancho) ---------- */
+  const playFit=document.getElementById('playFit'), playHost=document.getElementById('playPuzzle'), trayLabel=document.getElementById('trayLabel');
+  const play=makePieces(playHost,true);
+  const ORDER=[0,3,9,6,1,2,5,8,7,4], TRAY=[6,2,8,0,4,9,1,7,3,5], ROT=[8,-10,5,-6,11,-4,7,-9,3,-12];
+  const WIDE={w:1000,h:600,sc:.5,slots:[[715,105],[905,105],[715,215],[905,215],[715,325],[905,325],[715,435],[905,435],[715,540],[905,540]],label:[620,0]};
+  const TALL={w:560,h:900,sc:.42,slots:[[56,690],[168,690],[280,690],[392,690],[504,690],[56,820],[168,820],[280,820],[392,820],[504,820]],label:[0,584]};
+  let mode=WIDE;
+  const placed=new Set();
+  function chooseMode(){
+    const m = playFit.clientWidth < 640 ? TALL : WIDE;
+    if(m!==mode){ mode=m; playFit.dataset.w=m.w; playFit.dataset.h=m.h; playHost.style.width=m.w+'px'; playHost.style.height=m.h+'px'; trayLabel.style.left=m.label[0]+'px'; trayLabel.style.top=m.label[1]+'px'; layout(); }
+  }
+  function layout(){
+    play.forEach(o=>{
+      const on=placed.has(o.i); o.w.classList.toggle('placed',on);
+      if(on){ o.w.style.transform='none'; o.w.style.zIndex=1; return; }
+      const s=TRAY.indexOf(o.i), [sx,sy]=mode.slots[s];
+      o.w.style.transform=`translate(${sx-o.cx}px,${sy-o.cy}px) rotate(${ROT[s]}deg) scale(${mode.sc})`; o.w.style.zIndex=5;
+    });
+    document.getElementById('counter').textContent=`${placed.size} de 10 piezas`;
+    document.getElementById('placeNext').disabled=document.getElementById('placeAll').disabled=placed.size===10;
+  }
+  trayLabel.style.left=WIDE.label[0]+'px'; trayLabel.style.top=WIDE.label[1]+'px';
+  const readK=document.getElementById('readK'), readT=document.getElementById('readT'), readD=document.getElementById('readD');
+  const phase=n=> n<4?'Esquina':n<8?'Borde':'Centro';
+  function place(i){
+    if(placed.has(i)) return; placed.add(i); layout();
+    const o=play[i]; o.w.classList.remove('just'); void o.w.offsetWidth; o.w.classList.add('just');
+    const inf=INFO[i];
+    if(inf.w){ readK.textContent=`${phase(ORDER.indexOf(i))} · ${placed.size} de 10`; readT.textContent=inf.w; readD.innerHTML=`<b>${inf.c}</b> ${inf.s}`; }
+    else { readK.textContent=`Esquina · ${placed.size} de 10`; readT.textContent='La planta'; readD.textContent='La única pieza sin palabra: aquí entras tú, con las 6 actitudes de la tarjeta.'; }
+    if(placed.size===10) setTimeout(()=>{ readK.textContent='¡Rompecabezas completo!'; readT.textContent='9 palabras, 9 compromisos'; readD.textContent='Ahora abre la tarjeta guía y conecta cada palabra con su compromiso.'; },1100);
+  }
+  play.forEach(o=>o.p.addEventListener('click',()=>place(o.i)));
+  document.getElementById('placeNext').addEventListener('click',()=>{ const nx=ORDER.find(i=>!placed.has(i)); if(nx!==undefined) place(nx); });
+  let auto=null;
+  document.getElementById('placeAll').addEventListener('click',()=>{ clearInterval(auto); auto=setInterval(()=>{ const nx=ORDER.find(i=>!placed.has(i)); if(nx===undefined){clearInterval(auto);return;} place(nx); },450); });
+  document.getElementById('resetPuzzle').addEventListener('click',()=>{ clearInterval(auto); placed.clear(); layout(); readK.textContent='Empieza aquí'; readT.textContent='Toca una pieza o usa “Colocar pieza”'; readD.textContent='Cada pieza trae una palabra. Al colocarla verás el compromiso que representa.'; });
+  layout();
+
+  /* ---------- conectar, actitudes ---------- */
+  const mg=document.getElementById('matchGrid');
+  mg.innerHTML=INFO.filter(x=>x.w).map(x=>`<button class="mcard" aria-label="${x.w}: toca para ver el compromiso"><div class="in"><div class="f"><div class="w">${x.w}</div><div class="q">Toca para ver el compromiso</div></div><div class="b"><div class="w">${x.w}</div><div class="s"><b>${x.c}</b> ${x.s}</div></div></div></button>`).join('');
+  mg.querySelectorAll('.mcard').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('open')));
+  document.getElementById('revealAll').addEventListener('click',()=>mg.querySelectorAll('.mcard').forEach((c,n)=>setTimeout(()=>c.classList.add('open'),n*120)));
+  document.getElementById('hideAll').addEventListener('click',()=>mg.querySelectorAll('.mcard').forEach(c=>c.classList.remove('open')));
+  document.getElementById('attGrid').innerHTML=ATT.map((a,n)=>`<div class="att"><h3><span>${n+1}</span>${a[0]}</h3><p>${a[1]}</p></div>`).join('');
+
+  /* ---------- temporizador ---------- */
+  const C=2*Math.PI*200, ringVal=document.getElementById('ringVal'), timeEl=document.getElementById('time'), ring=document.getElementById('ring'), tStart=document.getElementById('tStart');
+  ringVal.style.strokeDasharray=C;
+  let total=180,left=180,tick=null;
+  function drawT(){ timeEl.textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`; ringVal.style.strokeDashoffset=C*(1-left/total); ring.classList.toggle('done',left===0); }
+  function stopT(){ clearInterval(tick); tick=null; tStart.textContent=(left>0&&left<total)?'Continuar':'Iniciar'; }
+  tStart.addEventListener('click',()=>{ if(tick){stopT();return;} if(left===0) left=total; tStart.textContent='Pausar'; tick=setInterval(()=>{ left=Math.max(0,left-1); drawT(); if(left===0){ stopT(); timeEl.textContent='¡Listo!'; } },1000); drawT(); });
+  document.getElementById('tReset').addEventListener('click',()=>{ stopT(); left=total; drawT(); tStart.textContent='Iniciar'; });
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{ document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); stopT(); total=left=(+c.dataset.min)*60; drawT(); tStart.textContent='Iniciar'; }));
+  drawT();
+
+  /* ---------- partes 1 y 2 ---------- */
+  const p1=document.getElementById('p1'), p2=document.getElementById('p2'), t1=document.getElementById('tab1'), t2=document.getElementById('tab2');
+  const P2_IDS=['parte-2','conecta','actitudes','reto','llevalo','cierre'];
+  let shown=null;
+  function route(){
+    const h=location.hash.replace('#','');
+    const two=P2_IDS.includes(h);
+    const changed = shown!==(two?2:1);
+    shown = two?2:1;
+    p1.classList.toggle('on',!two); p2.classList.toggle('on',two);
+    t1.classList.toggle('on',!two); t2.classList.toggle('on',two);
+    t1.setAttribute('aria-current',!two?'page':'false'); t2.setAttribute('aria-current',two?'page':'false');
+    requestAnimationFrame(()=>{ fitAll(); chooseMode(); fitAll();
+      if(h==='parte-1'||h==='parte-2'||changed&&!document.getElementById(h)) window.scrollTo({top:0});
+      else if(h && document.getElementById(h)) document.getElementById(h).scrollIntoView();
+    });
+  }
+  addEventListener('hashchange',route);
+  addEventListener('resize',()=>{ fitAll(); chooseMode(); fitAll(); });
+  try{ new ResizeObserver(()=>{ fitAll(); chooseMode(); fitAll(); }).observe(document.body); }catch(e){}
+  route();
+})();
+</script>
+</body>
+</html>
