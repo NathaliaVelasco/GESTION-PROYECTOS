@@ -579,6 +579,7 @@ const GRUPOS = [
 ];
 const state = {politica:{}, energia:{}, respel:{}};
 let me = null, asis = 0;
+const PREVIEW = /(^|[?&])vista(=|&|$)/.test(location.search.slice(1));
 async function rpc(fn, body){
   const r = await fetch(SB+fn,{method:"POST",headers:{"apikey":SBKEY,"Authorization":"Bearer "+SBKEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
   if(!r.ok){ let m=""; try{ m=(await r.json()).message||""; }catch(e){} throw new Error(m||("Error "+r.status)); }
@@ -588,6 +589,7 @@ function load(){ try{ me = JSON.parse(localStorage.getItem("eco360_me")||"null")
 function saveMe(){ try{ me ? localStorage.setItem("eco360_me", JSON.stringify(me)) : localStorage.removeItem("eco360_me"); }catch(e){} }
 function showWho(){
   const w = document.getElementById('who');
+  if(PREVIEW){ w.innerHTML='<b style="color:var(--bad)">Vista previa</b> · las respuestas no se guardan'; return; }
   w.innerHTML = me ? me.nombre+' · '+me.grupo+' · <a href="#" id="salir">No soy yo</a>' : '';
   if(me) document.getElementById('salir').addEventListener('click',e=>{ e.preventDefault(); me=null; asis=0; saveMe(); for(const k in state) state[k]={}; refreshAll(); openGate(); });
 }
@@ -621,6 +623,7 @@ function renderQuiz(k){
     const i = +qel.dataset.i, fb = qel.querySelector('.fb');
     qel.querySelectorAll('button').forEach(b=>b.addEventListener('click', async ()=>{
       if(state[k][i] !== undefined) return;
+      if(PREVIEW){ state[k][i] = +b.dataset.j; paint(k); total(); return; }
       if(!me){ openGate(); return; }
       qel.querySelectorAll('button').forEach(x=>x.disabled=true);
       fb.className='fb show'; fb.innerHTML='<span class="saving">Guardando tu respuesta…</span>';
@@ -686,6 +689,7 @@ function total(){
 async function asistir(e){
   e.preventDefault();
   const inp = document.getElementById('aclave'), err = document.getElementById('aerr'), b = document.getElementById('abtn');
+  if(PREVIEW){ err.textContent='Vista previa: aquí el mediador escribe su clave. No se guarda nada.'; return; }
   if(!me){ openGate(); return; }
   if(!inp.value.trim()){ err.textContent='El mediador debe escribir la clave.'; return; }
   b.disabled=true; err.textContent='';
@@ -723,7 +727,7 @@ document.getElementById('gform').addEventListener('submit', async e=>{
 load();
 Object.keys(QUIZ).forEach(renderQuiz);
 total(); route(); showWho();
-if(me) syncAnswers(); else openGate();
+if(PREVIEW){ document.getElementById('who').innerHTML='<b style="color:var(--bad)">Vista previa</b> · las respuestas no se guardan'; } else if(me) syncAnswers(); else openGate();
 window.addEventListener('hashchange', ()=>{ route(); document.querySelector('nav.menu').scrollIntoView({block:'start'}); });
 </script>
 </body>
