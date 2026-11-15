@@ -459,9 +459,10 @@ document.getElementById('rform').addEventListener('submit', async e=>{
   err.textContent=''; btn.disabled=true; btn.firstChild.textContent='Registrando… ';
   try{
     const id = await rpc("eco360_registrar",{p_nombre:nombre,p_grupo:grupo});
+    if(!me || me.id!==id){ ans=Array(9).fill(null); cur=0; store('eco360_entrada_borrador',null); }
     me = {id, nombre, grupo}; store('eco360_me', me); showWho();
     const st = await rpc("eco360_entrada_estado",{p_participante:id});
-    if(st.respondidas >= 9){ go('final'); } else { cur = 0; renderQ(); go('preguntas'); }
+    if(st.respondidas >= 9){ go('final'); } else { renderQ(); go('preguntas'); }
   }catch(x){ err.textContent='No pudimos registrarte. Revisa tu conexión a internet e intenta de nuevo.'; }
   btn.disabled=false; btn.firstChild.textContent='Empezar las preguntas ';
 });
@@ -528,14 +529,14 @@ function confeti(){
 
 /* ---------- Navegación e inicio ---------- */
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
-document.getElementById('b-empezar').onclick = async ()=>{
-  if(!me){ go('registro'); setTimeout(()=>document.getElementById('rnombre').focus(),350); return; }
-  try{
-    const st = await rpc("eco360_entrada_estado",{p_participante:me.id});
-    if(!st.registrado){ me=null; store('eco360_me',null); showWho(); go('registro'); return; }
-    if(st.respondidas >= 9){ go('final'); return; }
-  }catch(e){}
-  renderQ(); go('preguntas');
+document.getElementById('b-empezar').onclick = ()=>{
+  // El registro se muestra siempre: nombre completo, dependencia y grupo son obligatorios para comparar antes y después
+  if(me){
+    document.getElementById('rnombre').value = me.nombre;
+    const i = GRUPOS.findIndex(d=>d[3].includes(me.grupo));
+    if(i>=0){ dep=i; grupo=me.grupo; depsEl.querySelectorAll('.dep').forEach((x,j)=>x.setAttribute('aria-pressed', j===i)); paintGrupos(); }
+  }
+  go('registro'); setTimeout(()=>document.getElementById('rnombre').focus(),350);
 };
 (async function init(){
   me = read('eco360_me');
