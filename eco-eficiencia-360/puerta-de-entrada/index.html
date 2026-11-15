@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puerta de Entrada · ECO EFICIENCIA 360 · Imprenta Nacional de Colombia</title>
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="PUERTA DE ENTRADA · ECO EFICIENCIA 360">
+<meta property="og:description" content="Antes de empezar la jornada: 9 preguntas para conocer tu punto de partida.">
+<link rel="icon" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f7f7; --card:#ffffff; --ink:#1a1a1a; --muted:#5a6266; --line:#e0e4e4;
+  --teal:#178a84; --teal-soft:#e2f2f0; --green:#26a95e; --blue:#0072a8; --mint:#68bc9a; --lime:#98c340;
+  --amber:#e8891c; --amber-soft:#fdf0e0; --red:#c2362b; --red-soft:#fbe6e3;
+  --bad:#b3261e; --bad-soft:#fbe4e1; --ok:#1d7a45; --ok-soft:#e1f2e7;
+  --display:"Jost","Century Gothic","Segoe UI",system-ui,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --c:var(--teal); --cs:var(--teal-soft);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px;width:100%}
+.stripe{height:8px;background:linear-gradient(90deg,var(--lime) 0 8%,var(--blue) 8% 33%,var(--mint) 33% 58%,var(--green) 58% 83%,var(--teal) 83%)}
+header.top{background:var(--card)}
+header.top .wrap{display:flex;align-items:center;gap:14px;padding-top:12px;padding-bottom:12px}
+header.top .logo{height:58px;width:auto}
+.brand small{display:block;color:var(--teal);font-family:var(--display);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:500}
+.brand b{display:block;font-family:var(--display);font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:22px;line-height:1.1}
+.brand b span{color:var(--teal);font-weight:600}
+header.top .who{margin-left:auto;font-size:14px;color:var(--muted);text-align:right;line-height:1.3}
+header.top .who strong{display:block;color:var(--ink);font-size:15px}
+header.top .who button{font:inherit;font-size:13px;background:none;border:0;color:var(--teal);font-weight:700;padding:0;cursor:pointer;text-decoration:underline}
+main{flex:1;padding:32px 0 44px}
+.screen{display:none;animation:in .35s ease}
+.screen.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1,h2{font-family:var(--display);font-weight:500;line-height:1.1;margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--c)}
+.btn{font:inherit;font-weight:700;font-size:17px;padding:14px 26px;border-radius:999px;border:2px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:10px;justify-content:center;transition:transform .15s}
+.btn:hover:not(:disabled){transform:translateY(-2px)}
+.btn.solid{background:var(--ink);color:#fff}
+.btn.big{font-size:19px;padding:16px 30px}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.link{background:none;border:0;font:inherit;font-weight:700;color:var(--muted);cursor:pointer;padding:8px 4px}
+.link:focus-visible{outline:3px solid var(--teal)}
+
+/* ---------- Portada ---------- */
+.portada{display:grid;grid-template-columns:1.05fr .95fr;gap:10px;align-items:center}
+.portada h1{font-size:clamp(40px,8vw,64px);font-weight:600;letter-spacing:.01em;text-transform:uppercase;line-height:.95;margin:6px 0 14px}
+.portada h1 span{display:block;color:var(--teal)}
+.portada .lead{font-size:19px;margin:0 0 18px;max-width:34ch}
+.puerta-svg{width:100%;height:auto;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-weight:600;font-size:15px}
+.chip i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-style:normal}
+.chip i svg{width:16px;height:16px}
+.datos{display:flex;gap:18px;margin:0 0 22px;flex-wrap:wrap}
+.datos div{font-size:14px;color:var(--muted);line-height:1.2}
+.datos b{display:block;font-family:var(--display);font-size:30px;font-weight:600;color:var(--ink)}
+.nota{font-size:15px;color:var(--muted);margin:14px 0 0;max-width:46ch}
+
+/* ---------- Registro ---------- */
+.panel{background:var(--card);border:2px solid var(--ink);border-top:10px solid var(--c);border-radius:6px;padding:22px 22px 20px;box-shadow:6px 6px 0 var(--cs)}
+.paso{display:flex;align-items:center;gap:10px;margin:22px 0 10px;font-family:var(--display);font-weight:600;font-size:19px}
+.paso:first-of-type{margin-top:14px}
+.paso .n{flex:0 0 32px;height:32px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:16px}
+.campo{width:100%;font:inherit;font-size:19px;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink)}
+.campo:focus{outline:3px solid var(--teal);outline-offset:1px;border-color:var(--teal)}
+.deps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.dep{font:inherit;text-align:left;display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;font-size:16px;line-height:1.2;color:var(--ink);transition:transform .12s,border-color .12s}
+.dep:hover{transform:translateY(-2px);border-color:var(--dc)}
+.dep .ic{flex:0 0 42px;height:42px;border-radius:10px;background:var(--dc);display:grid;place-items:center}
+.dep .ic svg{width:24px;height:24px}
+.dep[aria-pressed="true"]{border-color:var(--dc);background:var(--ds);box-shadow:inset 0 0 0 1px var(--dc)}
+.dep:focus-visible,.grp:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.grupos{display:flex;flex-wrap:wrap;gap:8px}
+.grp{font:inherit;font-size:16px;font-weight:600;padding:10px 16px;border-radius:999px;border:2px solid var(--line);background:var(--card);cursor:pointer;color:var(--ink)}
+.grp:hover{border-color:var(--dc)}
+.grp[aria-pressed="true"]{background:var(--dc);border-color:var(--dc);color:#fff}
+.grp[aria-pressed="true"]::before{content:"✓ "}
+.vacio{color:var(--muted);font-size:15px;margin:0;padding:10px 14px;border:2px dashed var(--line);border-radius:12px}
+.hd{display:flex;gap:12px;align-items:flex-start;margin-top:22px;font-size:15px;line-height:1.45;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.hd input{width:22px;height:22px;flex:0 0 22px;margin:1px 0 0;accent-color:var(--teal)}
+.hd b{color:var(--ink)}
+.aviso{margin-top:8px;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:12px;padding:8px 14px;background:var(--card)}
+.aviso summary{cursor:pointer;font-weight:700;color:var(--teal);font-size:14px}
+.aviso p{margin:8px 0 0;font-size:13px;line-height:1.45}
+.aviso a{color:var(--teal)}
+.err{color:var(--bad);font-size:15px;font-weight:600;min-height:22px;margin:12px 0 4px}
+.acciones{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+
+/* ---------- Preguntas ---------- */
+.barra{display:flex;gap:5px;margin:0 0 18px}
+.barra span{flex:1;height:10px;border-radius:999px;background:var(--line);position:relative;overflow:hidden}
+.barra span::after{content:"";position:absolute;inset:0;background:var(--sc);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.barra span.done::after{transform:scaleX(1)}
+.barra span.now{outline:2px solid var(--sc);outline-offset:2px}
+.qcard{background:var(--card);border:2px solid var(--ink);border-radius:6px;overflow:hidden;box-shadow:6px 6px 0 var(--cs)}
+.qhead{background:var(--cs);border-bottom:2px solid var(--ink);display:grid;grid-template-columns:1fr 150px;align-items:center;gap:10px;padding:16px 20px;min-height:150px;position:relative}
+.qhead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--c)}
+.qhead .mod{display:inline-flex;align-items:center;gap:8px;background:var(--c);color:#fff;border-radius:999px;padding:4px 12px 4px 6px;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.qhead .mod i{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center}
+.qhead .mod i svg{width:14px;height:14px}
+.qhead .cont{font-family:var(--display);font-weight:600;font-size:15px;color:var(--muted);margin-top:10px}
+.qhead .cont b{font-size:34px;color:var(--ink);font-weight:600}
+.qhead .ilu svg{width:150px;height:120px;display:block}
+.qbody{padding:20px 20px 18px}
+.qt{font-family:var(--display);font-weight:500;font-size:clamp(21px,3.4vw,26px);line-height:1.2;margin:0 0 16px;text-wrap:balance}
+.qt em{font-style:normal;background:var(--c);color:#fff;padding:0 6px;border-radius:4px}
+.opts{display:grid;gap:10px}
+.op{font:inherit;font-size:17px;text-align:left;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;display:flex;gap:14px;align-items:center;line-height:1.3;transition:transform .12s,border-color .12s,background .12s}
+.op:hover{border-color:var(--c);transform:translateX(3px)}
+.op:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.op .l{flex:0 0 36px;height:36px;border-radius:10px;background:var(--card);border:2px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:16px}
+.op[aria-checked="true"]{background:var(--cs);border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c)}
+.op[aria-checked="true"] .l{background:var(--c);border-color:var(--c);color:#fff}
+.op.nose{border-style:dashed;background:var(--card);color:var(--muted)}
+.op.nose .l{border-style:dashed;border-color:var(--muted);color:var(--muted)}
+.op.nose[aria-checked="true"]{background:#eef1f1;border-color:var(--muted);color:var(--ink);box-shadow:none}
+.op.nose[aria-checked="true"] .l{background:var(--muted);border-color:var(--muted);color:#fff}
+.qnav{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:18px;flex-wrap:wrap}
+.qnav .btn{padding:12px 22px;font-size:16px}
+
+/* ---------- Envío / final ---------- */
+.final{display:grid;grid-template-columns:1fr 190px;gap:20px;align-items:end}
+.final h2{font-size:clamp(34px,6vw,48px);font-weight:600;text-transform:uppercase;margin:6px 0 12px}
+.final h2 span{color:var(--teal)}
+.final p{font-size:18px;margin:0 0 14px;max-width:44ch}
+.final .fig{position:relative}
+.final .fig img{width:190px;height:auto;display:block}
+.final .bubble{position:absolute;top:-6px;right:100px;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:6px 12px;font-weight:700;font-size:15px;white-space:nowrap}
+.resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 22px}
+.resumen div{background:var(--card);border:1.5px solid var(--line);border-left:6px solid var(--rc);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--muted);line-height:1.25}
+.resumen b{display:block;color:var(--ink);font-family:var(--display);font-size:16px;font-weight:600}
+.confeti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
+.confeti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:2px;animation:cae linear forwards}
+@keyframes cae{to{transform:translateY(110vh) rotate(720deg)}}
+.saving{display:flex;align-items:center;gap:12px;font-weight:600;color:var(--muted);margin-top:16px}
+.saving::before{content:"";width:20px;height:20px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--teal);animation:gira .8s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+
+footer{background:var(--card);font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding-top:18px;padding-bottom:22px}
+footer .s1{height:64px;width:auto}
+footer .s2{height:54px;width:auto;margin-left:auto}
+
+@media (max-width:700px){
+  .portada{grid-template-columns:1fr}
+  .portada .arte{order:-1;max-width:330px;margin:0 auto -6px}
+  header.top .wrap{flex-wrap:wrap;row-gap:6px}
+  header.top .logo{height:44px}
+  .brand small{display:none}
+  .brand b{font-size:19px}
+  header.top .who{flex-basis:100%;text-align:left;margin-left:0;font-size:13px}
+  header.top .who:empty{display:none}
+  header.top .who strong{display:inline;font-size:14px}
+  header.top .who strong::after{content:" · "}
+  main{padding-top:20px}
+  .qhead{grid-template-columns:1fr 104px;min-height:120px;padding:14px 16px 14px 22px}
+  .qhead .ilu svg{width:104px;height:86px}
+  .qbody{padding:16px 14px}
+  .final{grid-template-columns:1fr}
+  .final .fig{display:none}
+  .resumen{grid-template-columns:1fr}
+  footer .s2{margin-left:0}
+  .panel{padding:18px 14px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="stripe"></div>
+  <div class="wrap">
+    <img class="logo" src="img/logo.png" alt="Imprenta Nacional de Colombia">
+    <div class="brand"><small>Jornada de formación ambiental</small><b>Ecoeficiencia <span>360</span></b></div>
+    <div class="who" id="who"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ PORTADA ============ -->
+  <section class="screen on" id="s-portada">
+    <div class="portada">
+      <div>
+        <div class="eyebrow">Antes de empezar</div>
+        <h1>Puerta de <span>Entrada</span></h1>
+        <p class="lead">Cuéntanos qué sabes hoy. Así podremos ver, al final de la jornada, todo lo que avanzamos juntos.</p>
+        <div class="datos">
+          <div><b>9</b>preguntas</div>
+          <div><b>3</b>minutos</div>
+          <div><b>0</b>respuestas malas</div>
+        </div>
+        <div class="chips">
+          <span class="chip"><i style="background:var(--teal)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-9 6-14 15-14 0 9-5 15-14 15"/><path d="M5 19l8-8"/></svg></i>Política Ambiental</span>
+          <span class="chip"><i style="background:var(--amber)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></i>Energía</span>
+          <span class="chip"><i style="background:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/></svg></i>Residuos peligrosos</span>
+        </div>
+        <button class="btn solid big" id="b-empezar">Cruzar la puerta <span aria-hidden="true">→</span></button>
+        <p class="nota">No es un examen y no suma puntos al ranking. Es tu punto de partida: responde con sinceridad, y si no sabes algo, elige <b>“Aún no lo sé”</b>.</p>
+      </div>
+      <div class="arte">
+        <svg class="puerta-svg" viewBox="0 0 400 420" role="img" aria-label="Ilustración de una puerta abierta con luz, al pie de una montaña">
+          <defs>
+            <linearGradient id="luz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c9"/><stop offset="1" stop-color="#f6d860"/></linearGradient>
+            <linearGradient id="haz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6d860" stop-opacity=".75"/><stop offset="1" stop-color="#f6d860" stop-opacity="0"/></linearGradient>
+          </defs>
+          <circle cx="200" cy="190" r="170" fill="#e2f2f0"/>
+          <circle cx="312" cy="78" r="26" fill="#f6d860" stroke="#1a1a1a" stroke-width="3"/>
+          <path d="M30 300 140 120l40 55 40-70 150 195z" fill="#68bc9a" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M196 105l-24 42 14-6 10 14 10-16 12 8z" fill="#fff" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M140 120l-22 36 12-4 10 10 8-14 12 6z" fill="#fff" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M208 64v42" stroke="#1a1a1a" stroke-width="3"/><path d="M208 64h26l-6 8 6 8h-26" fill="#c2362b" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M10 330c60-40 120-30 190-30s140-10 190 30v90H10z" fill="#26a95e" stroke="#1a1a1a" stroke-width="3"/>
+          <path d="M175 410 196 318h8l21 92z" fill="url(#haz)"/>
+          <rect x="146" y="150" width="108" height="172" rx="4" fill="#1a1a1a"/>
+          <rect x="156" y="160" width="88" height="158" fill="url(#luz)"/>
+          <path d="M200 175c-10 8-14 20-10 32 12-2 20-12 20-24" fill="#98c340" stroke="#1a1a1a" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M200 205v30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M200 218c8-8 18-8 24-4-6 8-16 10-24 4z" fill="#68bc9a" stroke="#1a1a1a" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M156 160 112 176v162l44-20z" fill="#178a84" stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M120 196l28-10v40l-28 10zM120 250l28-10v40l-28 10z" fill="none" stroke="#1a1a1a" stroke-width="2.5" stroke-linejoin="round" opacity=".5"/>
+          <circle cx="146" cy="250" r="5" fill="#f6d860" stroke="#1a1a1a" stroke-width="2.5"/>
+          <rect x="150" y="116" width="100" height="26" rx="4" fill="#fff" stroke="#1a1a1a" stroke-width="3"/>
+          <path d="M170 142v8M230 142v8" stroke="#1a1a1a" stroke-width="3"/>
+          <text x="200" y="135" text-anchor="middle" font-family="Jost, sans-serif" font-weight="700" font-size="14" letter-spacing="1.5" fill="#178a84">ECO 360</text>
+          <g stroke="#1a1a1a" stroke-width="2.5" stroke-linejoin="round">
+            <path d="M58 352c-6-16 2-30 16-34 4 14-2 28-16 34z" fill="#98c340"/>
+            <path d="M326 356c4-16 18-24 32-20-2 14-16 24-32 20z" fill="#98c340"/>
+            <path d="M300 372c-10-10-10-24 0-32 10 8 10 22 0 32z" fill="#68bc9a"/>
+            <path d="M88 380c-12-6-16-20-8-30 12 6 16 20 8 30z" fill="#68bc9a"/>
+          </g>
+          <g fill="#f6d860" stroke="#1a1a1a" stroke-width="2">
+            <path d="M266 196l4 8 8 4-8 4-4 8-4-8-8-4 8-4z"/>
+            <path d="M120 120l3 6 6 3-6 3-3 6-3-6-6-3 6-3z"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REGISTRO ============ -->
+  <section class="screen" id="s-registro">
+    <form class="panel" id="rform" novalidate>
+      <div class="eyebrow">Paso previo</div>
+      <h2 style="font-size:clamp(26px,5vw,34px)">¿Quién cruza la puerta?</h2>
+      <p style="margin:6px 0 0;color:var(--muted)">Con tu nombre y tu grupo comparamos lo que sabes hoy con lo que sabrás al final de la jornada.</p>
+
+      <div class="paso"><span class="n">1</span><label for="rnombre">Tu nombre completo</label></div>
+      <input class="campo" id="rnombre" autocomplete="name" maxlength="120" placeholder="Nombres y apellidos">
+
+      <div class="paso"><span class="n">2</span><span id="lbl-dep">¿En qué dependencia trabajas?</span></div>
+      <div class="deps" id="deps" role="group" aria-labelledby="lbl-dep"></div>
+
+      <div class="paso"><span class="n">3</span><span id="lbl-grp">¿A qué grupo perteneces?</span></div>
+      <div class="grupos" id="grupos" role="group" aria-labelledby="lbl-grp"><p class="vacio">Primero elige tu dependencia.</p></div>
+
+      <div class="hd"><input type="checkbox" id="rhd"><label for="rhd"><b>Autorizo el tratamiento de mis datos personales</b> (nombre completo y grupo de trabajo). Se recopilan solo para efectos de la jornada de formación ECO EFICIENCIA 360 y se usarán únicamente para este fin, de acuerdo con la Ley 1581 de 2012.</label></div>
+      <details class="aviso"><summary>Leer el aviso de privacidad</summary>
+        <p><b>Responsable del tratamiento:</b> Imprenta Nacional de Colombia, empresa industrial y comercial del Estado. <b>Encargado:</b> Simoné, operador de la jornada ECO EFICIENCIA 360.</p>
+        <p><b>Datos que se recogen:</b> nombre completo, grupo de trabajo, respuestas a la prueba de entrada y a las preguntas de la jornada, registro de asistencia y fecha y hora de cada registro. No se recogen datos sensibles ni números de identificación.</p>
+        <p><b>Finalidad:</b> conocer el punto de partida del equipo y compararlo con los resultados al final de la jornada, calcular la participación por grupo de trabajo, seleccionar a las 20 personas ganadoras del taller de bienestar y elaborar el informe de resultados. No se usarán para ningún otro propósito ni se compartirán, venderán o cederán a terceros.</p>
+        <p><b>Conservación:</b> los datos se guardan mientras dure la evaluación y hasta la entrega del informe final. Después se eliminan de la base de datos de la jornada.</p>
+        <p><b>Tus derechos como titular (art. 8, Ley 1581 de 2012):</b> conocer, actualizar y rectificar tus datos; pedir prueba de esta autorización; ser informado sobre el uso que se les da; revocar la autorización o pedir que se eliminen; acceder a ellos de forma gratuita y presentar quejas ante la Superintendencia de Industria y Comercio.</p>
+        <p><b>Cómo ejercerlos:</b> a través del canal de PQRSD de la Imprenta Nacional (<a href="https://www.imprenta.gov.co/pqrsd" target="_blank" rel="noopener">imprenta.gov.co/pqrsd</a>) o con el equipo organizador durante la jornada.</p>
+      </details>
+      <div class="err" id="rerr" role="alert"></div>
+      <div class="acciones">
+        <button class="btn solid big" type="submit" id="rbtn">Empezar las preguntas <span aria-hidden="true">→</span></button>
+        <button class="link" type="button" data-go="portada">← Volver</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============ PREGUNTAS ============ -->
+  <section class="screen" id="s-preguntas">
+    <div class="barra" id="barra" aria-hidden="true"></div>
+    <div class="qcard" id="qcard">
+      <div class="qhead">
+        <div>
+          <span class="mod" id="qmod"></span>
+          <div class="cont" aria-live="polite">Pregunta <b id="qn">1</b> de 9</div>
+        </div>
+        <div class="ilu" id="qilu" aria-hidden="true"></div>
+      </div>
+      <div class="qbody">
+        <p class="qt" id="qt"></p>
+        <div class="opts" id="qopts" role="radiogroup" aria-labelledby="qt"></div>
+        <div class="qnav">
+          <button class="link" type="button" id="qprev">← Anterior</button>
+          <button class="btn solid" type="button" id="qnext" disabled>Siguiente →</button>
+        </div>
+        <div class="err" id="qerr" role="alert"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL ============ -->
+  <section class="screen" id="s-final">
+    <div class="final">
+      <div>
+        <div class="eyebrow">Respuestas guardadas</div>
+        <h2>¡Cruzaste la <span>puerta!</span></h2>
+        <p id="fmsg">Ya registramos tu punto de partida. Al final de la jornada vas a responder preguntas parecidas y veremos cuánto avanzamos como equipo.</p>
+        <div class="resumen">
+          <div style="--rc:var(--teal)"><b>Política Ambiental</b>9 compromisos y 6 actitudes</div>
+          <div style="--rc:var(--amber)"><b>Energía</b>Metas, acciones y hábitos</div>
+          <div style="--rc:var(--red)"><b>Residuos peligrosos</b>Qué son y qué hacer</div>
+        </div>
+        <a class="btn solid big" href="../">Ir a la jornada ECO EFICIENCIA 360 <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="fig"><div class="bubble">¡Bienvenido!</div><img src="img/hombre.webp" alt="Colaborador de la Imprenta con el pulgar arriba"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="stripe"></div>
+  <div class="wrap">
+    <img class="s1" src="img/slogan.webp" alt="Comunicar con transparencia es la mejor impresión">
+    <img class="s2" src="img/sello.webp" alt="PREAD · En marcha hacia la excelencia ambiental">
+  </div>
+</footer>
+
+<script>
+const SB = "https://tovzbcwwdxueejgidoze.supabase.co/rest/v1/rpc/";
+const SBKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvdnpiY3d3ZHh1ZWVqZ2lkb3plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MDA0NzAsImV4cCI6MjEwODI3NjQ3MH0.dHKHFpeYk00g93FEEF4BW5xzzHgXXQgg69ejzW0rWak";
+
+/* Mismos nombres de grupo que la página de la jornada: así cada persona queda emparejada entre la entrada y la salida */
+const GRUPOS = [
+  ["Gerencia General", "#178a84", "#e2f2f0", ["Gerencia General","Grupo Control Disciplinario Interno","Grupo de Comunicaciones"]],
+  ["Oficina Asesora de Planeación", "#0072a8", "#e3f0f7", ["Oficina Asesora de Planeación","Grupo de Mejora Continua"]],
+  ["Subgerencia Comercial y de Divulgación", "#e8891c", "#fdf0e0", ["Subgerencia Comercial y de Divulgación","Grupo Gestión de Ventas","Grupo Promoción y Divulgación"]],
+  ["Subgerencia de Producción", "#c2362b", "#fbe6e3", ["Subgerencia de Producción","Grupo Impresión Gráfica","Grupo Impresión en Seguridad y Servicios Digitales","Grupo Diario Oficial y Gacetas","Grupo Despachos","Grupo Mantenimiento Operativo","Grupo Aseguramiento de la Calidad"]],
+  ["Subgerencia Administrativa y Financiera", "#26a95e", "#e3f4ea", ["Subgerencia Administrativa y Financiera","Grupo Talento Humano","Grupo Financiera","Grupo Adquisiciones","Grupo de Facturación y Cartera","Grupo de Almacén General","Grupo de Infraestructura y Servicios Generales","Grupo de Gestión Documental"]]
+];
+const DEP_IC = [
+  '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4l11 5V5L3 10z"/><path d="M14 8a4 4 0 0 1 0 8M7 14v5h3"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6"/><path d="M17 4v8M14.5 6.5h4a1.5 1.5 0 0 1 0 3h-3"/></svg>'
+];
+
+const MODS = {
+  politica:{n:"Política Ambiental", c:"#178a84", s:"#e2f2f0", ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-9 6-14 15-14 0 9-5 15-14 15"/><path d="M5 19l8-8"/></svg>'},
+  energia:{n:"Energía", c:"#e8891c", s:"#fdf0e0", ic:'<svg viewBox="0 0 24 24" fill="#fff"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>'},
+  respel:{n:"Residuos peligrosos", c:"#c2362b", s:"#fbe6e3", ic:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/></svg>'}
+};
+
+/* Ilustraciones vectoriales (trazo negro, rellenos planos, como los personajes de la jornada) */
+const K = 'stroke="#1a1a1a" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+const ILU = [
+  // 1 · tres pilares
+  `<svg viewBox="0 0 150 120"><path d="M14 104h122" ${K} fill="none"/><path d="M28 34l47-22 47 22z" fill="#178a84" ${K}/><rect x="34" y="40" width="16" height="58" fill="#fff" ${K}/><rect x="67" y="40" width="16" height="58" fill="#98c340" ${K}/><rect x="100" y="40" width="16" height="58" fill="#68bc9a" ${K}/><rect x="24" y="98" width="102" height="8" fill="#1a1a1a"/></svg>`,
+  // 2 · papel que vuelve al ciclo
+  `<svg viewBox="0 0 150 120"><path d="M75 16a44 44 0 0 1 40 26" fill="none" ${K}/><path d="M112 30l4 13-13 1" fill="none" ${K}/><path d="M75 104a44 44 0 0 1-40-26" fill="none" ${K}/><path d="M38 90l-4-13 13-1" fill="none" ${K}/><path d="M52 34h34l14 14v40H52z" fill="#fff" ${K}/><path d="M86 34v14h14" fill="#e2f2f0" ${K}/><path d="M60 60h30M60 70h30M60 80h20" stroke="#178a84" stroke-width="3" stroke-linecap="round"/></svg>`,
+  // 3 · lupa sobre una hoja (reconocer con honestidad)
+  `<svg viewBox="0 0 150 120"><path d="M40 92c-4-30 18-56 52-60 4 34-18 58-52 60z" fill="#98c340" ${K}/><path d="M40 92 80 48" ${K} fill="none"/><circle cx="96" cy="64" r="24" fill="#fff" fill-opacity=".6" ${K}/><path d="M113 81l20 20" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/><path d="M86 56a12 12 0 0 1 12-6" stroke="#178a84" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+  // 4 · computador y rayo
+  `<svg viewBox="0 0 150 120"><rect x="22" y="18" width="92" height="64" rx="6" fill="#fff" ${K}/><rect x="30" y="26" width="76" height="48" rx="2" fill="#fdf0e0"/><path d="M60 82l-6 18h28l-6-18" fill="#e0e4e4" ${K}/><path d="M44 100h48" ${K}/><path d="M118 20l-16 26h12l-6 22 20-30h-12l8-18z" fill="#e8891c" ${K}/><path d="M48 50h20M48 58h30" stroke="#e8891c" stroke-width="3" stroke-linecap="round"/></svg>`,
+  // 5 · ventana con sol
+  `<svg viewBox="0 0 150 120"><rect x="26" y="14" width="80" height="90" rx="4" fill="#e3f0f7" ${K}/><path d="M66 14v90M26 59h80" ${K}/><circle cx="48" cy="38" r="11" fill="#f6d860" ${K}/><path d="M48 20v-4M30 38h-4M36 26l-3-3M60 26l3-3" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><path d="M118 30v34" ${K}/><path d="M108 64h20l-4 14h-12z" fill="#e8891c" ${K}/><path d="M112 82h12" stroke="#1a1a1a" stroke-width="3" stroke-dasharray="3 4" stroke-linecap="round"/></svg>`,
+  // 6 · oficina de noche, todo prendido
+  `<svg viewBox="0 0 150 120"><rect x="14" y="30" width="92" height="74" rx="4" fill="#1d3557" ${K}/><path d="M118 22a16 16 0 1 0 14 24 13 13 0 0 1-14-24z" fill="#f6d860" ${K}/><path d="M40 30v12" ${K}/><path d="M30 42h20l-4 10h-12z" fill="#f6d860" ${K}/><path d="M24 52l-6 10M56 52l6 10" stroke="#f6d860" stroke-width="3" stroke-linecap="round"/><rect x="64" y="66" width="34" height="22" rx="3" fill="#f6d860" ${K}/><path d="M72 74h18M72 80h12" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><rect x="24" y="74" width="30" height="12" rx="2" fill="#e0e4e4" ${K}/><path d="M30 92c4 4 14 4 18 0" stroke="#68bc9a" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+  // 7 · envase con símbolo de peligro
+  `<svg viewBox="0 0 150 120"><path d="M56 22h22v12l14 10v58H42V44l14-10z" fill="#fff" ${K}/><rect x="54" y="12" width="26" height="10" rx="2" fill="#c2362b" ${K}/><path d="M67 58 50 88h34z" fill="#f6d860" ${K}/><path d="M67 68v9M67 82v.5" stroke="#1a1a1a" stroke-width="3.5" stroke-linecap="round"/><path d="M104 74c0-10 10-18 10-18s10 8 10 18a10 10 0 0 1-20 0z" fill="#c2362b" ${K}/></svg>`,
+  // 8 · guante y bolsas de colores
+  `<svg viewBox="0 0 150 120"><path d="M30 104V64c0-6 9-6 9 0V38c0-6 9-6 9 0v-6c0-6 9-6 9 0v6c0-6 9-6 9 0v34l6-10c4-6 12-2 9 4l-12 26c-3 8-8 12-16 12z" fill="#fff" ${K}/><path d="M42 72c6 2 12 0 14-6M48 86c4-2 8-1 10 2" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="52" cy="58" r="5" fill="#1d3557"/><path d="M96 44h40v58H96z" fill="#c2362b" ${K}/><path d="M96 44l6-10h28l6 10" fill="none" ${K}/><path d="M104 60h24" stroke="#fff" stroke-width="3" stroke-linecap="round"/><text x="116" y="88" text-anchor="middle" font-family="Jost, sans-serif" font-weight="700" font-size="22" fill="#fff">?</text></svg>`,
+  // 9 · derrame con advertencia
+  `<svg viewBox="0 0 150 120"><path d="M14 96c6-12 26-10 36-14s26-10 42-4 34 4 40 14-16 16-38 14-28 4-46 2-38-2-34-12z" fill="#b9d7e6" ${K}/><path d="M40 92c10-4 24-4 34-2" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M30 30h26l6 10v22H24V40z" fill="#fff" ${K} transform="rotate(-28 43 46)"/><path d="M58 64c4 6 6 12 4 18" stroke="#7fb3cc" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M104 14 80 56h48z" fill="#f6d860" ${K}/><path d="M104 28v14M104 48v.5" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round"/></svg>`
+];
+
+/* Prueba de entrada: preguntas paralelas a las 9 de la jornada (mismo contenido, otro enunciado). La clave de respuestas vive en la base de datos, no aquí. */
+const NOSE = "Aún no lo sé";
+const PRE = [
+  {m:"politica", q:"Los compromisos de la Política Ambiental de la Imprenta se agrupan en 3 pilares. ¿Cuáles son?",
+   o:["Producir, vender y facturar","Prevenir y controlar, usar con eficiencia, y cultura y mejora","Reciclar, reutilizar y reducir"]},
+  {m:"politica", q:"Después de una impresión sobran recortes de papel limpio. ¿Qué acción refleja la <em>economía circular</em>?",
+   o:["Botarlos en la caneca de residuos ordinarios","Guardarlos en el puesto de trabajo indefinidamente","Separarlos para que se aprovechen y el material vuelva a usarse"]},
+  {m:"politica", q:"Antes de proponer una mejora ambiental en tu área, ¿qué es lo primero que hay que hacer?",
+   o:["Reconocer con honestidad qué estamos cuidando y qué estamos afectando","Esperar a que lo pida el jefe","Comprar productos “verdes”"]},
+  {m:"energia", q:"¿Qué parte del computador consume más energía?",
+   o:["El teclado","La pantalla","El mouse"]},
+  {m:"energia", q:"En la mañana entra mucha luz por las ventanas de tu oficina. ¿Cuál es la mejor práctica?",
+   o:["Cerrar las persianas y prender las luces","Prender todas las luces para ver mejor","Abrir las persianas y apagar las luces que sobran"]},
+  {m:"energia", q:"Un lunes encuentras que el aire acondicionado y las luces quedaron prendidos todo el fin de semana en una oficina vacía. ¿Qué lo habría evitado?",
+   o:["Que la última persona en salir apagara luces, aire y equipos","Nada, es normal que pase","Que vigilancia lo revisara el lunes"]},
+  {m:"respel", q:"¿Cuál de estos es un <em>residuo peligroso</em>?",
+   o:["Cartón limpio","Restos de comida","Un envase con restos de solvente"]},
+  {m:"respel", q:"Un guante contaminado con tinta, ¿en qué color de bolsa va dentro de la planta?",
+   o:["Blanca","Roja","Verde"]},
+  {m:"respel", q:"Ante un derrame de solvente, ¿qué es lo que <em>NO</em> se debe hacer?",
+   o:["Alejar a las personas del área","Echarle agua para que se vaya por el desagüe","Avisar al Grupo de Mejora Continua"]}
+];
+const LET = ["A","B","C","D"];
+
+let me = null, ans = Array(9).fill(null), cur = 0, dep = null, grupo = null;
+
+async function rpc(fn, body){
+  const r = await fetch(SB+fn,{method:"POST",headers:{"apikey":SBKEY,"Authorization":"Bearer "+SBKEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok){ let m=""; try{ m=(await r.json()).message||""; }catch(e){} throw new Error(m||("Error "+r.status)); }
+  return r.json();
+}
+function store(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function read(k){ try{ return JSON.parse(localStorage.getItem(k)||"null"); }catch(e){ return null; } }
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on', s.id==='s-'+id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showWho(){
+  const w = document.getElementById('who');
+  w.innerHTML = me ? '<strong></strong><span></span> · <button type="button" id="nosoy">No soy yo</button>' : '';
+  if(me){
+    w.querySelector('strong').textContent = me.nombre;
+    w.querySelector('span').textContent = me.grupo;
+    document.getElementById('nosoy').onclick = ()=>{ me=null; store('eco360_me',null); ans=Array(9).fill(null); store('eco360_entrada_borrador',null); showWho(); go('portada'); };
+  }
+}
+
+/* ---------- Registro ---------- */
+const depsEl = document.getElementById('deps'), grpsEl = document.getElementById('grupos');
+GRUPOS.forEach(([nombre,c,s,gs],i)=>{
+  const b = document.createElement('button'); b.type='button'; b.className='dep'; b.setAttribute('aria-pressed','false');
+  b.style.setProperty('--dc',c); b.style.setProperty('--ds',s);
+  b.innerHTML = '<span class="ic">'+DEP_IC[i]+'</span><span></span>'; b.lastChild.textContent = nombre;
+  b.onclick = ()=>{ dep=i; grupo=null; depsEl.querySelectorAll('.dep').forEach((x,j)=>x.setAttribute('aria-pressed', j===i)); paintGrupos(); };
+  depsEl.appendChild(b);
+});
+function paintGrupos(){
+  grpsEl.innerHTML='';
+  if(dep===null){ grpsEl.innerHTML='<p class="vacio">Primero elige tu dependencia.</p>'; return; }
+  const [nombre,c,,gs] = GRUPOS[dep];
+  gs.forEach(g=>{
+    const b=document.createElement('button'); b.type='button'; b.className='grp'; b.style.setProperty('--dc',c);
+    b.textContent = g===nombre ? 'Despacho de la '+(nombre.startsWith('Oficina')?'Oficina':nombre.startsWith('Gerencia')?'Gerencia':'Subgerencia') : g;
+    b.setAttribute('aria-pressed', grupo===g);
+    b.onclick = ()=>{ grupo=g; grpsEl.querySelectorAll('.grp').forEach(x=>x.setAttribute('aria-pressed', x===b)); };
+    grpsEl.appendChild(b);
+  });
+}
+document.getElementById('rform').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const nombre = document.getElementById('rnombre').value.trim().replace(/\s+/g,' ');
+  const err = document.getElementById('rerr'), btn = document.getElementById('rbtn');
+  if(nombre.split(' ').length < 2){ err.textContent='Escribe tu nombre completo: nombres y apellidos.'; document.getElementById('rnombre').focus(); return; }
+  if(dep===null){ err.textContent='Elige tu dependencia.'; return; }
+  if(!grupo){ err.textContent='Elige tu grupo de trabajo.'; return; }
+  if(!document.getElementById('rhd').checked){ err.textContent='Para participar debes autorizar el tratamiento de tus datos.'; return; }
+  err.textContent=''; btn.disabled=true; btn.firstChild.textContent='Registrando… ';
+  try{
+    const id = await rpc("eco360_registrar",{p_nombre:nombre,p_grupo:grupo});
+    me = {id, nombre, grupo}; store('eco360_me', me); showWho();
+    const st = await rpc("eco360_entrada_estado",{p_participante:id});
+    if(st.respondidas >= 9){ go('final'); } else { cur = 0; renderQ(); go('preguntas'); }
+  }catch(x){ err.textContent='No pudimos registrarte. Revisa tu conexión a internet e intenta de nuevo.'; }
+  btn.disabled=false; btn.firstChild.textContent='Empezar las preguntas ';
+});
+
+/* ---------- Preguntas ---------- */
+const barra = document.getElementById('barra');
+PRE.forEach(p=>{ const s=document.createElement('span'); s.style.setProperty('--sc', MODS[p.m].c); barra.appendChild(s); });
+function renderQ(){
+  const p = PRE[cur], M = MODS[p.m], card = document.getElementById('s-preguntas');
+  card.style.setProperty('--c', M.c); card.style.setProperty('--cs', M.s);
+  document.getElementById('qmod').innerHTML = '<i>'+M.ic+'</i>'+M.n;
+  document.getElementById('qn').textContent = cur+1;
+  document.getElementById('qilu').innerHTML = ILU[cur];
+  document.getElementById('qt').innerHTML = p.q;
+  const box = document.getElementById('qopts'); box.innerHTML='';
+  [...p.o, NOSE].forEach((txt,j)=>{
+    const b=document.createElement('button'); b.type='button'; b.className='op'+(j===3?' nose':'');
+    b.setAttribute('role','radio'); b.setAttribute('aria-checked', ans[cur]===j);
+    b.innerHTML='<span class="l">'+(j===3?'?':LET[j])+'</span><span></span>'; b.lastChild.textContent = txt;
+    b.onclick = ()=>{ ans[cur]=j; store('eco360_entrada_borrador',{id:me&&me.id,ans}); box.querySelectorAll('.op').forEach(x=>x.setAttribute('aria-checked', x===b)); paintNav();
+      if(cur<8) setTimeout(()=>{ if(ans[cur]===j){ cur++; renderQ(); } }, 380); };
+    box.appendChild(b);
+  });
+  barra.querySelectorAll('span').forEach((s,i)=>{ s.classList.toggle('done', ans[i]!==null); s.classList.toggle('now', i===cur); });
+  document.getElementById('qerr').textContent='';
+  paintNav();
+}
+function paintNav(){
+  const prev=document.getElementById('qprev'), next=document.getElementById('qnext');
+  prev.style.visibility = cur===0 ? 'hidden' : 'visible';
+  next.disabled = ans[cur]===null;
+  next.textContent = cur===8 ? 'Enviar mis respuestas ✓' : 'Siguiente →';
+  barra.querySelectorAll('span').forEach((s,i)=>s.classList.toggle('done', ans[i]!==null));
+}
+document.getElementById('qprev').onclick = ()=>{ if(cur>0){ cur--; renderQ(); } };
+document.getElementById('qnext').onclick = async ()=>{
+  if(ans[cur]===null) return;
+  if(cur<8){ cur++; renderQ(); return; }
+  const falta = ans.findIndex(a=>a===null);
+  if(falta>=0){ cur=falta; renderQ(); document.getElementById('qerr').textContent='Te falta responder esta pregunta.'; return; }
+  const next = document.getElementById('qnext'), err = document.getElementById('qerr');
+  next.disabled=true; next.textContent='Guardando…'; err.textContent='';
+  try{
+    await rpc("eco360_entrada_responder",{p_participante:me.id,p_respuestas:ans});
+    store('eco360_entrada_borrador',null); go('final'); confeti();
+  }catch(x){
+    if(/no registrado/i.test(x.message)){ me=null; store('eco360_me',null); showWho(); go('registro'); return; }
+    err.textContent='No pudimos guardar tus respuestas. Revisa tu conexión e intenta de nuevo.'; paintNav();
+  }
+};
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('s-preguntas').classList.contains('on')) return;
+  const k = e.key.toUpperCase(), idx = {A:0,B:1,C:2,D:3,"1":0,"2":1,"3":2,"4":3}[k];
+  if(idx!==undefined && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) document.querySelectorAll('#qopts .op')[idx].click();
+});
+
+function confeti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c=document.createElement('div'); c.className='confeti'; const cols=['#178a84','#26a95e','#98c340','#68bc9a','#0072a8','#e8891c'];
+  for(let i=0;i<70;i++){ const p=document.createElement('i'); p.style.left=Math.random()*100+'vw'; p.style.background=cols[i%cols.length];
+    p.style.animationDuration=(2.2+Math.random()*2)+'s'; p.style.animationDelay=(Math.random()*.6)+'s'; c.appendChild(p); }
+  document.body.appendChild(c); setTimeout(()=>c.remove(),5000);
+}
+
+/* ---------- Navegación e inicio ---------- */
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+document.getElementById('b-empezar').onclick = async ()=>{
+  if(!me){ go('registro'); setTimeout(()=>document.getElementById('rnombre').focus(),350); return; }
+  try{
+    const st = await rpc("eco360_entrada_estado",{p_participante:me.id});
+    if(!st.registrado){ me=null; store('eco360_me',null); showWho(); go('registro'); return; }
+    if(st.respondidas >= 9){ go('final'); return; }
+  }catch(e){}
+  renderQ(); go('preguntas');
+};
+(async function init(){
+  me = read('eco360_me');
+  const b = read('eco360_entrada_borrador');
+  if(me && b && b.id===me.id && Array.isArray(b.ans) && b.ans.length===9){ ans=b.ans; const f=ans.findIndex(a=>a===null); cur = f<0 ? 8 : f; }
+  showWho();
+  if(me){
+    try{ const st = await rpc("eco360_entrada_estado",{p_participante:me.id});
+      if(!st.registrado){ me=null; store('eco360_me',null); showWho(); }
+      else if(st.respondidas>=9){ document.getElementById('fmsg').textContent='Ya habías respondido la prueba de entrada. ¡Gracias! Al final de la jornada veremos cuánto avanzamos como equipo.'; go('final'); }
+    }catch(e){}
+  }
+})();
+</script>
+</body>
+</html>
