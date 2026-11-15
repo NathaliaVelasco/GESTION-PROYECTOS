@@ -94,6 +94,17 @@ tr:last-child td{border-bottom:0}
 }
 
 @media (max-width:600px){.tiles{grid-template-columns:1fr}}
+/* ===== Antes y después ===== */
+.ad{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.ad>div{border:1px solid var(--line);border-top:5px solid var(--c,#178a84);border-radius:6px;padding:10px 12px;font-size:14px;color:var(--muted);background:var(--card)}
+.ad b{display:block;color:var(--ink);font-family:var(--display);font-weight:600;font-size:15px;margin-bottom:4px}
+.ad .nums{font-family:var(--display);font-size:21px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.1}
+.ad .nums small{font-size:14px;color:var(--muted);font-weight:500}
+.up{color:#1d7a45;font-weight:700} .down{color:#b3261e;font-weight:700} .eq{color:var(--muted);font-weight:700}
+.bars{display:block;width:100%;height:auto;max-width:720px}
+.leg2{display:flex;gap:18px;font-size:14px;margin:6px 0 0}
+.leg2 i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+@media (max-width:700px){.ad{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -124,13 +135,18 @@ tr:last-child td{border-bottom:0}
       </div>
       <p class="note">Puntaje: 8 puntos por cada respuesta correcta (72) más 28 de asistencia, para un total de 100. En caso de empate, gana quien completó primero sus respuestas y su asistencia. Las personas que aún no han terminado aparecen con la etiqueta "En curso".</p>
     </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><strong>Antes y después · Puerta de Entrada vs. preguntas de la jornada</strong><a class="btn alt" href="../puerta-de-entrada/" target="_blank" rel="noopener">Ver Puerta de Entrada</a></div>
+      <div class="ad" id="ad"></div>
+      <p class="note" id="adnote"></p>
+    </div>
     <div class="tbl"><table>
       <thead><tr><th class="n">#</th><th>Nombre completo</th><th>Grupo de trabajo</th><th class="n">Preguntas</th><th class="n">Asistencia</th><th class="n">Total</th><th>Completó</th></tr></thead>
       <tbody id="tb"></tbody>
     </table></div>
       <div class="danger">
       <h4>Reiniciar datos</h4>
-      <p>Borra todos los participantes, respuestas y asistencias registrados. Úsalo solo antes de empezar las actividades del 20 de noviembre. Esta acción no se puede deshacer: si necesitas conservar algo, descarga primero el Excel.</p>
+      <p>Borra todos los participantes, respuestas (incluida la Puerta de Entrada) y asistencias registrados. Úsalo solo antes de empezar las actividades del 20 de noviembre. Esta acción no se puede deshacer: si necesitas conservar algo, descarga primero el Excel.</p>
       <button class="btn red" type="button" id="resetopen">Reiniciar datos</button>
       <div id="resetbox" hidden style="margin-top:12px">
         <label for="resetconf">Para confirmar, escribe REINICIAR</label>
@@ -151,12 +167,59 @@ tr:last-child td{border-bottom:0}
 const SB = "https://tovzbcwwdxueejgidoze.supabase.co/rest/v1/rpc/";
 const SBKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvdnpiY3d3ZHh1ZWVqZ2lkb3plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MDA0NzAsImV4cCI6MjEwODI3NjQ3MH0.dHKHFpeYk00g93FEEF4BW5xzzHgXXQgg69ejzW0rWak";
 const MODS = {politica:"Política Ambiental", energia:"Energía", respel:"Residuos peligrosos"};
-let clave = "", rows = [];
+let clave = "", rows = [], ent = [];
 
-async function fetchRows(){
-  const r = await fetch(SB+"eco360_resultados_v2",{method:"POST",headers:{"apikey":SBKEY,"Authorization":"Bearer "+SBKEY,"Content-Type":"application/json"},body:JSON.stringify({p_clave:clave})});
+async function call(fn){
+  const r = await fetch(SB+fn,{method:"POST",headers:{"apikey":SBKEY,"Authorization":"Bearer "+SBKEY,"Content-Type":"application/json"},body:JSON.stringify({p_clave:clave})});
   if(!r.ok){ let m=""; try{ m=(await r.json()).message||""; }catch(e){} throw new Error(m); }
   return r.json();
+}
+async function fetchRows(){
+  const [a,b] = await Promise.all([call("eco360_resultados_v2"), call("eco360_entrada_detalle").catch(()=>[])]);
+  ent = b; return a;
+}
+/* Antes (Puerta de Entrada) y después (preguntas de la jornada). Pregunta de entrada k ↔ módulo, tema k%3 */
+const MODKEYS = ["politica","energia","respel"];
+function antesDespues(){
+  const s = () => ({ok:0,tot:0});
+  const R = {ent:{all:s(),nose:0}, sal:{all:s()}, mod:{}, tema:{}, dep:{}, pers:new Map()};
+  MODKEYS.forEach(m=>{ R.mod[m]={ent:s(),sal:s()}; R.tema[m]=[0,1,2].map(()=>({ent:s(),sal:s()})); });
+  const depOf = g => { const i = DEPS.findIndex(d=>d[1].includes(g)); return i<0 ? "Otros" : DEPS[i][0]; };
+  const P = (r) => { const k=r.nombre+"|"+r.grupo; if(!R.pers.has(k)) R.pers.set(k,{nombre:r.nombre,grupo:r.grupo,e:0,et:0,nose:0,s:0,st:0}); return R.pers.get(k); };
+  const D = (g) => { const d=depOf(g); if(!R.dep[d]) R.dep[d]={ent:s(),sal:s()}; return R.dep[d]; };
+  ent.forEach(r=>{ const m=r.modulo, i=r.pregunta%3, ok=r.correcta?1:0;
+    R.ent.all.tot++; R.ent.all.ok+=ok; if(r.no_sabe) R.ent.nose++;
+    R.mod[m].ent.tot++; R.mod[m].ent.ok+=ok; R.tema[m][i].ent.tot++; R.tema[m][i].ent.ok+=ok;
+    const d=D(r.grupo); d.ent.tot++; d.ent.ok+=ok;
+    const p=P(r); p.et++; p.e+=ok; if(r.no_sabe) p.nose++; });
+  rows.filter(r=>r.modulo).forEach(r=>{ const m=r.modulo, i=r.pregunta, ok=r.correcta?1:0;
+    R.sal.all.tot++; R.sal.all.ok+=ok;
+    R.mod[m].sal.tot++; R.mod[m].sal.ok+=ok; R.tema[m][i].sal.tot++; R.tema[m][i].sal.ok+=ok;
+    const d=D(r.grupo); d.sal.tot++; d.sal.ok+=ok;
+    const p=P(r); p.st++; p.s+=ok; });
+  const pares = [...R.pers.values()].filter(p=>p.et===9 && p.st===9);
+  R.pares = pares;
+  R.mejoraron = pares.filter(p=>p.s>p.e).length;
+  R.iguales = pares.filter(p=>p.s===p.e).length;
+  R.bajaron = pares.filter(p=>p.s<p.e).length;
+  R.pe = pares.length ? pares.reduce((a,p)=>a+p.e,0)/pares.length : 0;
+  R.ps = pares.length ? pares.reduce((a,p)=>a+p.s,0)/pares.length : 0;
+  R.conEntrada = [...R.pers.values()].filter(p=>p.et>0).length;
+  return R;
+}
+const acc = x => x.tot ? 100*x.ok/x.tot : null;
+function delta(a,b){ if(a===null||b===null) return '<span class="eq">—</span>'; const d=b-a; const s=(d>0?'+':'')+d.toLocaleString('es-CO',{maximumFractionDigits:1,minimumFractionDigits:1})+' pts';
+  return '<span class="'+(d>0.05?'up':d<-0.05?'down':'eq')+'">'+(d>0.05?'▲ ':d<-0.05?'▼ ':'')+s+'</span>'; }
+const pc = x => x===null ? '—' : x.toLocaleString('es-CO',{maximumFractionDigits:1,minimumFractionDigits:1})+' %';
+function renderAD(){
+  const R = antesDespues(), box = document.getElementById('ad');
+  const MC = {politica:"#178a84", energia:"#e8891c", respel:"#c2362b"}, MN = {politica:"Política Ambiental", energia:"Energía", respel:"Residuos peligrosos"};
+  const ea=acc(R.ent.all), sa=acc(R.sal.all);
+  box.innerHTML = '<div style="--c:#1a1a1a"><b>Total</b><div class="nums">'+pc(ea)+' <small>→</small> '+pc(sa)+'</div>'+delta(ea,sa)+'</div>'+
+    MODKEYS.map(m=>{ const a=acc(R.mod[m].ent), b=acc(R.mod[m].sal);
+      return '<div style="--c:'+MC[m]+'"><b>'+MN[m]+'</b><div class="nums">'+pc(a)+' <small>→</small> '+pc(b)+'</div>'+delta(a,b)+'</div>'; }).join('');
+  document.getElementById('adnote').textContent = R.conEntrada+' personas hicieron la Puerta de Entrada · '+R.pares.length+' completaron ambas pruebas'+
+    (R.pares.length ? ' · '+R.mejoraron+' mejoraron, '+R.iguales+' se mantuvieron y '+R.bajaron+' bajaron' : '')+'. % de respuestas correctas, antes → después.';
 }
 function people(){
   const map = new Map();
@@ -179,6 +242,7 @@ function render(){
   document.getElementById('t1').textContent = ps.length;
   document.getElementById('t2').textContent = ps.filter(p=>p.resp===9).length;
   document.getElementById('t3').textContent = ps.filter(p=>p.asistencia>0).length;
+  renderAD();
   const tb = document.getElementById('tb');
   tb.innerHTML = ps.length ? ps.slice(0,20).map((p,i)=>'<tr class="win"><td class="n">'+(i+1)+'</td><td>'+esc(p.nombre)+'</td><td>'+esc(p.grupo)+'</td><td class="n">'+p.preguntas+'</td><td class="n">'+p.asistencia+'</td><td class="n"><b>'+p.total+'</b></td><td>'+(p.completo? fmt(p.fin) : '<span class="pill">En curso</span>')+'</td></tr>').join('') : '<tr><td colspan="7">Todavía no hay registros.</td></tr>';
 }
@@ -205,6 +269,18 @@ function excel(){
   const wd = XLSX.utils.aoa_to_sheet(det);
   wd['!cols']=[{wch:34},{wch:22},{wch:20},{wch:40},{wch:10},{wch:9},{wch:8},{wch:16}];
   XLSX.utils.book_append_sheet(wb, wd, "Detalle respuestas");
+  const R = antesDespues();
+  const adh = [["Nombre completo","Grupo de trabajo","Entrada: aciertos (de 9)","Entrada: 'Aún no lo sé'","Jornada: aciertos (de 9)","Cambio (aciertos)","Estado"]];
+  [...R.pers.values()].sort((a,b)=>a.grupo.localeCompare(b.grupo,'es')||a.nombre.localeCompare(b.nombre,'es')).forEach(p=>adh.push([p.nombre,p.grupo,p.et?p.e:"",p.et?p.nose:"",p.st?p.s:"",(p.et===9&&p.st===9)?p.s-p.e:"",
+    (p.et===9&&p.st===9)?(p.s>p.e?"Mejoró":p.s===p.e?"Igual":"Bajó"):(!p.et?"Sin prueba de entrada":p.st<9?"Jornada sin terminar":"")]));
+  const wad = XLSX.utils.aoa_to_sheet(adh); wad['!cols']=[{wch:34},{wch:30},{wch:12},{wch:12},{wch:12},{wch:10},{wch:20}];
+  wad['!autofilter']={ref:'A1:G'+adh.length};
+  XLSX.utils.book_append_sheet(wb, wad, "Antes y después");
+  const QE = ["3 pilares de la Política","Economía circular (recortes de papel)","Reconocer con honestidad","Parte del computador que más consume","Aprovechar la luz natural","Apagar todo al salir","Identificar un residuo peligroso","Bolsa roja (guante con tinta)","Qué NO hacer ante un derrame"];
+  const de = [["Nombre completo","Grupo de trabajo","Módulo","Pregunta de entrada","Respuesta elegida","Correcta","Fecha y hora"]];
+  ent.forEach(r=>de.push([r.nombre,r.grupo,MODS[r.modulo],QE[r.pregunta],r.no_sabe?"Aún no lo sé":"ABC"[r.opcion],r.correcta?"Sí":"No",fmt(r.respondido)]));
+  const wde = XLSX.utils.aoa_to_sheet(de); wde['!cols']=[{wch:34},{wch:30},{wch:20},{wch:36},{wch:14},{wch:9},{wch:16}];
+  XLSX.utils.book_append_sheet(wb, wde, "Detalle entrada");
   const hoy = new Date().toLocaleDateString('es-CO',{timeZone:'America/Bogota'}).replace(/\//g,'-');
   XLSX.writeFile(wb, "ECO_EFICIENCIA_360_resultados_"+hoy+".xlsx");
 }
@@ -264,6 +340,50 @@ function pieSVG(parts, size){
 const pct = (a,b)=> b ? (100*a/b) : 0;
 const f1 = x => x.toLocaleString('es-CO',{maximumFractionDigits:1, minimumFractionDigits:1});
 
+function barsSVG(items){
+  // items: [{l, a, b, c}] porcentajes antes (a) y después (b)
+  const W=720, rowH=58, H=items.length*rowH+30, x0=200, wMax=W-x0-70;
+  let s='<svg class="bars" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Porcentaje de aciertos antes y después por categoría">';
+  [0,25,50,75,100].forEach(v=>{ const x=x0+wMax*v/100; s+='<line x1="'+x+'" y1="4" x2="'+x+'" y2="'+(H-22)+'" stroke="#e0e4e4"/><text x="'+x+'" y="'+(H-6)+'" font-size="12" fill="#5a6266" text-anchor="middle">'+v+' %</text>'; });
+  items.forEach((it,i)=>{ const y=8+i*rowH;
+    s+='<text x="'+(x0-12)+'" y="'+(y+26)+'" font-size="14" font-weight="700" fill="#1a1a1a" text-anchor="end">'+it.l+'</text>';
+    const wa=wMax*(it.a||0)/100, wb=wMax*(it.b||0)/100;
+    s+='<rect x="'+x0+'" y="'+y+'" width="'+wa+'" height="18" rx="3" fill="#c9cfcf"/><text x="'+(x0+wa+6)+'" y="'+(y+14)+'" font-size="12" fill="#5a6266">'+(it.a===null?'—':f1(it.a)+' %')+'</text>';
+    s+='<rect x="'+x0+'" y="'+(y+22)+'" width="'+wb+'" height="18" rx="3" fill="'+it.c+'"/><text x="'+(x0+wb+6)+'" y="'+(y+36)+'" font-size="12" font-weight="700" fill="#1a1a1a">'+(it.b===null?'—':f1(it.b)+' %')+'</text>';
+  });
+  return s+'</svg>';
+}
+function informeAD(){
+  const R = antesDespues();
+  const QE = ["Los 3 pilares de la Política","Economía circular","Reconocer con honestidad","Consumo del computador (pantalla)","Aprovechar la luz natural","Apagar todo al salir","Identificar un residuo peligroso","Bolsa roja para RESPEL","Qué NO hacer ante un derrame"];
+  let h = '<h3>4. Antes y después de la formación</h3>';
+  if(!R.ent.all.tot){ return h+'<p>Aún no hay respuestas en la Puerta de Entrada (prueba de entrada).</p>'; }
+  const ea=acc(R.ent.all), sa=acc(R.sal.all);
+  h += '<p>Antes de la formación, cada persona respondió en la <b>Puerta de Entrada</b> 9 preguntas sobre los mismos temas que se evalúan en la jornada, formuladas de otra manera y con la opción “Aún no lo sé”. Comparamos el porcentaje de respuestas correctas antes y después.</p>';
+  h += '<div class="kpis">'+
+    '<div class="kpi"><b>'+R.conEntrada+'</b>personas hicieron la prueba de entrada</div>'+
+    '<div class="kpi"><b>'+R.pares.length+'</b>completaron ambas pruebas</div>'+
+    '<div class="kpi"><b>'+pc(ea)+' → '+pc(sa)+'</b>aciertos antes → después</div>'+
+    '<div class="kpi"><b>'+pc(pct(R.ent.nose,R.ent.all.tot))+'</b>de las respuestas de entrada fueron “Aún no lo sé”</div></div>';
+  if(R.pares.length){
+    h += '<p style="margin-top:12px">Entre las '+R.pares.length+' personas que completaron ambas pruebas, el promedio pasó de <b>'+f1(R.pe)+'</b> a <b>'+f1(R.ps)+'</b> respuestas correctas de 9. <b>'+R.mejoraron+'</b> mejoraron ('+f1(pct(R.mejoraron,R.pares.length))+' %), '+R.iguales+' se mantuvieron y '+R.bajaron+' bajaron.</p>';
+  }
+  h += barsSVG([{l:"Total",a:ea,b:sa,c:"#1a1a1a"}, ...MODKEYS.map(m=>({l:MODNAME[m].replace(' (PGIRP)','').replace('Programa de Ahorro de ',''),a:acc(R.mod[m].ent),b:acc(R.mod[m].sal),c:MODCOLOR[m]}))]);
+  h += '<div class="leg2"><span><i style="background:#c9cfcf"></i>Antes (Puerta de Entrada)</span><span><i style="background:linear-gradient(90deg,#178a84 0 33%,#e8891c 33% 66%,#c2362b 66%)"></i>Después (jornada), en el color de cada categoría</span></div>';
+  h += '<div class="tbl" style="margin-top:14px"><table><thead><tr><th>Categoría</th><th>Tema</th><th class="n">Antes</th><th class="n">Después</th><th class="n">Cambio</th></tr></thead><tbody>';
+  MODKEYS.forEach(m=>{ const a=acc(R.mod[m].ent), b=acc(R.mod[m].sal);
+    h += '<tr class="dep"><td><b>'+MODNAME[m]+'</b></td><td></td><td class="n"><b>'+pc(a)+'</b></td><td class="n"><b>'+pc(b)+'</b></td><td class="n">'+delta(a,b)+'</td></tr>';
+    [0,1,2].forEach(i=>{ const x=R.tema[m][i], a2=acc(x.ent), b2=acc(x.sal);
+      h += '<tr><td></td><td>'+QE[MODKEYS.indexOf(m)*3+i]+'</td><td class="n">'+pc(a2)+'</td><td class="n">'+pc(b2)+'</td><td class="n">'+delta(a2,b2)+'</td></tr>'; }); });
+  h += '</tbody></table></div>';
+  const deps = DEPS.map(d=>d[0]).concat(R.dep["Otros"]?["Otros"]:[]).filter(d=>R.dep[d]);
+  if(deps.length){
+    h += '<div class="tbl" style="margin-top:14px"><table><thead><tr><th>Dependencia</th><th class="n">Antes</th><th class="n">Después</th><th class="n">Cambio</th></tr></thead><tbody>'+
+      deps.map(d=>{ const a=acc(R.dep[d].ent), b=acc(R.dep[d].sal); return '<tr><td>'+esc(d)+'</td><td class="n">'+pc(a)+'</td><td class="n">'+pc(b)+'</td><td class="n">'+delta(a,b)+'</td></tr>'; }).join('')+'</tbody></table></div>';
+  }
+  h += '<p class="meta" style="font-size:13px;color:var(--muted)">Porcentaje de respuestas correctas. Cambio en puntos porcentuales. “Aún no lo sé” cuenta como respuesta no correcta. En las preguntas de la jornada solo cuenta el primer intento.</p>';
+  return h;
+}
 function informe(){
   const ps = people();
   const n = ps.length;
@@ -330,11 +450,12 @@ function informe(){
   mid.slice(0,3).forEach(x=>recs.push({c:MODCOLOR[x.m], t:QTXT[x.m][x.i]+' · '+f1(x.a)+' % de aciertos', d:'Nivel aceptable. Conviene repasarlo en las comunicaciones internas: '+REC[x.m][x.i].charAt(0).toLowerCase()+REC[x.m][x.i].slice(1)}));
   if(!weak.length && !mid.length && flat.some(x=>x.tot)) recs.push({c:'#26a95e', t:'Mantener el conocimiento', d:'Todos los temas superan el 85 % de aciertos. Recomendamos sostenerlo con recordatorios periódicos y la capacitación trimestral que prevé el PGIRP.'});
   if(n < UNIVERSO*0.8) recs.push({c:'#0072a8', t:'Ampliar la cobertura', d:'Participó el '+f1(pct(n,UNIVERSO))+' % del universo. Recomendamos una jornada de nivelación para los grupos de trabajo con menor participación'+(cero.length?', empezando por los que no registraron participantes':'')+'.'});
-  h += '<h3>4. Recomendaciones de refuerzo</h3><ul class="recs">'+recs.map(r=>'<li style="--c:'+r.c+'"><b>'+r.t+'</b>'+r.d+'</li>').join('')+'</ul>';
+  h += informeAD();
+  h += '<h3>5. Recomendaciones de refuerzo</h3><ul class="recs">'+recs.map(r=>'<li style="--c:'+r.c+'"><b>'+r.t+'</b>'+r.d+'</li>').join('')+'</ul>';
 
   // Top 20
   const top = ps.slice(0,20);
-  h += '<h3 class="pb">5. Ganadores del taller de bienestar (Top 20)</h3><div class="tbl"><table><thead><tr><th class="n">#</th><th>Nombre completo</th><th>Grupo de trabajo</th><th class="n">Preguntas</th><th class="n">Asistencia</th><th class="n">Total</th></tr></thead><tbody>'+
+  h += '<h3 class="pb">6. Ganadores del taller de bienestar (Top 20)</h3><div class="tbl"><table><thead><tr><th class="n">#</th><th>Nombre completo</th><th>Grupo de trabajo</th><th class="n">Preguntas</th><th class="n">Asistencia</th><th class="n">Total</th></tr></thead><tbody>'+
     (top.length ? top.map((p,i)=>'<tr><td class="n">'+(i+1)+'</td><td>'+esc(p.nombre)+'</td><td>'+esc(p.grupo)+'</td><td class="n">'+p.preguntas+'</td><td class="n">'+p.asistencia+'</td><td class="n"><b>'+p.total+'</b></td></tr>').join('') : '<tr><td colspan="6">Sin registros.</td></tr>')+'</tbody></table></div>';
   h += '<p style="font-size:14px;color:var(--muted)">Criterio: mayor puntaje total (8 puntos por respuesta correcta, máximo 72, más 28 por asistencia). En caso de empate, gana quien completó primero sus respuestas y su asistencia.</p>';
   h += '<div class="foot">Datos recolectados en ECO EFICIENCIA 360 con autorización de los participantes (Ley 1581 de 2012), únicamente para la evaluación de la jornada. Informe preparado por Simoné para la Imprenta Nacional de Colombia.</div>';
@@ -356,7 +477,7 @@ document.getElementById('resetgo').addEventListener('click', async e=>{
     if(!r.ok) throw new Error();
     const d = await r.json();
     document.getElementById('resetbox').hidden=true; document.getElementById('resetconf').value='';
-    document.getElementById('resetok').innerHTML='<div class="okmsg">Listo. Se borraron '+d.participantes+' participantes y '+d.respuestas+' respuestas. El registro quedó en cero.</div>';
+    document.getElementById('resetok').innerHTML='<div class="okmsg">Listo. Se borraron '+d.participantes+' participantes y '+d.respuestas+' respuestas'+(d.entrada!=null?' y '+d.entrada+' respuestas de la Puerta de Entrada':'')+'. El registro quedó en cero.</div>';
     rows = await fetchRows(); render();
   }catch(x){ err.textContent='No se pudo reiniciar. Revisa tu conexión e intenta de nuevo.'; }
   e.target.disabled=false;
