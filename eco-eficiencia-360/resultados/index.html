@@ -154,7 +154,7 @@ const MODS = {politica:"Política Ambiental", energia:"Energía", respel:"Residu
 let clave = "", rows = [];
 
 async function fetchRows(){
-  const r = await fetch(SB+"eco360_resultados",{method:"POST",headers:{"apikey":SBKEY,"Authorization":"Bearer "+SBKEY,"Content-Type":"application/json"},body:JSON.stringify({p_clave:clave})});
+  const r = await fetch(SB+"eco360_resultados_v2",{method:"POST",headers:{"apikey":SBKEY,"Authorization":"Bearer "+SBKEY,"Content-Type":"application/json"},body:JSON.stringify({p_clave:clave})});
   if(!r.ok){ let m=""; try{ m=(await r.json()).message||""; }catch(e){} throw new Error(m); }
   return r.json();
 }
@@ -162,7 +162,7 @@ function people(){
   const map = new Map();
   rows.forEach(r=>{
     const key = r.nombre+"|"+r.grupo;
-    if(!map.has(key)) map.set(key,{nombre:r.nombre, grupo:r.grupo, fecha:r.registrado, asistencia:r.asistencia||0, asisFecha:r.asistencia_fecha, politica:0, energia:0, respel:0, resp:0, ultima:null});
+    if(!map.has(key)) map.set(key,{nombre:r.nombre, grupo:r.grupo, fecha:r.registrado, asistencia:r.asistencia||0, asisFecha:r.asistencia_fecha, asisDia:r.asistencia_dia, politica:0, energia:0, respel:0, resp:0, ultima:null});
     const p = map.get(key);
     if(r.modulo){ p[r.modulo]+=r.puntos; p.resp++; if(!p.ultima || r.respondido>p.ultima) p.ultima=r.respondido; }
   });
@@ -188,20 +188,20 @@ function fmt(d){ const x=new Date(d); return x.toLocaleString('es-CO',{timeZone:
 function excel(){
   const ps = people();
   const wb = XLSX.utils.book_new();
-  const head = ["Puesto","Nombre completo","Grupo de trabajo","Política Ambiental (máx 24)","Energía (máx 24)","Residuos peligrosos (máx 24)","Puntos preguntas (máx 72)","Puntos asistencia (máx 28)","Total (máx 100)","Estado","Completó (fecha y hora)","Fecha de registro"];
-  const fila = (p,i)=>[i+1,p.nombre,p.grupo,p.politica,p.energia,p.respel,p.preguntas,p.asistencia,p.total,p.completo?"Completo":"En curso",p.completo?fmt(p.fin):"",fmt(p.fecha)];
-  const cols = [{wch:7},{wch:34},{wch:22},{wch:14},{wch:12},{wch:14},{wch:14},{wch:14},{wch:12},{wch:10},{wch:18},{wch:16}];
+  const head = ["Puesto","Nombre completo","Grupo de trabajo","Política Ambiental (máx 24)","Energía (máx 24)","Residuos peligrosos (máx 24)","Puntos preguntas (máx 72)","Puntos asistencia (máx 28)","Día de asistencia","Total (máx 100)","Estado","Completó (fecha y hora)","Fecha de registro"];
+  const fila = (p,i)=>[i+1,p.nombre,p.grupo,p.politica,p.energia,p.respel,p.preguntas,p.asistencia,p.asisDia?"Día "+p.asisDia:"",p.total,p.completo?"Completo":"En curso",p.completo?fmt(p.fin):"",fmt(p.fecha)];
+  const cols = [{wch:7},{wch:34},{wch:22},{wch:14},{wch:12},{wch:14},{wch:14},{wch:14},{wch:10},{wch:12},{wch:10},{wch:18},{wch:16}];
   const top = XLSX.utils.aoa_to_sheet([head, ...ps.slice(0,20).map(fila)]); top['!cols']=cols;
   XLSX.utils.book_append_sheet(wb, top, "Top 20");
   const all = XLSX.utils.aoa_to_sheet([head, ...ps.map(fila)]); all['!cols']=cols;
-  all['!autofilter']={ref:'A1:L'+(ps.length+1)};
+  all['!autofilter']={ref:'A1:M'+(ps.length+1)};
   XLSX.utils.book_append_sheet(wb, all, "Participantes");
   const QN = {politica:["¿Cuántos compromisos tiene la Política?","¿Qué significa ECONOMÍA CIRCULAR?","Actitud: reconocer si cuidas o perjudicas"],
               energia:["Computador en las pausas","Luz natural","Último en salir de la oficina"],
               respel:["Color de bolsa para RESPEL sólidos","Qué hacer con trapo con tinta","Qué hacer ante un derrame"]};
   const det = [["Nombre completo","Grupo de trabajo","Módulo","Pregunta","Respuesta elegida","Correcta","Puntos","Fecha y hora"]];
   rows.filter(r=>r.modulo).forEach(r=>det.push([r.nombre,r.grupo,MODS[r.modulo],QN[r.modulo][r.pregunta],"ABCD"[r.opcion],r.correcta?"Sí":"No",r.puntos,fmt(r.respondido)]));
-  rows.filter(r=>r.asistencia>0).reduce((m,r)=>m.set(r.nombre+"|"+r.grupo,r),new Map()).forEach(r=>det.push([r.nombre,r.grupo,"Asistencia","Clave del mediador","","Sí",r.asistencia,fmt(r.asistencia_fecha)]));
+  rows.filter(r=>r.asistencia>0).reduce((m,r)=>m.set(r.nombre+"|"+r.grupo,r),new Map()).forEach(r=>det.push([r.nombre,r.grupo,"Asistencia","Clave del mediador"+(r.asistencia_dia?" · Día "+r.asistencia_dia:""),"","Sí",r.asistencia,fmt(r.asistencia_fecha)]));
   const wd = XLSX.utils.aoa_to_sheet(det);
   wd['!cols']=[{wch:34},{wch:22},{wch:20},{wch:40},{wch:10},{wch:9},{wch:8},{wch:16}];
   XLSX.utils.book_append_sheet(wb, wd, "Detalle respuestas");
