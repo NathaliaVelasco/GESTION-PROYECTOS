@@ -9,23 +9,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* Plan: misma identidad del instructivo en sala — azul turquesa del overol y la gorra del personaje, papel Crush Citrus, acento cítrico.
+/* Plan: misma identidad del instructivo en sala — azul turquesa del overol del personaje, en versión profunda, papel Crush Citrus, acento cítrico.
    Layout: landing en dos partes (pasos 1–5 y 6–10), secciones en dos columnas que se apilan en el celular. */
 :root{
-  --bg:#3E9FC0;
-  --bg-2:#3894B4;
-  --surface:#F3FAFC;
-  --line:#2A7D9B;
-  --text:#0E2A33;
-  --muted:#1E4653;
-  --accent:#0B4D66;
+  --bg:#1B627A;
+  --bg-2:#185970;
+  --surface:#144E62;
+  --line:#3C87A0;
+  --text:#F2F8FA;
+  --muted:#CDE4EC;
+  --accent:#FFC65C;
   --paper:#ECE5C9;
   --ink:#1D2B22;
   --citrus:#F4B23E;
-  --leaf:#0B6B5E;
+  --leaf:#9FE0D6;
   --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  color-scheme:light;
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -45,7 +45,7 @@ h3{font-size:clamp(21px,1.8vw,27px);font-weight:800}
 .wrap{max-width:1240px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
 
 /* barra superior */
-.top{position:sticky;top:0;z-index:20;background:rgba(62,159,192,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top{position:sticky;top:0;z-index:20;background:rgba(27,98,122,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
 .top .brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;font-size:18px}
 .top .brand img{height:38px;width:auto;background:#fff;border-radius:8px;padding:4px 6px}
@@ -133,7 +133,7 @@ h3{font-size:clamp(21px,1.8vw,27px);font-weight:800}
 .tarjeta .tag{position:absolute;top:-14px;left:20px;background:var(--citrus);color:var(--ink);font-weight:700;font-size:15px;padding:5px 12px;border-radius:999px}
 
 /* paso a la parte 2 */
-.next{padding:clamp(56px,7vw,96px) 0;text-align:center;background:linear-gradient(180deg,var(--bg),#2F89A8)}
+.next{padding:clamp(56px,7vw,96px) 0;text-align:center;background:linear-gradient(180deg,var(--bg),#134B5E)}
 .next h2{margin:0 auto;max-width:18ch}
 .next p{color:var(--muted);margin:14px auto 28px;max-width:46ch}
 .next .btn{font-size:clamp(18px,1.5vw,22px);padding:16px 30px}
@@ -185,7 +185,7 @@ h3{font-size:clamp(21px,1.8vw,27px);font-weight:800}
 
 /* cierre */
 .closing h2{font-size:clamp(40px,5.4vw,80px)}
-.closing h2 em{font-style:normal;color:#fff}
+.closing h2 em{font-style:normal;color:var(--accent)}
 .signature{margin-top:26px;color:var(--muted)}
 footer{padding:28px 0;color:var(--muted);font-size:15px}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -381,9 +381,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <p class="lead">Este kit no se entrega ni se califica. Es un recordatorio diario de lo que la Imprenta se compromete a hacer, y de lo que tú puedes hacer.</p>
       </div>
       <div class="cards3">
-        <div class="tipcard"><div class="ic" style="background:rgba(244,178,62,.16)"><svg viewBox="0 0 24 24" stroke="#B5770C"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg></div><div><h3>Dale color</h3><p>El dibujo está listo para colorear, solo o con tu familia.</p></div></div>
-        <div class="tipcard"><div class="ic" style="background:rgba(62,159,192,.16)"><svg viewBox="0 0 24 24" stroke="#1F7FA0"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div><div><h3>Ponlo a la vista</h3><p>En tu puesto o tu locker, junto a la tarjeta, con tu palabra elegida a la vista.</p></div></div>
-        <div class="tipcard"><div class="ic" style="background:rgba(14,42,51,.08)"><svg viewBox="0 0 24 24" stroke="#0E2A33"><path d="M5 7h14l-1.2 13H6.2z"/><path d="M3 7h18M9 7V4h6v3"/></svg></div><div><h3>Ciérrale el ciclo</h3><p>No lo plastifiques. Cuando termine su vida útil, va limpio y seco a la caneca <span class="bin"></span>blanca de aprovechables.</p></div></div>
+        <div class="tipcard"><div class="ic" style="background:rgba(244,178,62,.16)"><svg viewBox="0 0 24 24" stroke="#F4B23E"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg></div><div><h3>Dale color</h3><p>El dibujo está listo para colorear, solo o con tu familia.</p></div></div>
+        <div class="tipcard"><div class="ic" style="background:rgba(127,208,232,.16)"><svg viewBox="0 0 24 24" stroke="#7FD0E8"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div><div><h3>Ponlo a la vista</h3><p>En tu puesto o tu locker, junto a la tarjeta, con tu palabra elegida a la vista.</p></div></div>
+        <div class="tipcard"><div class="ic" style="background:rgba(255,255,255,.08)"><svg viewBox="0 0 24 24" stroke="#F2F8FA"><path d="M5 7h14l-1.2 13H6.2z"/><path d="M3 7h18M9 7V4h6v3"/></svg></div><div><h3>Ciérrale el ciclo</h3><p>No lo plastifiques. Cuando termine su vida útil, va limpio y seco a la caneca <span class="bin"></span>blanca de aprovechables.</p></div></div>
       </div>
     </div>
   </section>
