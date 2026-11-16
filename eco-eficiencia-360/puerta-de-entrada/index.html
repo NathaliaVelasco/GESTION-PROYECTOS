@@ -463,7 +463,7 @@ document.getElementById('rform').addEventListener('submit', async e=>{
     me = {id, nombre, grupo}; store('eco360_me', me); showWho();
     const st = await rpc("eco360_entrada_estado",{p_participante:id});
     if(st.respondidas >= 9){ go('final'); } else { renderQ(); go('preguntas'); }
-  }catch(x){ err.textContent='No pudimos registrarte. Revisa tu conexión a internet e intenta de nuevo.'; }
+  }catch(x){ err.textContent = /cerrado/i.test(x.message||'') ? 'La Puerta de Entrada cerró el 30 de noviembre.' : 'No pudimos registrarte. Revisa tu conexión a internet e intenta de nuevo.'; }
   btn.disabled=false; btn.firstChild.textContent='Empezar las preguntas ';
 });
 
@@ -538,12 +538,22 @@ document.getElementById('b-empezar').onclick = ()=>{
   }
   go('registro'); setTimeout(()=>document.getElementById('rnombre').focus(),350);
 };
+const CIERRE = new Date('2026-12-01T00:00:00-05:00'), FIN_CONSULTA = new Date('2026-12-21T00:00:00-05:00');
+const CERRADO = Date.now() >= CIERRE.getTime();
+if(CERRADO){
+  document.getElementById('b-empezar').onclick = ()=>{
+    document.getElementById('fmsg').innerHTML = Date.now() >= FIN_CONSULTA.getTime()
+      ? 'La jornada ECO EFICIENCIA 360 finalizó. Gracias por ser parte de la formación ambiental de la Imprenta Nacional de Colombia.'
+      : 'La Puerta de Entrada cerró el 30 de noviembre, junto con el ranking. Puedes consultar todo el contenido de la jornada hasta el 20 de diciembre en <a href="../?vista" style="color:inherit;font-weight:700">la página de ECO EFICIENCIA 360</a>.';
+    go('final');
+  };
+}
 (async function init(){
   me = read('eco360_me');
   const b = read('eco360_entrada_borrador');
   if(me && b && b.id===me.id && Array.isArray(b.ans) && b.ans.length===9){ ans=b.ans; const f=ans.findIndex(a=>a===null); cur = f<0 ? 8 : f; }
   showWho();
-  if(me){
+  if(me && !CERRADO){
     try{ const st = await rpc("eco360_entrada_estado",{p_participante:me.id});
       if(!st.registrado){ me=null; store('eco360_me',null); showWho(); }
       else if(st.respondidas>=9){ document.getElementById('fmsg').textContent='Ya habías respondido la prueba de entrada. ¡Gracias! Al final de la jornada veremos cuánto avanzamos como equipo.'; go('final'); }

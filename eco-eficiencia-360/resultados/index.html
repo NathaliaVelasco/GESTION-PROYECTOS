@@ -134,7 +134,7 @@ tr:last-child td{border-bottom:0}
         <strong>Top 20 · ganan el taller de bienestar</strong>
         <div class="row"><button class="btn alt" type="button" id="actualizar">Actualizar</button><button class="btn alt" type="button" id="verinf">Ver informe para el cliente</button><button class="btn" type="button" id="excel">Descargar Excel</button></div>
       </div>
-      <p class="note">Puntaje: 8 puntos por cada respuesta correcta (72) más 28 de asistencia, para un total de 100. En caso de empate, gana quien completó primero sus respuestas y su asistencia. Las personas que aún no han terminado aparecen con la etiqueta "En curso".</p>
+      <p class="note">Puntaje: 8 puntos por cada respuesta correcta (72) más 28 de asistencia, para un total de 100. Solo participan en el Top 20 quienes registraron asistencia en una sesión (20, 27 o 30 de noviembre). El ranking cierra el 30 de noviembre a las 11:59 p. m. En caso de empate, gana quien completó primero sus respuestas y su asistencia. Las personas que aún no han terminado aparecen con la etiqueta "En curso".</p>
     </div>
     <div class="card">
       <div class="row" style="justify-content:space-between"><strong>Antes y después · Puerta de Entrada vs. preguntas de la jornada</strong><a class="btn alt" href="../puerta-de-entrada/" target="_blank" rel="noopener">Ver Puerta de Entrada</a></div>
@@ -245,7 +245,7 @@ function render(){
   document.getElementById('t3').textContent = ps.filter(p=>p.asistencia>0).length;
   renderAD();
   const tb = document.getElementById('tb');
-  tb.innerHTML = ps.length ? ps.slice(0,20).map((p,i)=>'<tr class="win"><td class="n">'+(i+1)+'</td><td>'+esc(p.nombre)+'</td><td>'+esc(p.grupo)+'</td><td class="n">'+p.preguntas+'</td><td class="n">'+p.asistencia+'</td><td class="n"><b>'+p.total+'</b></td><td>'+(p.completo? fmt(p.fin) : '<span class="pill">En curso</span>')+'</td></tr>').join('') : '<tr><td colspan="7">Todavía no hay registros.</td></tr>';
+  tb.innerHTML = ps.filter(p=>p.asistencia>0).length ? ps.filter(p=>p.asistencia>0).slice(0,20).map((p,i)=>'<tr class="win"><td class="n">'+(i+1)+'</td><td>'+esc(p.nombre)+'</td><td>'+esc(p.grupo)+'</td><td class="n">'+p.preguntas+'</td><td class="n">'+p.asistencia+'</td><td class="n"><b>'+p.total+'</b></td><td>'+(p.completo? fmt(p.fin) : '<span class="pill">En curso</span>')+'</td></tr>').join('') : '<tr><td colspan="7">Todavía no hay registros.</td></tr>';
 }
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function fmt(d){ const x=new Date(d); return x.toLocaleString('es-CO',{timeZone:'America/Bogota',dateStyle:'short',timeStyle:'short'}); }
@@ -253,13 +253,13 @@ function fmt(d){ const x=new Date(d); return x.toLocaleString('es-CO',{timeZone:
 function excel(){
   const ps = people();
   const wb = XLSX.utils.book_new();
-  const head = ["Puesto","Nombre completo","Grupo de trabajo","Política Ambiental (máx 24)","Energía (máx 24)","Residuos peligrosos (máx 24)","Puntos preguntas (máx 72)","Puntos asistencia (máx 28)","Día de asistencia","Total (máx 100)","Estado","Completó (fecha y hora)","Fecha de registro"];
-  const fila = (p,i)=>[i+1,p.nombre,p.grupo,p.politica,p.energia,p.respel,p.preguntas,p.asistencia,p.asisDia?"Día "+p.asisDia:"",p.total,p.completo?"Completo":"En curso",p.completo?fmt(p.fin):"",fmt(p.fecha)];
-  const cols = [{wch:7},{wch:34},{wch:22},{wch:14},{wch:12},{wch:14},{wch:14},{wch:14},{wch:10},{wch:12},{wch:10},{wch:18},{wch:16}];
-  const top = XLSX.utils.aoa_to_sheet([head, ...ps.slice(0,20).map(fila)]); top['!cols']=cols;
+  const head = ["Puesto","Nombre completo","Participa en el premio","Grupo de trabajo","Política Ambiental (máx 24)","Energía (máx 24)","Residuos peligrosos (máx 24)","Puntos preguntas (máx 72)","Puntos asistencia (máx 28)","Día de asistencia","Total (máx 100)","Estado","Completó (fecha y hora)","Fecha de registro"];
+  const fila = (p,i)=>[i+1,p.nombre,p.asistencia>0?"Sí":"No (sin asistencia)",p.grupo,p.politica,p.energia,p.respel,p.preguntas,p.asistencia,p.asisDia?"Día "+p.asisDia:"",p.total,p.completo?"Completo":"En curso",p.completo?fmt(p.fin):"",fmt(p.fecha)];
+  const cols = [{wch:7},{wch:34},{wch:20},{wch:22},{wch:14},{wch:12},{wch:14},{wch:14},{wch:14},{wch:10},{wch:12},{wch:10},{wch:18},{wch:16}];
+  const top = XLSX.utils.aoa_to_sheet([head, ...ps.filter(p=>p.asistencia>0).slice(0,20).map(fila)]); top['!cols']=cols;
   XLSX.utils.book_append_sheet(wb, top, "Top 20");
   const all = XLSX.utils.aoa_to_sheet([head, ...ps.map(fila)]); all['!cols']=cols;
-  all['!autofilter']={ref:'A1:M'+(ps.length+1)};
+  all['!autofilter']={ref:'A1:N'+(ps.length+1)};
   XLSX.utils.book_append_sheet(wb, all, "Participantes");
   const QN = {politica:["¿Cuántos compromisos tiene la Política?","¿Qué significa ECONOMÍA CIRCULAR?","Actitud: reconocer si cuidas o perjudicas"],
               energia:["Computador en las pausas","Luz natural","Último en salir de la oficina"],
@@ -455,10 +455,10 @@ function informe(){
   h += '<h3>5. Recomendaciones de refuerzo</h3><ul class="recs">'+recs.map(r=>'<li style="--c:'+r.c+'"><b>'+r.t+'</b>'+r.d+'</li>').join('')+'</ul>';
 
   // Top 20
-  const top = ps.slice(0,20);
+  const top = ps.filter(p=>p.asistencia>0).slice(0,20);
   h += '<h3 class="pb">6. Ganadores del taller de bienestar (Top 20)</h3><div class="tbl"><table><thead><tr><th class="n">#</th><th>Nombre completo</th><th>Grupo de trabajo</th><th class="n">Preguntas</th><th class="n">Asistencia</th><th class="n">Total</th></tr></thead><tbody>'+
     (top.length ? top.map((p,i)=>'<tr><td class="n">'+(i+1)+'</td><td>'+esc(p.nombre)+'</td><td>'+esc(p.grupo)+'</td><td class="n">'+p.preguntas+'</td><td class="n">'+p.asistencia+'</td><td class="n"><b>'+p.total+'</b></td></tr>').join('') : '<tr><td colspan="6">Sin registros.</td></tr>')+'</tbody></table></div>';
-  h += '<p style="font-size:14px;color:var(--muted)">Criterio: mayor puntaje total (8 puntos por respuesta correcta, máximo 72, más 28 por asistencia). En caso de empate, gana quien completó primero sus respuestas y su asistencia.</p>';
+  h += '<p style="font-size:14px;color:var(--muted)">Criterio: mayor puntaje total (8 puntos por respuesta correcta, máximo 72, más 28 por asistencia). Solo participan quienes asistieron a una de las sesiones del 20, 27 o 30 de noviembre; el ranking cerró el 30 de noviembre. En caso de empate, gana quien completó primero sus respuestas y su asistencia.</p>';
   h += '<div class="foot">Datos recolectados en ECO EFICIENCIA 360 con autorización de los participantes (Ley 1581 de 2012), únicamente para la evaluación de la jornada. Informe preparado por Simoné para la Imprenta Nacional de Colombia.</div>';
   document.getElementById('rep').innerHTML = h;
 }
