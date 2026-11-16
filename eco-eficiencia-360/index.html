@@ -538,7 +538,7 @@ footer .wrap{padding-top:24px;padding-bottom:28px}
   <section class="mod" id="asistencia">
     <div class="eyebrow">Módulo 5</div>
     <h2>Asistencia y puntaje final</h2>
-    <p class="lead">Al terminar el taller, pídele al mediador que escriba su clave en este espacio. Así se suman tus 28 puntos de asistencia.</p>
+    <p class="lead">Al terminar el taller, pídele al mediador que escriba su clave en este espacio. Así se suman tus 28 puntos de asistencia. Solo funciona durante las sesiones del 20, 27 y 30 de noviembre.</p>
     <div class="final">
       <div>
         <div class="score-big" id="fin-total">0 <small>/ 100 puntos</small></div>
@@ -710,7 +710,8 @@ function total(){
   const falt = Object.keys(QUIZ).filter(k=>Object.keys(state[k]).length<3);
   document.getElementById('fin-pend').innerHTML = falt.length ? '<b>Aún puedes sumar puntos:</b> te faltan preguntas en '+falt.map(k=>'<a href="#'+k+'">'+names[k]+'</a>').join(', ')+'.' : '';
   const box = document.getElementById('asis-box');
-  if(asis>0){ box.innerHTML = '<div class="asis-ok">✓ Asistencia registrada: +28 puntos.</div>'; }
+  if(CERRADO){ box.innerHTML = '<div class="asis-ok" style="background:#fbe4e1">El registro de asistencia cerró el 30 de noviembre. Los 28 puntos de asistencia solo los sumaron quienes participaron en las sesiones del 20, 27 o 30 de noviembre.</div>'; }
+  else if(asis>0){ box.innerHTML = '<div class="asis-ok">✓ Asistencia registrada: +28 puntos.</div>'; }
   else if(!box.querySelector('form')){
     box.innerHTML = '<form class="asis-form" id="aform" novalidate><label for="aclave">Clave del mediador</label><div class="row"><input id="aclave" type="password" autocomplete="off" placeholder="Solo la escribe el mediador"><button class="btn solid" type="submit" id="abtn">Registrar asistencia</button></div><div class="err" id="aerr" role="alert" style="color:var(--bad);min-height:22px;margin-top:8px"></div></form>';
     document.getElementById('aform').addEventListener('submit', asistir);
