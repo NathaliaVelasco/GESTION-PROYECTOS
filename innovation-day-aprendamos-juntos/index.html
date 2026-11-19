@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Innovation Day · Aprendamos juntos</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Cierra el caso: reto para distribuidores Solventum en el Innovation Day.">
+<link rel="icon" href="../img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Mundo único: el viaje del paciente sobre el verde oscuro Solventum */
+  --bg:#01332B; --panel:#0B4237; --ink:#FFFFFF; --muted:#BFFDE3;
+  --brand:#05DD4D; --teal:#19A591; --mteal:#1CCF93; --line:rgba(191,253,227,.22);
+  --bad:#FF8A73;
+  --font:"Figtree", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.app{min-height:100%;display:flex;flex-direction:column;max-width:1100px;margin:0 auto;padding:20px clamp(16px,4vw,40px)}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+header img{height:30px;width:auto}
+.hud{display:flex;gap:20px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:16px}
+.hud b{color:var(--ink);font-size:20px}
+main{flex:1;padding:24px 0}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:32px;align-items:start}
+.stage>.col{min-width:0;display:flex;flex-direction:column}
+.patient{position:sticky;top:16px;display:grid;gap:10px;justify-items:center;text-align:center}
+.patient img{width:100%;max-width:240px;height:auto;transition:filter .6s ease}
+.patient p{margin:0;font-size:15px;color:var(--muted)}
+.patient b{display:block;font-size:22px;color:var(--brand);font-variant-numeric:tabular-nums}
+.meter{display:flex;gap:6px}
+.meter i{width:28px;height:8px;border-radius:4px;background:var(--line)}
+.meter i.on{background:var(--brand)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:center}
+.hero img{width:100%;height:auto;mix-blend-mode:screen}
+@media (max-width:900px){.stage,.hero{grid-template-columns:1fr}.patient{position:static;grid-template-columns:90px 1fr;justify-items:start;text-align:left;align-items:center}.patient img{max-width:90px;grid-row:span 3}.hero img{max-width:180px;justify-self:center;order:-1}}
+h1,h2,h3{text-wrap:balance;margin:0;font-weight:700}
+h1{font-size:clamp(40px,7vw,76px);line-height:1}
+h1 span{color:var(--brand)}
+h2{font-size:clamp(24px,3.4vw,34px);line-height:1.15}
+.lede{font-size:clamp(18px,2.2vw,22px);color:var(--muted);max-width:62ch}
+.eyebrow{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--mteal);font-weight:700}
+.btn{border:0;border-radius:999px;background:var(--brand);color:var(--bg);font-weight:700;font-size:20px;padding:16px 32px;min-height:56px}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* Ruta del paciente */
+.route{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 24px}
+.stop{border-top:4px solid var(--line);padding-top:8px;font-size:14px;color:var(--muted)}
+.stop.on{border-color:var(--brand);color:var(--ink)}
+.stop.done{border-color:var(--teal)}
+.stop .n{font-variant-numeric:tabular-nums;font-weight:700}
+
+/* Intro */
+.intro{display:grid;gap:28px;align-content:center;flex:1}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.how div{border-left:3px solid var(--teal);padding:4px 0 4px 14px}
+.how b{display:block;font-size:20px;margin-bottom:4px}
+.field{display:grid;gap:6px;max-width:460px}
+.field label{font-size:15px;color:var(--muted)}
+.field input{font:inherit;font-size:20px;background:var(--panel);border:2px solid var(--line);color:var(--ink);border-radius:12px;padding:14px 16px}
+
+/* Caso */
+.case{background:var(--panel);border-radius:20px;padding:clamp(20px,3vw,32px);display:grid;gap:14px;border:1px solid var(--line)}
+.who{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:16px}
+.who i{font-style:normal;background:var(--teal);color:var(--bg);font-weight:700;border-radius:999px;padding:3px 12px;font-size:14px}
+.quote{font-size:clamp(20px,2.6vw,26px);line-height:1.3}
+.step{margin-top:22px;display:grid;gap:12px}
+.step h3{font-size:20px;color:var(--muted);font-weight:400}
+.step h3 b{color:var(--ink)}
+.quads{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.opts{display:grid;gap:12px}
+.choice{text-align:left;background:transparent;border:2px solid var(--line);border-radius:16px;padding:16px 18px;min-height:64px;display:flex;gap:14px;align-items:flex-start;font-size:18px;transition:border-color .15s,background .15s}
+.choice:hover:not(:disabled){border-color:var(--mteal)}
+.choice .k{flex:none;width:34px;height:34px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:15px}
+.choice small{display:block;color:var(--muted);font-size:15px;margin-top:2px}
+.choice.ok{border-color:var(--brand);background:rgba(5,221,77,.12)}
+.choice.ok .k{background:var(--brand);color:var(--bg);border-color:var(--brand)}
+.choice.no{border-color:var(--bad);background:rgba(255,138,115,.10)}
+.choice.no .k{border-color:var(--bad);color:var(--bad)}
+.choice:disabled{cursor:default}
+.choice.dim{opacity:.45}
+
+/* Revelación */
+.reveal{margin-top:20px;border-radius:20px;background:linear-gradient(120deg,var(--teal),#2b8f5a);padding:clamp(20px,3vw,30px);display:grid;gap:16px}
+.verdict{font-size:22px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.stat{background:rgba(1,51,43,.35);border-radius:14px;padding:14px}
+.stat b{display:block;font-size:30px;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat span{font-size:15px}
+.human{font-size:18px;border-left:3px solid var(--muted);padding-left:12px}
+.human em{font-style:normal;font-weight:700;display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.why{font-size:16px;opacity:.95}
+
+/* Final */
+.final{display:grid;gap:24px}
+.score{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.score .big{font-size:clamp(64px,10vw,110px);font-weight:700;line-height:.9;color:var(--brand);font-variant-numeric:tabular-nums}
+.badge{display:inline-block;background:var(--brand);color:var(--bg);font-weight:700;border-radius:999px;padding:6px 16px}
+.kit{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.kit div{background:var(--panel);border-radius:14px;padding:16px;border:1px solid var(--line);font-size:16px}
+.kit b{display:block;color:var(--mteal);font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.board{background:var(--panel);border-radius:16px;padding:16px 20px;border:1px solid var(--line)}
+.board ol{margin:8px 0 0;padding-left:0;list-style:none;font-variant-numeric:tabular-nums}
+.board li{padding:4px 0;display:flex;justify-content:space-between;gap:12px}
+.board li.me{color:var(--brand);font-weight:700}
+.closing{font-size:20px;border-left:4px solid var(--brand);padding-left:14px;max-width:62ch}
+footer{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+footer button{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px;padding:4px}
+.hidden{display:none!important}
+@media (max-width:700px){.how{grid-template-columns:1fr}.quads{grid-template-columns:1fr}.route{grid-template-columns:repeat(2,1fr)}.hud{gap:12px}}
+@media (prefers-reduced-motion:no-preference){.fade{animation:f .35s ease both}@keyframes f{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <img src="assets/logo-blanco.png" alt="Solventum">
+    <div class="hud" id="hud" aria-live="polite"></div>
+  </header>
+  <main id="view"></main>
+  <footer>
+    <span>Innovation Day · 25 de noviembre · Experiencia diseñada por Simoné</span>
+    <span><button id="resetBoard" type="button">Borrar ranking</button></span>
+  </footer>
+</div>
+
+<script>
+// ===== Contenido (fuente: Plan de Exhibición actualizado + documento Innovation Day + fichas de portafolio) =====
+const QUADS = {
+  E:{name:"Esterilización", tag:"El cimiento de la seguridad", short:"Esterilización"},
+  P:{name:"Preparación", tag:"Acondicionamiento y protección preoperatoria", short:"Preparación"},
+  C:{name:"Cirugía", tag:"Control quirúrgico y alta complejidad", short:"Cirugía"},
+  H:{name:"Hospitalización y UCI", tag:"Recuperación, accesos vasculares y cuidado crítico", short:"Hospitalización y UCI"}
+};
+// Orden del viaje del paciente
+const ROUTE = ["E","P","C","H"];
+
+const CASES = {
+ E:[
+  {who:"Jefe de central de esterilización · Clínica de alta complejidad",
+   q:"“El instrumental sale del esterilizador y el siguiente paciente ya está en sala. ¿Cómo confirmo que el ciclo fue letal sin frenar la programación?”",
+   opts:[
+    {t:"Indicadores biológicos Attest™ Super-Rapid con autolectora Attest™ 490", s:"Lectura automatizada: resultado definitivo de letalidad en 24 minutos.", ok:true},
+    {t:"Cinta indicadora en cada paquete", s:"Si cambia de color, el instrumental está listo para usar.", why:"La cinta solo muestra que el paquete pasó por el ciclo. No confirma que el ciclo haya eliminado los microorganismos."},
+    {t:"El indicador más barato del mercado", s:"Descuento por volumen para toda la central.", why:"El precio abre conversación, pero no responde la pregunta de la jefe: certeza y velocidad."}],
+   stats:[["24 min","para confirmar la letalidad del ciclo"],["70+ años","haciendo de la esterilización una promesa de seguridad"]],
+   human:"El instrumental llega verificado al quirófano y el siguiente paciente no espera.",
+   pitch:"Attest™ Super-Rapid: letalidad confirmada en 24 minutos."},
+  {who:"Gerente de sostenibilidad · Hospital universitario",
+   q:"“Tenemos meta de reducir residuos este año, pero no podemos perder el control diario del esterilizador.”",
+   opts:[
+    {t:"Attest™ eBowie-Dick con tarjetas de prueba", s:"Prueba diaria del esterilizador con mucho menos papel y residuos.", ok:true},
+    {t:"Hacer la prueba Bowie-Dick una vez por semana", s:"Menos paquetes, menos residuos.", why:"Espaciar la prueba diaria deja días sin control del esterilizador. Se ahorra papel a costa de la seguridad."},
+    {t:"Paquetes de prueba convencionales a mejor precio", s:"El mismo control de siempre, más económico.", why:"No mueve la meta ambiental del hospital, que es lo que la gerente está pidiendo."}],
+   stats:[["94%","menos residuos con las tarjetas eBowie-Dick 10135"],["≈88 lb","de papel evitadas por esterilizador al año"]],
+   human:"Control diario intacto y un hospital que cumple su compromiso ambiental.",
+   pitch:"eBowie-Dick: el mismo control diario con hasta 94% menos residuos."},
+  {who:"Coordinadora de calidad · Red de clínicas",
+   q:"“Esterilizamos con vapor, peróxido y óxido de etileno. Cada sede monitorea distinto y no logro estandarizar.”",
+   opts:[
+    {t:"Portafolio Attest™ para las tres modalidades", s:"Indicadores biológicos y químicos para vapor, VH2O2 y óxido de etileno, con autolectoras 490, 490mini y 390G.", ok:true},
+    {t:"Un proveedor distinto para cada tecnología", s:"Elegir el más económico en cada caso.", why:"Multiplica criterios, formatos y registros: lo contrario de estandarizar."},
+    {t:"Monitorear solo con integradores químicos", s:"Lectura inmediata, sin incubadora.", why:"El integrador ayuda, pero sin indicador biológico no hay confirmación de letalidad del ciclo."}],
+   stats:[["3 modalidades","vapor, peróxido y óxido de etileno"],["1 estándar","de monitoreo para toda la red"]],
+   human:"Cada paciente recibe el mismo nivel de seguridad, sin importar la sede.",
+   pitch:"Attest™: un solo estándar de monitoreo para vapor, VH2O2 y OE."}
+ ],
+ P:[
+  {who:"Instrumentadora jefe · Salas de cirugía ortopédica",
+   q:"“La preparación de piel gotea, mancha los campos y nos retrasa antes de incidir.”",
+   opts:[
+    {t:"Solución quirúrgica DuraPrep™", s:"Yodo povacrilex y alcohol isopropílico con flujo controlado: menos derrames, cobertura aséptica superior.", ok:true},
+    {t:"Aplicar más antiséptico para asegurar cobertura", s:"Más producto, más protección.", why:"Más líquido significa más escurrimiento y campos húmedos, el problema que ya tienen."},
+    {t:"Cambiar a una gasa con antiséptico genérico", s:"Más económico por procedimiento.", why:"No resuelve el control del flujo ni el tiempo del equipo."}],
+   stats:[["Flujo controlado","sin derrames sobre los campos"],["+ Clipper™","retiro de vello sin cuchilla antes de preparar la piel"]],
+   human:"Una piel preparada de forma impecable antes de la primera incisión.",
+   pitch:"DuraPrep™ + Clipper™: preparación aséptica superior y sin derrames."},
+  {who:"Enfermera jefe · Sala preoperatoria",
+   q:"“Los pacientes esperan en camilla y entran fríos al quirófano. Para cuando los calentamos ya es tarde.”",
+   opts:[
+    {t:"Batas de calentamiento preoperatorio con Thinsulate™", s:"Se conectan al calentamiento por aire forzado y protegen la normotermia desde antes de la cirugía.", ok:true},
+    {t:"Cobijas de algodón calentadas", s:"Disponibles y conocidas por todos.", why:"Pierden el calor en minutos y no mantienen la temperatura central del paciente."},
+    {t:"Calentar al paciente solo en recuperación", s:"Atender el temblor cuando aparece.", why:"Llega tarde: la hipotermia ya ocurrió y con ella el riesgo de complicaciones."}],
+   stats:[["Hasta 90%","de pacientes quirúrgicos presentan hipotermia inadvertida"],["2 a 6 días","más de estancia hospitalaria"],["COP $27M","costo promedio por paciente con hipotermia"]],
+   human:"El paciente entra cálido y tranquilo a su cirugía.",
+   pitch:"Batas Bair Hugger™: normotermia desde la sala preoperatoria."},
+  {who:"Enfermera de cirugía · Pacientes adultos mayores",
+   q:"“Llegan con la piel frágil. Entre la humedad y los adhesivos, se nos lesionan antes de empezar.”",
+   opts:[
+    {t:"Película protectora sin ardor Cavilon™", s:"Protege la piel de la humedad, facilita una retirada suave del adhesivo y reduce la fricción.", ok:true},
+    {t:"Crema de barrera espesa antes de fijar", s:"Una capa gruesa que aísla la piel.", why:"Impide que los adhesivos fijen bien y oculta la piel a la inspección."},
+    {t:"Usar menos cinta para no lastimar", s:"Fijaciones más ligeras.", why:"Los dispositivos quedan inseguros y se desplazan: se cambia un riesgo por otro."}],
+   stats:[["Sin ardor","se aplica incluso sobre piel lesionada"],["Menos fuerza","en la retirada del adhesivo"],["Menos fricción","y menos lesiones de espesor parcial"]],
+   human:"La piel del paciente llega intacta al final de su estancia.",
+   pitch:"Cavilon™: integridad cutánea desde el inicio, sin MARSI."}
+ ],
+ C:[
+  {who:"Anestesiólogo · Quirófanos de cirugía general",
+   q:"“En cirugías largas los pacientes se enfrían y despiertan temblando.”",
+   opts:[
+    {t:"Mantas Bair Hugger™ de aire forzado con unidades 775 y 875", s:"Normotermia transoperatoria sobre o bajo el paciente, sin limitar el acceso quirúrgico.", ok:true},
+    {t:"Subir la temperatura del quirófano", s:"Solución inmediata con lo que ya hay.", why:"Incomoda al equipo quirúrgico y no mantiene la temperatura central del paciente durante todo el procedimiento."},
+    {t:"Cobijas adicionales sobre el campo", s:"Más capas, más calor.", why:"Estorban el campo estéril y no entregan calor activo."}],
+   stats:[["Hasta 90%","de pacientes quirúrgicos presentan hipotermia inadvertida"],["2 a 6 días","más de estancia hospitalaria"]],
+   human:"Un despertar cálido y cómodo, con menos temblor y menos estrés para el cuerpo.",
+   pitch:"Bair Hugger™: normotermia transoperatoria sin perder acceso quirúrgico."},
+  {who:"Coordinador de cirugía de trauma",
+   q:"“En trauma pasamos muchas unidades de sangre y líquidos. Me preocupa infundir frío o con aire.”",
+   opts:[
+    {t:"Sistema Ranger™ de calentamiento de sangre y fluidos", s:"Calienta en línea y elimina burbujas de forma automática.", ok:true},
+    {t:"Calentar las bolsas en baño de agua antes de conectarlas", s:"Práctica conocida y sin inversión.", why:"La temperatura se pierde en la línea y no controla las burbujas de aire."},
+    {t:"Infundir más lento para que el cuerpo compense", s:"Menos volumen frío por minuto.", why:"En trauma el tiempo es vida: no es una opción reducir la velocidad de reanimación."}],
+   stats:[["En línea","temperatura controlada hasta el paciente"],["Burbujas","eliminadas automáticamente para prevenir embolia gaseosa"]],
+   human:"El paciente crítico recibe cada unidad a la temperatura correcta y sin aire.",
+   pitch:"Ranger™: fluidos tibios y sin burbujas, incluso en reanimación masiva."},
+  {who:"Jefe de cirugía · Paciente de alto riesgo para cirugía abdominal",
+   q:"“Este paciente tiene todo para complicarse la herida. No quiero verlo de regreso por seromas o infección.”",
+   opts:[
+    {t:"Terapia Prevena™ de manejo de incisiones", s:"Presión negativa sobre la incisión cerrada hasta por 7 días.", ok:true},
+    {t:"Apósito convencional y control en consulta", s:"Lo habitual para cualquier cierre.", why:"En un paciente de alto riesgo, esperar a la consulta es esperar la complicación."},
+    {t:"Steri-Strip™ y gasa", s:"Buen afrontamiento de bordes.", why:"Afronta la piel, pero no gestiona el exudado ni protege la incisión de alto riesgo."}],
+   stats:[["48%","menos infecciones del sitio quirúrgico"],["36%","menos retornos a quirófano"],["23%","menos readmisiones"]],
+   human:"El paciente se va a casa y no regresa: el cuidado continúa fuera del quirófano.",
+   pitch:"Prevena™: protección de la incisión cerrada hasta 7 días."},
+  {who:"Cirujano general · Abdomen abierto por sepsis",
+   q:"“Tengo un abdomen abierto complejo. Necesito controlar la cavidad y llegar al cierre fascial primario.”",
+   opts:[
+    {t:"Terapia AbThera™ con unidad V.A.C. Ulta™", s:"Cierre temporal de la cavidad abdominal con presión negativa para tomar el control de forma temprana.", ok:true},
+    {t:"Bolsa de Bogotá", s:"Cierre temporal económico y conocido.", why:"Contiene la cavidad, pero no remueve activamente el fluido ni ayuda a traccionar la fascia hacia el cierre."},
+    {t:"Compresas con succión de pared", s:"Presión negativa improvisada.", why:"Sin control de presión ni un sistema validado para la cavidad abdominal."}],
+   stats:[["50%","de pacientes con abdomen abierto presentan sepsis"],["3x","más estancia en UCI con sepsis"],["#1","causa de reingreso hospitalario: la sepsis"]],
+   human:"Tomar el control temprano es devolverle al paciente la posibilidad de cerrar y volver a casa.",
+   pitch:"AbThera™: control temprano del abdomen abierto hacia el cierre fascial."}
+ ],
+ H:[
+  {who:"Comité de infecciones · Unidad de cuidado intensivo",
+   q:"“Tuvimos casos de infección asociada a línea central. Queremos una barrera activa que no nos tape el sitio de inserción.”",
+   opts:[
+    {t:"Tegaderm™ CHG + dispositivo de fijación PICC/CVC", s:"Apósito transparente con gel de clorhexidina al 2% integrado y estabilización sin suturas.", ok:true},
+    {t:"Gasa con esparadrapo cambiada a diario", s:"Barata y conocida por todo el personal.", why:"Oculta el sitio, obliga a manipular la línea a diario y no tiene acción antimicrobiana."},
+    {t:"Apósito transparente estándar", s:"Permite ver el sitio de inserción.", why:"Da visibilidad, pero sin clorhexidina no reduce activamente la colonización del catéter."}],
+   stats:[["25%","de los pacientes con CLABSI fallecen"],["12 a 24 días","más de estancia por cada infección del torrente sanguíneo"],["COP $65M","costo promedio por CLABSI en Estados Unidos"]],
+   human:"La línea de vida del paciente crítico queda protegida y siempre a la vista.",
+   pitch:"Tegaderm™ CHG: barrera antimicrobiana continua y visible. Programa L.A.T.I.R. 2.0."},
+  {who:"Jefe de enfermería · Hospitalización",
+   q:"“Los catéteres periféricos se desplazan y los recambios se llevan horas de mi equipo.”",
+   opts:[
+    {t:"Tegaderm™ I.V. Advanced", s:"Film transparente que aísla de bacterias y virus, uso hasta 7 días y menor desplazamiento.", ok:true},
+    {t:"Reforzar con varias capas de cinta", s:"Más sujeción por menos dinero.", why:"Más adhesivo significa más lesiones de piel al retirar (MARSI) y menos visibilidad del sitio."},
+    {t:"Programar recambio de vía cada 48 horas", s:"Prevenir el desplazamiento cambiando antes.", why:"Más punciones dolorosas para el paciente y más carga de trabajo para enfermería."}],
+   stats:[["COP $50,7M","de ahorro total anual"],["12%","de reducción del costo total anual"],["1.939 horas","de enfermería ahorradas al año"]],
+   human:"Menos punciones, más comodidad y un sitio que se inspecciona sin retirar el apósito.",
+   pitch:"Tegaderm™ I.V. Advanced: hasta 7 días seguro, menos recambios."},
+  {who:"Enfermera de oncología · Unidad de quimioterapia",
+   q:"“Manipulamos los puertos de las líneas muchas veces por turno. La desinfección manual no siempre se cumple igual.”",
+   opts:[
+    {t:"Protectores de puerto Curos™ y Curos Tips™", s:"Tapones impregnados de alcohol que desinfectan de forma continua y pasiva.", ok:true},
+    {t:"Tapas estándar sin desinfectante", s:"Mantienen el puerto cerrado.", why:"Cubren, pero no desinfectan: todo vuelve a depender de la técnica manual."},
+    {t:"Dejar los puertos descubiertos y limpiar antes de usar", s:"Sin costo adicional.", why:"El puerto queda expuesto entre manipulaciones, justo el riesgo que la unidad quiere cerrar."}],
+   stats:[["Pasiva","desinfección que no depende del turno ni de la prisa"],["L.A.T.I.R. 2.0","programa de Onco-cuidado esencial"]],
+   human:"El paciente oncológico queda blindado frente a la contaminación en cada conexión.",
+   pitch:"Curos™: desinfección estandarizada en cada puerto, sin variabilidad."},
+  {who:"Cirujano · Servicio de heridas complejas",
+   q:"“Paciente con herida infectada y esfacelo. Ya vamos por el tercer desbridamiento en salas.”",
+   opts:[
+    {t:"Terapia Veraflo™ en la unidad V.A.C. Ulta™", s:"Ciclos automatizados de instilación, remojo y drenaje de solución tópica.", ok:true},
+    {t:"Curaciones diarias con gasa húmeda", s:"Sin equipos, en la cama del paciente.", why:"Cada cambio es doloroso, la limpieza depende de la técnica y el tejido avanza más lento."},
+    {t:"Presión negativa sin instilación", s:"Drena el exudado y favorece la granulación.", why:"Ayuda, pero no limpia el lecho: en heridas infectadas con esfacelo el valor está en la instilación."}],
+   stats:[[">30%","menos desbridamientos quirúrgicos"],[">50%","mayor probabilidad de reducir el recuento bacteriano"]],
+   human:"Menos idas a cirugía y un camino predecible hacia el cierre de la herida.",
+   pitch:"Veraflo™: limpia, instila y reduce desbridamientos repetidos."},
+  {who:"Enfermera de clínica de heridas · Atención ambulatoria",
+   q:"“Mi paciente dejó de salir de su casa por el olor de su úlcera. Le da vergüenza recibir visitas.”",
+   opts:[
+    {t:"Actisorb™ Plus 25", s:"Apósito de carbón activado con plata que controla la carga microbiana y neutraliza el olor.", ok:true},
+    {t:"Cambiar el apósito varias veces al día", s:"Retirar el exudado antes de que huela.", why:"Más cambios significan más dolor y más costo, sin atacar la carga microbiana que produce el olor."},
+    {t:"Ambientadores y apósito superabsorbente", s:"Disimular el olor y retener más exudado.", why:"Disimula el síntoma, pero no controla la infección."}],
+   stats:[["Carbón + plata","controla la infección y neutraliza el olor"],["Dignidad","el paciente recupera su confianza y su vida social"]],
+   human:"Volver a abrir la puerta de la casa también es parte de sanar.",
+   pitch:"Actisorb™ Plus 25: control del olor y de la infección."}
+ ]
+};
+
+const PTS = {quad:50, arg:100, streak:25};
+const LEVELS = [
+  {min:450, name:"Embajador de soluciones integrales", msg:"Conectas el problema de la institución con el diferencial que cierra el negocio."},
+  {min:250, name:"Aliado estratégico", msg:"Reconoces la mayoría de los diferenciales. Llévate el kit y afina el argumento."},
+  {min:0,   name:"Explorador del portafolio", msg:"Hoy descubriste argumentos nuevos. Conversa con el equipo de cada cuadrante del stand."}
+];
+const MAX = ROUTE.length*(PTS.quad+PTS.arg) + (ROUTE.length-1)*PTS.streak;
+
+// ===== Estado =====
+let S;
+const view = document.getElementById("view");
+const hud = document.getElementById("hud");
+const BKEY = "innovation-day-aprendamos-juntos-ranking";
+function loadBoard(){ try{ return JSON.parse(localStorage.getItem(BKEY)) || []; }catch(e){ return []; } }
+function saveBoard(b){ try{ localStorage.setItem(BKEY, JSON.stringify(b)); }catch(e){} }
+let board = loadBoard();
+
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function newGame(name, company){
+  S = {name, company, i:0, score:0, streak:0, hits:0,
+       picks: ROUTE.map(k=>({q:k, c:CASES[k][Math.floor(Math.random()*CASES[k].length)]})),
+       log:[]};
+}
+
+function renderHud(){
+  if(!S || S.done){ hud.innerHTML=""; return; }
+  hud.innerHTML = `<span>Caso <b>${S.i+1}/${ROUTE.length}</b></span><span>Puntos <b>${S.score}</b></span><span>Racha <b>${S.streak}</b></span>`;
+}
+
+function patientPanel(){
+  const n = S.log.filter(l=>l.ok).length;
+  const glow = 0.55 + 0.45*(n/ROUTE.length);
+  return `<aside class="patient" id="pt"><img src="assets/paciente-inicio.webp" alt="Tu paciente" width="520" height="1040" style="filter:brightness(${glow}) saturate(${glow})">
+    <p>Etapas protegidas<b>${n} de ${ROUTE.length}</b></p>
+    <div class="meter">${ROUTE.map((k,ix)=>`<i class="${S.log[ix]&&S.log[ix].ok?"on":""}" title="${QUADS[k].name}"></i>`).join("")}</div></aside>`;
+}
+function routeBar(){
+  return `<div class="route" aria-label="Ruta del paciente">${ROUTE.map((k,idx)=>{
+    const cls = idx<S.i?"done":idx===S.i?"on":"";
+    const moment = QUADS[k].name;
+    return `<div class="stop ${cls}"><span class="n">0${idx+1}</span> · ${moment}</div>`;}).join("")}</div>`;
+}
+
+// ===== Pantallas =====
+function intro(){
+  S=null; renderHud();
+  view.innerHTML = `
+  <section class="hero fade"><div class="intro">
+    <div>
+      <p class="eyebrow">Innovation Day · Aprendamos juntos</p>
+      <h1>Cierra el <span>caso</span></h1>
+    </div>
+    <p class="lede">Este es tu paciente. Antes de volver a casa pasará por esterilización, preparación, cirugía y hospitalización. En cada etapa, una institución te trae un problema real. Encuentra la solución integral y el argumento que gana la conversación.</p>
+    <div class="how">
+      <div><b>1. Escucha al cliente</b>Lee el reto de la institución.</div>
+      <div><b>2. Ubica la solución</b>Elige el cuadrante que lo resuelve. +${PTS.quad}</div>
+      <div><b>3. Cierra con el diferencial</b>Elige el argumento que solo Solventum tiene. +${PTS.arg}</div>
+    </div>
+    <form id="f" class="row" autocomplete="off">
+      <div class="field"><label for="nm">Tu nombre</label><input id="nm" maxlength="24" required placeholder="Ej.: Andrea"></div>
+      <div class="field"><label for="co">Distribuidor (opcional)</label><input id="co" maxlength="30" placeholder="Ej.: Distribuciones del Caribe"></div>
+    </form>
+    <div class="row"><button class="btn" id="go" type="button">Empezar el reto</button><span style="color:var(--muted)">Dura unos 3 minutos</span></div>
+  </div><img src="assets/paciente-inicio.webp" alt="Ilustración holográfica de un paciente: el protagonista del viaje" width="520" height="1040"></section>`;
+  const go = ()=>{ const n=document.getElementById("nm").value.trim(); if(!n){document.getElementById("nm").focus();return;}
+    newGame(n, document.getElementById("co").value.trim()); play(); };
+  document.getElementById("go").onclick=go;
+  document.getElementById("f").onsubmit=e=>{e.preventDefault();go();};
+}
+
+function play(){
+  renderHud();
+  const {q, c} = S.picks[S.i];
+  S.cur = {quadOk:null, argOk:null, opts:shuffle(c.opts)};
+  view.innerHTML = `<div class="stage"><div class="col">
+  ${routeBar()}
+  <article class="case fade">
+    <div class="who"><i>Cliente</i>${esc(c.who)}</div>
+    <p class="quote">${esc(c.q)}</p>
+  </article>
+  <section class="step" id="s1">
+    <h3><b>Paso 1.</b> ¿Qué solución integral resuelve este reto?</h3>
+    <div class="quads">${ROUTE.map((k,ix)=>`<button class="choice" data-q="${k}" type="button"><span class="k">${ix+1}</span><span>${QUADS[k].name}<small>${QUADS[k].tag}</small></span></button>`).join("")}</div>
+  </section>
+  <section class="step hidden" id="s2"></section>
+  <section id="rv"></section></div>${patientPanel()}</div>`;
+  view.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>pickQuad(b.dataset.q));
+  window.scrollTo({top:0});
+}
+
+function pickQuad(k){
+  const {q} = S.picks[S.i];
+  const ok = k===q; S.cur.quadOk=ok; if(ok) S.score+=PTS.quad;
+  view.querySelectorAll("[data-q]").forEach(b=>{ b.disabled=true;
+    if(b.dataset.q===q) b.classList.add("ok"); else if(b.dataset.q===k) b.classList.add("no"); else b.classList.add("dim"); });
+  renderHud();
+  const s2=document.getElementById("s2"); s2.classList.remove("hidden"); s2.classList.add("fade");
+  s2.innerHTML = `<h3><b>Paso 2.</b> ${ok?"¡Bien ubicado!":"La solución está en <b>"+esc(QUADS[q].name)+"</b>."} ¿Con qué argumento cierras?</h3>
+   <div class="opts">${S.cur.opts.map((o,i)=>`<button class="choice" data-a="${i}" type="button"><span class="k">${"ABC"[i]}</span><span>${esc(o.t)}<small>${esc(o.s)}</small></span></button>`).join("")}</div>`;
+  s2.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>pickArg(+b.dataset.a));
+  s2.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});
+}
+
+function pickArg(i){
+  const {q,c} = S.picks[S.i]; const o=S.cur.opts[i]; const ok=!!o.ok;
+  S.cur.argOk=ok;
+  let bonus=0;
+  if(ok){ S.score+=PTS.arg; S.hits++; if(S.cur.quadOk){ S.streak++; if(S.streak>1){bonus=PTS.streak; S.score+=bonus;} } else S.streak=0; }
+  else S.streak=0;
+  document.querySelectorAll("[data-a]").forEach(b=>{ b.disabled=true; const oo=S.cur.opts[+b.dataset.a];
+    if(oo.ok) b.classList.add("ok"); else if(+b.dataset.a===i) b.classList.add("no"); else b.classList.add("dim"); });
+  S.log.push({q, c, ok:ok&&S.cur.quadOk});
+  renderHud();
+  const pt=document.getElementById("pt"); if(pt) pt.outerHTML=patientPanel();
+  const last = S.i===ROUTE.length-1;
+  const rv=document.getElementById("rv");
+  rv.innerHTML = `<div class="reveal fade" role="status">
+    <div class="verdict">${ok?"Caso cerrado. Ese es el diferencial."+(bonus?` Racha +${bonus}`:""):"Ese argumento no cierra este caso."}</div>
+    ${ok?"":`<p class="why">${esc(o.why)}</p>`}
+    <div class="stats">${c.stats.map(s=>`<div class="stat"><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join("")}</div>
+    <p class="human"><em>Lo que cambia para el paciente</em>${esc(c.human)}</p>
+    <div><button class="btn" id="nx" type="button" style="background:var(--bg);color:var(--ink)">${last?"Ver mi resultado":"Siguiente cliente"}</button></div>
+  </div>`;
+  document.getElementById("nx").onclick=()=>{ if(last) finish(); else { S.i++; play(); } };
+  rv.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});
+}
+
+function finish(){
+  S.done=true; renderHud(); const prot=S.log.filter(l=>l.ok).length;
+  const lvl = LEVELS.find(l=>S.score>=l.min);
+  const entry = {n:S.name, c:S.company, p:S.score, t:Date.now()};
+  board.push(entry); board.sort((a,b)=>b.p-a.p||a.t-b.t); board=board.slice(0,10); saveBoard(board);
+  view.innerHTML = `
+  <section class="final fade">
+    <div class="hero"><div>
+      <p class="eyebrow">${esc(S.name)}${S.company?" · "+esc(S.company):""}</p>
+      <div class="score"><span class="big">${S.score}</span><span style="color:var(--muted)">de ${MAX} puntos · ${S.hits}/${ROUTE.length} casos cerrados</span></div>
+      <p style="margin:12px 0 0"><span class="badge">${lvl.name}</span></p>
+      <p class="lede" style="margin-top:12px">${lvl.msg}</p>
+    </div><figure style="margin:0;text-align:center"><img src="assets/paciente-protegido.webp" alt="Paciente protegido de principio a fin" width="520" height="1040" style="filter:brightness(${0.55+0.45*prot/ROUTE.length})"><figcaption style="color:var(--muted);font-size:15px">${prot===ROUTE.length?"Paciente protegido de principio a fin":"Protegiste "+prot+" de "+ROUTE.length+" etapas de su viaje"}</figcaption></figure></div>
+    <div>
+      <h2 style="margin-bottom:12px">Tu kit de argumentos</h2>
+      <div class="kit">${S.log.map(l=>`<div><b>${esc(QUADS[l.q].short)}</b>${esc(l.c.pitch)}</div>`).join("")}</div>
+    </div>
+    <p class="closing">Desde la central de esterilización hasta la UCI, es un mismo paciente. Cuando llevas la solución integral, conectas la calidad de cada insumo y acompañas a la institución en todo el viaje.</p>
+    <div class="board"><h3>Ranking del stand</h3>
+      <ol>${board.map((b,ix)=>`<li class="${b===entry?"me":""}"><span>${ix+1}. ${esc(b.n)}${b.c?" · "+esc(b.c):""}</span><span>${b.p}</span></li>`).join("")}</ol>
+    </div>
+    <div class="row"><button class="btn" id="again" type="button">Siguiente distribuidor</button></div>
+  </section>`;
+  document.getElementById("again").onclick=intro;
+  window.scrollTo({top:0});
+}
+
+// Borrar ranking con confirmación en la página
+document.getElementById("resetBoard").onclick=function(){
+  if(this.dataset.armed){ board=[]; saveBoard(board); this.textContent="Ranking borrado"; delete this.dataset.armed; document.querySelectorAll(".board ol").forEach(o=>o.innerHTML=""); return; }
+  this.dataset.armed="1"; this.textContent="Toca otra vez para confirmar";
+  setTimeout(()=>{ if(this.dataset.armed){ delete this.dataset.armed; this.textContent="Borrar ranking"; } },4000);
+};
+
+intro();
+</script>
+</body>
+</html>
