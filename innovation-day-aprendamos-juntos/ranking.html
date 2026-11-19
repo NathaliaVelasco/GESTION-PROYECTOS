@@ -20,7 +20,7 @@
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{background:var(--bg) url("assets/kv-mapa.webp") no-repeat right center/auto 100%;color:var(--ink);font-family:var(--font)}
-.wrap{min-height:100%;display:flex;flex-direction:column;gap:24px;padding:28px clamp(16px,4vw,56px);background:linear-gradient(90deg,var(--bg) 0%,var(--bg) 45%,rgba(1,27,18,.55) 100%)}
+.wrap{min-height:100%;display:flex;flex-direction:column;gap:20px;padding:24px clamp(16px,4vw,56px);background:linear-gradient(90deg,var(--bg) 0%,var(--bg) 45%,rgba(1,27,18,.55) 100%)}
 header{display:flex;align-items:center;gap:16px}
 header img{height:32px;width:auto}
 header span{border-left:1px solid var(--line);padding-left:16px;font-size:13px;letter-spacing:.22em;text-transform:uppercase;line-height:1.3}
@@ -28,8 +28,8 @@ header em{display:block;font-style:normal;letter-spacing:.04em;text-transform:no
 h1{margin:0;font-size:clamp(36px,5vw,64px);line-height:1;font-weight:700;text-wrap:balance}
 h1 b{color:var(--gold)}
 .sub{margin:8px 0 0;color:var(--muted);font-size:clamp(16px,1.8vw,20px)}
-ol{list-style:none;margin:0;padding:0;display:grid;gap:10px;max-width:760px}
-li{display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 20px;font-size:clamp(18px,2vw,24px)}
+ol{list-style:none;margin:0;padding:0;display:grid;gap:8px;max-width:760px}
+li{display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(6px,0.9vh,12px) 20px;font-size:clamp(17px,2.2vh,24px)}
 li .pos{font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums;font-size:1.2em}
 li .who small{display:block;color:var(--muted);font-size:.7em}
 li .pts{font-weight:700;font-variant-numeric:tabular-nums}
