@@ -19,8 +19,9 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{background:var(--bg) url("assets/kv-mapa.webp") no-repeat right center/auto 100%;color:var(--ink);font-family:var(--font)}
-.wrap{min-height:100%;display:flex;flex-direction:column;gap:20px;padding:24px clamp(16px,4vw,56px);background:linear-gradient(90deg,var(--bg) 0%,var(--bg) 45%,rgba(1,27,18,.55) 100%)}
+body{background:var(--bg) url("assets/kv-fondo.webp") no-repeat right center/cover;color:var(--ink);font-family:var(--font)}
+.wrap{min-height:100%;display:flex;flex-direction:column;gap:20px;padding:24px clamp(16px,4vw,56px);background:linear-gradient(90deg,rgba(1,27,18,.95) 0%,rgba(1,27,18,.85) 42%,rgba(1,27,18,.15) 100%)}
+@media (orientation:portrait){body{background-image:url("assets/kv-ondas.webp")}.wrap{background:rgba(1,27,18,.72)}}
 header{display:flex;align-items:center;gap:16px}
 header img{height:32px;width:auto}
 header span{border-left:1px solid var(--line);padding-left:16px;font-size:13px;letter-spacing:.22em;text-transform:uppercase;line-height:1.3}

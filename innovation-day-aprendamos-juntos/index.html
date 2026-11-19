@@ -20,7 +20,7 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{background:linear-gradient(90deg,var(--bg) 0%,var(--bg) 50%,rgba(1,27,18,.78) 100%),url("assets/kv-mapa.webp") right top/auto 100vh no-repeat var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+body{background:linear-gradient(90deg,rgba(1,27,18,.96) 0%,rgba(1,27,18,.9) 45%,rgba(1,27,18,.55) 100%),url("assets/kv-fondo.webp") right center/cover no-repeat var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--font);font-size:18px;line-height:1.4;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
 .app{position:relative;min-height:100%;display:flex;flex-direction:column;max-width:1100px;margin:0 auto;padding:20px clamp(16px,4vw,40px)}
@@ -118,6 +118,12 @@ h2{font-size:clamp(24px,3.4vw,34px);line-height:1.15}
 footer{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
 .flink{color:var(--gold);font-size:14px;padding:4px}
 .hidden{display:none!important}
+@media (orientation:portrait){body{background-image:linear-gradient(180deg,rgba(1,27,18,.78),rgba(1,27,18,.9)),url("assets/kv-ondas.webp")}}
+/* Portada del stand: key visual completo, se toca para empezar */
+.cover{position:fixed;inset:0;z-index:20;border:0;padding:0;margin:0;background:#011B12 url("assets/kv-portada.webp") center/contain no-repeat;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;width:100%}
+.cover span{margin-bottom:5vh;background:var(--gold);color:var(--bg);font-weight:700;font-size:clamp(18px,2.2vw,26px);border-radius:999px;padding:14px 34px;box-shadow:0 0 0 6px rgba(220,195,105,.25)}
+@media (prefers-reduced-motion:no-preference){.cover span{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 0 14px rgba(220,195,105,.08)}}}
+@media (orientation:portrait){.cover{background-image:url("assets/kv-portada.webp"),url("assets/kv-ondas.webp");background-size:100% auto,cover;background-position:center 30%,center}}
 @media (max-width:700px){.how{grid-template-columns:1fr}.quads{grid-template-columns:1fr}.route{grid-template-columns:repeat(2,1fr)}.hud{gap:12px}}
 @media (prefers-reduced-motion:no-preference){.fade{animation:f .35s ease both}@keyframes f{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}}
 </style>
@@ -338,6 +344,11 @@ function routeBar(){
 }
 
 // ===== Pantallas =====
+function cover(){
+  S=null; renderHud();
+  view.innerHTML = `<button class="cover" id="cv" type="button" aria-label="Channel Annual Meeting. Toca para empezar el reto Cierra el caso"><span>Toca para empezar · Cierra el caso</span></button>`;
+  document.getElementById("cv").onclick=intro;
+}
 function intro(){
   S=null; renderHud();
   view.innerHTML = `
@@ -444,11 +455,11 @@ function finish(){
     </div>
     <div class="row"><button class="btn" id="again" type="button">Siguiente distribuidor</button></div>
   </section>`;
-  document.getElementById("again").onclick=intro;
+  document.getElementById("again").onclick=cover;
   window.scrollTo({top:0});
 }
 
-intro();
+cover();
 </script>
 </body>
 </html>
