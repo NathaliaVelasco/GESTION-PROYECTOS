@@ -185,6 +185,32 @@ textarea{width:100%;min-height:84px;border-radius:12px;border:1px solid var(--li
 .nm.sel{background:var(--brand);color:var(--night);border-color:var(--brand);font-weight:600}
 .nm.taken{opacity:.35;text-decoration:line-through;cursor:not-allowed}
 .sync{font-size:11px;color:var(--muted);font-family:var(--f-mono)}.sync.wait{color:var(--gold)}
+
+.vpin{display:none}
+.andgrid,.vgrid,.rgrid{display:flex;flex-direction:column;gap:14px}
+@media (min-width:960px){
+  .app{max-width:1200px}
+  .scene.wide{height:340px}
+  .pad{padding:0 32px}
+  .narrow{max-width:760px;margin-left:auto;margin-right:auto;width:100%}
+  .andgrid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:20px;align-items:start}
+  .bld{display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px;align-items:start}
+  .bl{position:sticky;top:70px}
+  .bld .pv{width:230px;margin:6px 0}
+  .parts{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .opts,.window .glass .opts{display:grid;grid-template-columns:1fr 1fr}
+  .q{font-size:22px}
+  .rail{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;overflow:visible;padding:8px 32px 18px}
+  .carbtn{flex:none}
+  .wagon{height:360px}
+  .wagon .wtag{left:32px}
+  .vgrid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;align-items:start;margin-top:-140px!important}
+  .vleft{position:sticky;top:70px;display:flex;flex-direction:column;gap:14px}
+  .vleft .steps{grid-template-columns:1fr 1fr}
+  .vpin{display:block;width:150px;height:150px;object-fit:contain;align-self:center;margin-top:8px}
+  .rgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start}
+  .verdict img{width:150px;height:150px}
+}
 /* resultados */
 .bars{display:flex;flex-direction:column;gap:10px}
 .bar{display:grid;grid-template-columns:70px 1fr 54px;gap:8px;align-items:center;font-size:13px}
@@ -344,7 +370,7 @@ function trainSVG(){
   // tren bala de perfil, avanzando a la derecha, con el Cotopaxi al fondo
   const win=(x0,x1)=>{let w="";for(let x=x0;x<x1;x+=30){w+=`<rect x="${x}" y="121" width="20" height="13" rx="4" fill="#0B201C"/><rect x="${x+2}" y="123" width="16" height="4" rx="2" fill="#BFFDE3" opacity=".35"/>`}return w};
   const lines=Array.from({length:9},(_,i)=>`<rect x="${(i*53)%240}" y="${100+i*9}" width="${60+(i*37)%90}" height="2" rx="1" fill="#BFFDE3" opacity="${.12+(i%3)*.08}"/>`).join("");
-  return `<svg class="scene" viewBox="0 0 680 230" role="img" aria-label="Tren bala del Expreso de la Salud">
+  return `<svg class="scene wide" preserveAspectRatio="xMidYMid slice" viewBox="0 0 680 230" role="img" aria-label="Tren bala del Expreso de la Salud">
    <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#011F1A"/><stop offset="1" stop-color="#03463B"/></linearGradient>
     <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#E6EEEB"/><stop offset="1" stop-color="#AEBDB8"/></linearGradient>
@@ -378,12 +404,12 @@ function boothSVG(){
   const win=x=>`<g transform="translate(${x},70)"><rect width="150" height="150" fill="#4A2A12"/><path d="M8 150V40a67 34 0 0 1 134 0v110z" fill="#CFE9E0" opacity=".9"/>
    <path d="M8 150V40a67 34 0 0 1 134 0v110z" fill="none" stroke="#B07A4C" stroke-width="6"/><rect x="62" y="40" width="26" height="110" fill="#B07A4C" opacity=".35"/>
    <rect x="40" y="122" width="70" height="28" fill="#2B1709"/></g>`;
-  return `<svg class="scene" viewBox="0 0 680 330" role="img" aria-label="Taquilla de venta de tiquetes en madera">
+  return `<svg class="scene wide" preserveAspectRatio="xMidYMin slice" viewBox="0 0 680 330" role="img" aria-label="Taquilla de venta de tiquetes en madera">
    <rect width="680" height="330" fill="#E9DCC4"/><rect y="0" width="680" height="34" fill="#C9A57A"/>
    <rect x="20" y="40" width="640" height="290" fill="#8A5631"/>
-   <rect x="200" y="46" width="280" height="40" rx="6" fill="#01332B"/>
-   <text x="340" y="73" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="18" letter-spacing="4" fill="#05DD4D">TAQUILLA · ENTRADA</text>
    ${win(45)}${win(265)}${win(485)}
+   <rect x="200" y="40" width="280" height="40" rx="6" fill="#01332B"/>
+   <text x="340" y="67" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="18" letter-spacing="4" fill="#05DD4D">TAQUILLA · ENTRADA</text>
    <rect x="20" y="226" width="640" height="18" fill="#B07A4C"/><rect x="20" y="244" width="640" height="86" fill="#6C401F"/>
    ${[0,1,2,3,4,5,6].map(i=>`<rect x="${40+i*90}" y="256" width="70" height="62" rx="4" fill="none" stroke="#B07A4C" stroke-opacity=".6" stroke-width="3"/>`).join("")}
    <text x="120" y="160" text-anchor="middle" font-family="Solve Pro,sans-serif" font-weight="600" font-size="15" fill="#01332B">1</text>
@@ -437,7 +463,7 @@ function interiorSVG(n){
 }
 function doorSVG(open){
   const o=open?128:0;
-  return `<svg class="scene" viewBox="0 0 680 330" role="img" aria-label="Puerta de salida del tren">
+  return `<svg class="scene wide" preserveAspectRatio="xMidYMin slice" viewBox="0 0 680 330" role="img" aria-label="Puerta de salida del tren">
    <rect width="680" height="330" fill="#1A2B27"/>
    <rect x="170" y="10" width="340" height="44" rx="6" fill="#05DD4D"/>
    <text x="340" y="40" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="20" letter-spacing="6" fill="#01332B">SALIDA</text>
@@ -495,18 +521,18 @@ function anden(){
     <div><div class="kicker">LET'S HEAL Ecuador · 27 de noviembre</div>
     <h1 style="font-size:30px;margin-top:6px">Bienvenida a bordo del Expreso de la Salud</h1>
     <p class="lead">Seis vagones, seis insignias. Arma tu pasajero, escoge tu nombre y compra el tiquete en la taquilla.</p></div>
-    <div class="card"><div class="qhead"><h2 style="font-size:17px">1. Arma tu avatar</h2><button class="mini" id="rand">Aleatorio</button></div>
-      <div class="pv" id="pv"></div>
+    <div class="andgrid"><div class="card"><div class="qhead"><h2 style="font-size:17px">1. Arma tu avatar</h2><button class="mini" id="rand">Aleatorio</button></div>
+      <div class="bld"><div class="bl"><div class="pv" id="pv"></div></div><div class="br">
       <div class="tabs" id="tabs" role="tablist"></div>
-      <div id="opts"></div></div>
-    <div class="card"><div class="qhead"><h2 style="font-size:17px">2. Escoge tu nombre</h2><span class="note">${NAMES.length-TAKEN.size} disponibles</span></div>
+      <div id="opts"></div></div></div></div>
+    <div class="stack"><div class="card"><div class="qhead"><h2 style="font-size:17px">2. Escoge tu nombre</h2><span class="note">${NAMES.length-TAKEN.size} disponibles</span></div>
       <p class="note" style="margin:6px 0 10px">Cada nombre es único: cuando alguien lo escoge, queda ocupado para los demás.</p><p class="note" id="nmmsg" style="color:var(--gold);margin:0 0 8px" aria-live="polite"></p>
       <div class="names" role="radiogroup">${NAMES.map(n=>`<button class="nm ${TAKEN.has(n)?"taken":""} ${S.avatar===n?"sel":""}" ${TAKEN.has(n)?"disabled":""} data-n="${n}" role="radio" aria-checked="${S.avatar===n}">${n}</button>`).join("")}</div></div>
     <div class="card"><h2 style="font-size:17px">3. Tu grupo</h2>
       <div class="groups" style="margin-top:12px">${GROUPS.map((g,i)=>`<button class="grp ${S.group===i?"sel":""}" data-g="${i}"><i style="background:${g[1]}"></i>${g[0]}</button>`).join("")}</div></div>
     <button class="btn" id="go" ${S.avatar&&S.group!=null?"":"disabled"}>Ir a la taquilla</button>
     <p class="note" style="text-align:center;margin:0">Avatares: Avataaars de Pablo Stanley, vía DiceBear.</p>
-  </div>`;
+  </div></div></div>`;
   builderUI();refreshPreview();
   $("#rand").onclick=()=>{S.build=randomBuild();builderUI();refreshPreview()};
   const ready=()=>{$("#go").disabled=!(S.avatar&&S.group!=null)};
@@ -536,7 +562,7 @@ function quiz(container,list,idx,answers,onDone,paper){
 }
 
 function taquilla(){
-  view.innerHTML=`${boothSVG()}<div class="pad stack" style="margin-top:-60px;position:relative">
+  view.innerHTML=`${boothSVG()}<div class="pad stack narrow" style="margin-top:-60px;position:relative">
     <div class="window"><div class="glass" id="qbox"></div></div>
     <p class="note">Prueba de entrada: 7 preguntas, 2 puntos cada una. Tu resultado imprime el tiquete.</p></div>`;
   quiz($("#qbox"),TEST,0,S.entryAns,()=>{S.entry=S.entryAns.filter(Boolean).length*2;savePrueba("entrada",S.entryAns);saveSes();go("boleto")},true);
@@ -556,7 +582,7 @@ function ticketHTML(){
   </div>`;
 }
 function boleto(){
-  view.innerHTML=`<div class="pad stack" style="padding-top:20px">
+  view.innerHTML=`<div class="pad stack narrow" style="padding-top:20px">
     <div><div class="kicker">Tiquete impreso</div><h1 style="font-size:26px;margin-top:6px">Sacaste ${S.entry} de 14 en la taquilla</h1>
     <p class="lead">Este es tu punto de partida. Al final, la puerta de salida mide cuánto avanzaste.</p></div>
     ${ticketHTML()}
@@ -568,7 +594,7 @@ function mapa(){
   const won=Object.values(S.cars).filter(c=>c.won).length;
   view.innerHTML=`<div class="pad" style="padding-top:20px"><div class="kicker">Andén principal</div>
     <h1 style="font-size:26px;margin-top:6px">${won===6?"Colección completa":"Sube a un vagón"}</h1>
-    <p class="lead">${won} de 6 insignias ganadas. Desliza para ver los vagones; tu grupo empieza en el que indique la facilitadora.</p></div>
+    <p class="lead">${won} de 6 insignias ganadas. Tu grupo empieza en el vagón que indique la facilitadora.</p></div>
     <div class="rail" style="margin-top:12px">${CARS.map(c=>{const st=S.cars[c.n];const cls=st?(st.won?"won":"transit"):"";
       return `<button class="carbtn" data-n="${c.n}"><div class="car ${cls}"><img class="pinp" src="${A["pin"+c.n]}" alt="">
         <div class="num">VAGÓN ${c.n}</div><h3>${c.t}</h3><div class="prod">${c.p}</div>
@@ -576,7 +602,7 @@ function mapa(){
         <span class="pill ${cls}">${st?(st.won?`Insignia ganada · ${st.total}/12`:`En tránsito · ${st.total}/12`):"Por abordar"}</span>
         <div class="wheels"><i></i><i></i></div></div></button>`}).join("")}</div>
     <div class="track"></div>
-    <div class="pad stack" style="margin-top:20px">${ticketHTML()}
+    <div class="pad stack narrow" style="margin-top:20px">${ticketHTML()}
       <button class="btn ${won===6?"":"ghost"}" id="exit">Ir a la puerta de salida</button></div>`;
   view.querySelectorAll(".carbtn").forEach(b=>b.onclick=()=>{S.cur=+b.dataset.n;S.step=0;S.tmp={ind:null,grp:null,puz:null};go("vagon")});
   $("#exit").onclick=()=>{S.qi=0;S.exitAns=[];go("salida")};
@@ -586,10 +612,11 @@ let timerId=null;
 function vagon(){
   const c=CARS[S.cur-1],T=S.tmp;
   const names=["Individual","Grupal","Rompecabezas","Resultado"];
-  view.innerHTML=`<div class="wagon"><div class="wm" role="img" aria-label="Interior de un vagón"></div><div class="wtag">VAGÓN ${c.n}</div></div><div class="pad stack" style="margin-top:-96px;position:relative">
-    <div><div class="kicker">Vagón ${c.n} · ${c.p}</div><h1 style="font-size:25px;margin-top:4px">${c.s}</h1></div>
+  view.innerHTML=`<div class="wagon"><div class="wm" role="img" aria-label="Interior de un vagón"></div><div class="wtag">VAGÓN ${c.n}</div></div><div class="pad vgrid" style="margin-top:-96px;position:relative">
+    <div class="vleft"><div><div class="kicker">Vagón ${c.n} · ${c.p}</div><h1 style="font-size:25px;margin-top:4px">${c.s}</h1></div>
     <div class="steps">${names.map((n,i)=>`<div class="${i<S.step?"done":i===S.step?"now":""}">${n}</div>`).join("")}</div>
-    <div id="stage"></div></div>`;
+    <img class="vpin" src="${A["pin"+c.n]}" alt="Pin del vagón ${c.n}"></div>
+    <div id="stage" class="stack"></div></div>`;
   const st=$("#stage");
   if(timerId){clearInterval(timerId);timerId=null}
   if(S.step===0){
@@ -648,7 +675,7 @@ let order=[];
 function salida(){
   if(S.qi===0&&!S.exitAns.length){order=[...TEST.keys()].sort(()=>Math.random()-.5)}
   const list=order.map(i=>TEST[i]);
-  view.innerHTML=`${doorSVG(false)}<div class="pad stack" style="margin-top:16px">
+  view.innerHTML=`${doorSVG(false)}<div class="pad stack narrow" style="margin-top:16px">
     <div><div class="kicker">Puerta de salida · prueba final</div><p class="lead" style="margin-top:4px">Las mismas 7 preguntas de la taquilla, en otro orden. Responde para abrir la puerta.</p></div>
     <div class="card" id="qbox"></div></div>`;
   const ans=[];
@@ -661,7 +688,7 @@ function resultados(){
   const total=S.entry+carsPts+S.exit,delta=S.exit-S.entry;
   // datos de ejemplo del grupo de 47
   const pre=[38,45,41,34,30,27,52],post=[86,81,88,77,90,74,93];
-  view.innerHTML=`${doorSVG(true)}<div class="pad stack" style="margin-top:16px">
+  view.innerHTML=`${doorSVG(true)}<div class="pad rgrid" style="margin-top:16px"><div class="stack">
     <div class="card verdict" style="padding-top:6px">${won===6?`<img src="${A.logopin}" alt="Pin Let's Heal" style="width:200px;height:auto">`:""}
       <div class="kicker">${S.avatar} · resultado final</div><div class="tot">${total}<span style="font-size:20px;color:var(--muted)"> / 100</span></div>
       <p class="lead" style="margin:0">${won} de 6 insignias · ${delta>=0?"+":""}${delta} puntos entre la entrada y la salida</p></div>
@@ -673,14 +700,14 @@ function resultados(){
       <table class="cmp"><thead><tr><th>Tema</th><th class="c">Entrada</th><th class="c">Salida</th></tr></thead><tbody>
       ${TEST.map((t,i)=>`<tr><td>${TEST_LABEL[t.v]}</td><td class="c ${S.entryAns[i]?"yes":"nop"}">${S.entryAns[i]?"Acertó":"Falló"}</td><td class="c ${S.exitAns[i]?"yes":"nop"}">${S.exitAns[i]?"Acertó":"Falló"}</td></tr>`).join("")}
       </tbody></table></div>
-    <div class="card stack"><div class="qhead"><h2 style="font-size:17px">Los 47 asistentes</h2><span class="pill transit">Datos de ejemplo</span></div>
+    </div><div class="stack"><div class="card stack"><div class="qhead"><h2 style="font-size:17px">Los 47 asistentes</h2><span class="pill transit">Datos de ejemplo</span></div>
       <p class="note" style="margin:0">Porcentaje de aciertos por pregunta. Así se vería el tablero proyectado en la premiación.</p>
       <div class="legend"><span><i style="background:var(--muted)"></i>Entrada</span><span><i style="background:var(--brand)"></i>Salida</span></div>
       <div class="gchart">${TEST.map((t,i)=>`<div class="gq"><span class="note">${SHORT[t.v]}</span>
         <div class="pair"><i style="width:${pre[i]}%;background:var(--muted)"></i><i style="width:${post[i]}%;background:var(--brand)"></i></div></div>`).join("")}</div>
       <p class="note" style="margin:0">Promedio del grupo: ${Math.round(pre.reduce((a,b)=>a+b)/7)} % en la entrada y ${Math.round(post.reduce((a,b)=>a+b)/7)} % en la salida.</p></div>
     ${ticketHTML()}
-    <button class="btn ghost" id="again">Volver al andén</button></div>`;
+    <button class="btn ghost" id="again">Volver al andén</button></div></div>`;
   $("#again").onclick=()=>go("mapa");
 }
 if(EVENTO){$("#demobar").remove();TAKEN.clear()}
