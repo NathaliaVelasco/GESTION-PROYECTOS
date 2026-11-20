@@ -491,7 +491,7 @@ function doorSVG(open){
 
 const OPT={
  skin:[["f9e2e7","Tono 1"],["f5d5c7","Tono 2"],["e9c8b9","Tono 3"],["edd79c","Tono 4"],["e9b399","Tono 5"],["f6a27a","Tono 6"],["ac9286","Tono 7"],["67402d","Tono 8"]],
- top:[["shortFlat","Corto liso"],["shortWaved","Corto ondulado"],["shortCurly","Corto rizado"],["theCaesarAndSidePart","Raya al lado"],["sides","Entradas"],["bob","Bob"],["bun","Moño"],["straight01","Largo liso"],["curly","Largo rizado"],["bigHair","Melena"]],
+ top:[["none","Calvo"],["shortFlat","Corto liso"],["shortWaved","Corto ondulado"],["shortCurly","Corto rizado"],["theCaesarAndSidePart","Raya al lado"],["sides","Entradas"],["bob","Bob"],["bun","Moño"],["straight01","Largo liso"],["curly","Largo rizado"],["bigHair","Melena"]],
  hairColor:[["000000","Negro"],["bb834b","Mostaza"],["ff751f","Naranja"],["8c3300","Cobrizo"],["870b0b","Vinotino"],["051a7a","Azul"],["900a63","Fucsia"],["e8f1f1","Plata"]],
  clothes:[["c1ff72","Lima"],["00bf63","Verde"],["56a33b","Verde hoja"],["0cc0df","Celeste"],["0097b2","Azul petróleo"],["10a795","Turquesa"]],
  eyes:[["default","Normales"],["happy","Felices"],["side","De lado"],["squint","Entrecerrados"],["surprised","Sorpresa"],["wink","Guiño"],["winkWacky","Guiño divertido"],["closed","Cerrados"],["eyeRoll","Mirada arriba"],["hearts","Corazones"]],
@@ -504,9 +504,9 @@ const TABS=[["skin","Piel"],["top","Cabello"],["hairColor","Color"],["eyes","Ojo
 function rnd(a){return a[Math.floor(Math.random()*a.length)][0]}
 function randomBuild(){const b={};for(const k in OPT)b[k]=rnd(OPT[k]);b.accessories=Math.random()<.3?b.accessories:"none";b.facialHair=Math.random()<.2?b.facialHair:"none";if(b.eyes==="hearts")b.eyes="default";return b}
 function avSVG(b,bg="bffde3"){
-  const o={skinColor:[b.skin],top:[b.top],hairColor:[b.hairColor],facialHairColor:[b.hairColor],eyes:[b.eyes],eyebrows:[b.eyebrows],mouth:[b.mouth],nose:["default"],
+  const o={skinColor:[b.skin],top:[b.top==="none"?"shortFlat":b.top],hairColor:[b.hairColor],facialHairColor:[b.hairColor],eyes:[b.eyes],eyebrows:[b.eyebrows],mouth:[b.mouth],nose:["default"],
     accessories:[b.accessories==="none"?"round":b.accessories],accessoriesProbability:b.accessories==="none"?0:100,accessoriesColor:["262e33"],
-    facialHair:[b.facialHair==="none"?"beardLight":b.facialHair],facialHairProbability:b.facialHair==="none"?0:100,topProbability:100,
+    facialHair:[b.facialHair==="none"?"beardLight":b.facialHair],facialHairProbability:b.facialHair==="none"?0:100,topProbability:b.top==="none"?0:100,
     clothing:["shirtCrewNeck"],clothesColor:[b.clothes||"00bf63"],backgroundColor:[bg],style:["circle"],seed:"x"};
   return AV.createAvatar(AV.avataaars,o).toDataUri();
 }
