@@ -6,4 +6,5 @@ Disallow: /eco-eficiencia-360/
 Disallow: /gestion-comercial/
 Disallow: /el-expreso-de-la-salud/
 Disallow: /megalabs-circuito-del-reconocimiento/
+Disallow: /megalabs-ruta-de-experiencia/
 Sitemap: https://www.experienciasimone.com/sitemap.xml
