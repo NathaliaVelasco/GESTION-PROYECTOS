@@ -151,8 +151,9 @@ textarea{width:100%;min-height:84px;border-radius:12px;border:1px solid var(--li
 .puzzle{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;aspect-ratio:35/25;border-radius:10px;overflow:hidden;background:#0B201C;padding:3px;position:relative}
 .puzzle i{background:linear-gradient(135deg,#0A5546,#19A591);border-radius:3px;opacity:.25;transition:opacity .3s}
 .puzzle i.in{opacity:1}
-.puzzle .words{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:14px;place-content:center}
-.puzzle .words span{background:var(--paper);color:var(--night);font-family:var(--f-display);font-weight:600;font-size:14px;text-align:center;padding:8px 6px;border-radius:8px;opacity:0;transform:scale(.9);transition:all .35s}
+.puzzle .words{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:10px;place-content:center}
+.puzzle.fichas .words{grid-template-columns:1fr;gap:6px}
+.puzzle .words span{background:var(--paper);color:var(--night);font-family:var(--f-display);font-weight:600;font-size:12.5px;line-height:1.15;text-align:center;padding:5px 4px;border-radius:7px;opacity:0;transform:scale(.9);transition:all .35s}
 .puzzle.solved .words span{opacity:1;transform:none}
 .score3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
 .score3 div{background:rgba(255,255,255,.05);border-radius:12px;padding:10px 4px;font-size:12px;color:var(--muted)}
@@ -310,32 +311,32 @@ const CARS=[
   c:"Luis Lorenzo, 87 años, secuelas de ACV, obesidad grado II y nutrición enteral. Lesión sacra de 3 meses con exudado abundante y olor fétido.",
   iq:"¿Qué escala validada se recomienda para valorar el riesgo de lesión por presión?",io:["Glasgow","Braden","Wagner","CEAP"],ia:1,
   gq:"En el caso de Luis Lorenzo, mencionen dos factores que favorecieron la lesión sacra.",gk:["Inmovilidad tras el ACV","Edad avanzada","Obesidad","Humedad","Estado nutricional"],
-  w:["Valoración","Presión","Descarga","Prevención"]},
+  w:["Etiología","Factores","Localización","Tamaño de la herida","Características del tejido"],r:"Fichas de valoración"},
  {n:2,t:"Tratamiento de la herida",s:"Cambio de vía: apósitos o presión negativa",p:"Apósitos avanzados y V.A.C.®",
   c:"Lesión profunda con exudado abundante. Un subgrupo plantea apósitos avanzados y el otro terapia de presión negativa sobre el mismo caso.",
   iq:"¿En qué situación se considera el apósito WHITEFOAM en terapia de presión negativa?",io:["Herida superficial sin exudado","Estructuras delicadas expuestas, como tendón, hueso o vasos, y túneles","Incisión cerrada","Quemadura de primer grado"],ia:1,
   gq:"Según las recomendaciones del IWII 2025 sobre limpieza terapéutica de heridas, ¿qué extensión de piel perilesional debe incluirse en la limpieza durante una curación?",gk:["Hasta 20 cm de piel perilesional"],
-  w:["Limpieza","Granulación","Exudado","Sellado"]},
+  w:["Limpieza terapéutica","Biopelícula","Desbridamiento","Exudado","Granulación","Apósito avanzado","Presión negativa","Espuma","Sellado","Reevaluación"],r:"Rompecabezas"},
  {n:3,t:"Lesión vascular",s:"Ruta vascular: compresión segura",p:"Coban™ 2",
   c:"María Elena, 72 años, hipertensa con insuficiencia venosa crónica. Lesión de 8 meses en tercio distal interno de la pierna izquierda, con edema y exudado en aumento.",
   iq:"¿Qué hallazgo es típico de una úlcera venosa?",io:["Lesión en dedos con bordes en sacabocado y lecho pálido","Lesión en región maleolar interna, bordes irregulares y exudado abundante","Ausencia de pulsos y dolor que mejora al elevar la pierna","Necrosis seca en talón"],ia:1,
   gq:"Antes de iniciar la terapia compresiva con el sistema Coban™ 2, mencionen dos aspectos clínicos que deben evaluarse para determinar la seguridad y pertinencia de su aplicación.",gk:["Índice tobillo-brazo","Pulsos pedio y tibial posterior","Llenado capilar","Sensibilidad","Estado de la piel y dolor"],
-  w:["Compresión","Perfusión","Edema","Retorno venoso"]},
+  w:["Compresión","Índice tobillo-brazo","Edema","Retorno venoso","Perfusión","Insuficiencia venosa","Capa de confort","Capa de compresión","Ejercicio","Piel perilesional"],r:"Rompecabezas"},
  {n:4,t:"Pie diabético",s:"Señal de alerta: pie diabético",p:"Veraflo™",
   c:"Paciente de 67 años, panadero, con diabetes tipo 2 de 15 años y neuropatía. Úlcera plantar de 3,5 × 2,8 cm en antepié derecho; rechaza la cirugía.",
   iq:"¿Cuál es el signo preulcerativo más frecuente en el pie de una persona con diabetes?",io:["Hiperqueratosis o callo","Uña encarnada","Edema maleolar","Piel brillante sin vello"],ia:0,
   gq:"El paciente rechaza la cirugía. Propongan tres prioridades del plan interdisciplinario.",gk:["Descarga de presión","Evaluación vascular","Control metabólico","Descartar osteomielitis","Explorar su negativa y asegurar una decisión informada"],
-  w:["Instilación","Limpieza","Descarga","Infección"]},
+  w:["Neuropatía","Descarga","Hiperqueratosis","Infección","Osteomielitis","Instilación","Control glucémico","Perfusión","Calzado","Educación"],r:"Rompecabezas"},
  {n:5,t:"Prevención en la incisión",s:"Viaje seguro: protege la incisión",p:"PREVENA™",
   c:"Paciente que sale de quirófano tras una cirugía de alto riesgo, con factores que aumentan la probabilidad de complicaciones del sitio quirúrgico.",
   iq:"¿Qué paciente es mejor candidato para PREVENA™?",io:["Dehiscencia ya establecida","Herida abierta infectada","Incisión cerrada en paciente con obesidad, diabetes y cirugía de alto riesgo","Quemadura de segundo grado"],ia:2,
   gq:"¿En qué situaciones clínicas está indicado PREVENA™ para prevenir complicaciones del sitio quirúrgico?",gk:["Incisiones cerradas con factores de riesgo: obesidad, diabetes, tabaquismo, inmunosupresión","Cirugías de alto riesgo"],
-  w:["Incisión","Riesgo","Protección","Prevención"]},
+  w:["Incisión cerrada","Factores de riesgo","Seroma","Dehiscencia","Infección quirúrgica","Obesidad","Tabaquismo","Diabetes","Presión negativa","Protección"],r:"Rompecabezas"},
  {n:6,t:"Abdomen abierto",s:"Cabina de control: abdomen abierto",p:"ABTHERA™",
   c:"Paciente crítico con abdomen abierto tras cirugía de control de daños, con necesidad de manejo temporal y nueva evaluación quirúrgica.",
   iq:"¿Cada cuánto se recomienda cambiar el apósito ABTHERA™?",io:["Cada 6 horas","Cada 24 a 72 horas, según la evolución","Cada 7 días","Solo al cerrar la fascia"],ia:1,
   gq:"Mencionen dos responsabilidades de enfermería en el paciente con abdomen abierto y ABTHERA™.",gk:["Vigilar presión intraabdominal","Balance hídrico y cuantificación del efluente","Integridad del sellado y alarmas de fuga","Signos de infección","Protección de la piel perilesional"],
-  w:["Protección visceral","Efluente","Tensión medial","Cierre fascial"]}
+  w:["Protección visceral","Efluente","Tensión medial","Cierre fascial","Presión intraabdominal","Balance hídrico","Edema visceral","Contaminación","Reexploración","Nutrición"],r:"Rompecabezas"}
 ];
 
 
@@ -724,7 +725,7 @@ function cdHTML(){return `<div class="cd hidden" id="cd"><span id="cdl">Tiempo</
 function showCD(est,fase){const el=$("#cd");if(!el)return;if(est&&est.fase===fase&&est.restante!=null){el.classList.remove("hidden");$("#cdt").textContent=mmss(est.restante);el.classList.toggle("warn",est.restante<=30);$("#cdl").textContent=est.restante>0?"Tiempo restante":"Tiempo terminado"}else el.classList.add("hidden")}
 function vagon(){
   const c=CARS[S.cur-1],T=S.tmp;
-  const names=["Individual","Grupal","Rompecabezas","Resultado"];
+  const names=["Individual","Grupal",c.n===1?"Fichas":"Rompecabezas","Resultado"];
   stopTimers();
   view.innerHTML=`<div class="wagon"><div class="wm" role="img" aria-label="Interior de un vagón"></div><div class="wtag">VAGÓN ${c.n}</div></div><div class="pad vgrid" style="margin-top:-96px;position:relative">
     <div class="vleft"><div><div class="kicker">Vagón ${c.n} · ${c.p}</div><h1 style="font-size:25px;margin-top:4px">${c.s}</h1></div>
@@ -755,7 +756,7 @@ function vagon(){
       <label for="ga" class="note">Respuesta del grupo: la escribe y la envía una sola persona del grupo</label>
       <textarea id="ga" placeholder="Escriban aquí la respuesta acordada"></textarea>
       ${EVENTO?`<button class="btn" id="gsend">Enviar respuesta del grupo</button><p class="note" id="gmsg" aria-live="polite" style="margin:0"></p>`:""}</div>
-      ${EVENTO?`<button class="btn ghost" id="gnext">Continuar al rompecabezas</button>`:
+      ${EVENTO?`<button class="btn ghost" id="gnext">Continuar ${c.n===1?"a las fichas":"al rompecabezas"}</button>`:
       `<div class="facil"><div class="kicker">Simulación del facilitador Solventum · solo en el demo</div><div style="font-size:14px;margin-top:6px">En el evento esto lo hace el facilitador Solventum desde su panel. Respuestas válidas:</div>
         <ul>${c.gk.map(k=>`<li>${k}</li>`).join("")}</ul>
         <div class="two" style="margin-top:12px"><button class="btn okb" id="gy">Correcta · 4 pts</button><button class="btn nob" id="gn">Incorrecta · 0</button></div></div>`}`;
@@ -770,9 +771,10 @@ function vagon(){
   }
 
   if(S.step===2){
-    st.innerHTML=`${cdHTML()}<div class="card stack"><div class="qhead"><span class="kicker">Rompecabezas en acrílico · 35 × 25 cm</span><span class="note">4 pts · máximo 3 min</span></div>
-      <div class="puzzle" id="pz">${Array.from({length:20},()=>"<i></i>").join("")}<div class="words">${c.w.map(w=>`<span>${w}</span>`).join("")}</div></div>
-      <p class="note" style="margin:0">Armen el rompecabezas en la mesa. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 4 puntos. Al terminar, lean en voz alta las palabras clave.</p></div>
+    const F=c.n===1;
+    st.innerHTML=`${cdHTML()}<div class="card stack"><div class="qhead"><span class="kicker">${F?"Fichas de valoración sobre la mesa":"Rompecabezas en acrílico · 35 × 25 cm"}</span><span class="note">4 pts · máximo 3 min</span></div>
+      <div class="puzzle${F?" fichas":""}" id="pz">${Array.from({length:20},()=>"<i></i>").join("")}<div class="words">${c.w.map(w=>`<span>${w}</span>`).join("")}</div></div>
+      <p class="note" style="margin:0">${F?"Las fichas están en desorden sobre la mesa. Organícenlas bajo los 5 títulos según el caso de Luis Lorenzo y descarten las que no corresponden. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 4 puntos.":"Armen el rompecabezas en la mesa. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 4 puntos. Al terminar, lean en voz alta las 10 palabras clave."}</p></div>
       ${EVENTO?`<button class="btn ghost" id="pnext">Ver resultado del vagón</button>`:
       `<div class="facil"><div class="kicker">Simulación del facilitador Solventum · solo en el demo</div>
         <div class="timer" id="tm">3:00</div><div class="ring"><i id="rg" style="width:100%"></i></div>
@@ -799,12 +801,12 @@ function vagon(){
       <div class="tot">${fmt(r.total)}<span style="font-size:20px;color:var(--muted)"> / 12</span></div>
       <h2 style="font-size:20px;margin:6px 0">${r.won?"Insignia ganada":"Vagón en tránsito"}</h2>
       <p class="lead" style="margin:0 0 14px">${r.won?"El facilitador Solventum perfora tu tiquete y te entrega el pin.":(r.ind+r.grp+r.puz>=8?"Sumaste 8 o más, pero la pregunta individual es obligatoria para ganar el pin.":"Necesitas 8 de 12 y la pregunta individual correcta para ganar el pin.")}</p>
-      <div class="score3"><div><b>${r.ind}</b>Individual</div><div><b>${r.grp}</b>Grupal</div><div><b>${r.puz}</b>Rompecabezas</div></div></div>
+      <div class="score3"><div><b>${r.ind}</b>Individual</div><div><b>${r.grp}</b>Grupal</div><div><b>${r.puz}</b>${c.n===1?"Fichas":"Rompecabezas"}</div></div></div>
       <button class="btn" id="back">Volver al andén</button>`;$("#back").onclick=()=>go("mapa")};
     if(S.cars[c.n])draw(S.cars[c.n]);
     else if(ONLINE()){
       st.innerHTML=`<div class="card verdict"><div class="spin" aria-hidden="true"></div><h2 style="font-size:20px;margin:10px 0 6px">Esperando la validación del facilitador Solventum</h2>
-        <p class="lead" style="margin:0">Tu resultado aparece aquí apenas el facilitador Solventum registre la respuesta grupal y el rompecabezas.</p></div><button class="btn ghost" id="back">Volver al andén</button>`;
+        <p class="lead" style="margin:0">Tu resultado aparece aquí apenas el facilitador Solventum registre la respuesta grupal y ${c.n===1?"las fichas":"el rompecabezas"}.</p></div><button class="btn ghost" id="back">Volver al andén</button>`;
       $("#back").onclick=()=>go("mapa");
       poll(r=>{if(r.grupal!=null&&r.rompecabezas!=null){stopTimers();finishCar({ind:r.individual??T.ind??0,grp:r.grupal,puz:r.rompecabezas,bono:!!r.bono});draw(S.cars[c.n])}});
     }else{st.innerHTML=`<p class="lead">Este vagón no tiene resultado todavía.</p><button class="btn ghost" id="back">Volver al andén</button>`;$("#back").onclick=()=>go("mapa")}
