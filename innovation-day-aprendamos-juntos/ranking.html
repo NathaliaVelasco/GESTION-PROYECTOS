@@ -70,7 +70,7 @@ const API={url:"https://tovzbcwwdxueejgidoze.supabase.co/rest/v1/rpc/",key:"eyJh
 async function rpc(fn,body){
   const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),6000);
   try{ const r=await fetch(API.url+fn,{method:"POST",signal:ctl.signal,headers:{"apikey":API.key,"Authorization":"Bearer "+API.key,"Content-Type":"application/json"},body:JSON.stringify(body||{})});
-    if(!r.ok) throw new Error(r.status); return await r.json(); } finally{ clearTimeout(t); }
+    if(!r.ok){ const e=new Error("http "+r.status); e.status=r.status; throw e; } return await r.json(); } finally{ clearTimeout(t); }
 }
 
 const BKEY = "innovation-day-reto-distribuidores-ranking";
@@ -107,7 +107,7 @@ document.getElementById("rform").onsubmit = async e=>{
     if(r==="bloqueado"){ msg.textContent="Demasiados intentos con clave incorrecta. Espera 15 minutos."; return; }
     if(r==="ok"){ try{localStorage.removeItem(BKEY);}catch(_){} msg.textContent="Ranking reiniciado."; document.getElementById("rclave").value=""; seen=new Set(); render(); setTimeout(()=>dlg.classList.add("hidden"),1500); }
     else msg.textContent="Clave incorrecta. El ranking no se reinició.";
-  }catch(_){ msg.textContent="Sin conexión: no se puede reiniciar. Intenta de nuevo en un momento."; }
+  }catch(e){ msg.textContent = e&&e.status ? "El servidor no pudo reiniciar el ranking (error "+e.status+"). Avísale a Simoné." : "Sin conexión: no se puede reiniciar. Intenta de nuevo en un momento."; }
 };
 </script>
 </body>
