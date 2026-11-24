@@ -43,6 +43,7 @@ li.new{animation:glow 1.6s ease}
 footer{margin-top:auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:12px}
 footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;cursor:pointer;padding:4px;text-decoration:underline}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
@@ -53,33 +54,57 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
     <p class="sub">4 momentos para cuidar y proteger una vida. Los distribuidores que mejor explican la solución integral de Solventum para Jesús.</p>
   </div>
   <div id="list" aria-live="polite"></div>
+  <form id="rform" class="hidden" style="max-width:760px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center" autocomplete="off">
+    <label for="rclave">Clave del stand para reiniciar</label>
+    <input id="rclave" inputmode="numeric" maxlength="12" style="font:inherit;font-size:18px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:160px">
+    <button type="submit" style="font:inherit;font-weight:700;background:var(--gold);color:var(--bg);border:0;border-radius:999px;padding:8px 20px;cursor:pointer">Reiniciar</button>
+    <span id="rmsg" style="color:var(--muted)"></span>
+  </form>
   <footer>
     <span>Innovation Day · Noviembre 2026 · Bogotá · Experiencia diseñada por Simoné</span>
-    <span><a href="./">Volver al juego</a> · <button id="reset" type="button">Borrar ranking</button></span>
+    <span><span id="estado"></span> · <a href="./">Volver al juego</a> · <button id="reset" type="button">Reiniciar ranking</button></span>
   </footer>
 </div>
 <script>
+const API={url:"https://tovzbcwwdxueejgidoze.supabase.co/rest/v1/rpc/",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvdnpiY3d3ZHh1ZWVqZ2lkb3plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MDA0NzAsImV4cCI6MjEwODI3NjQ3MH0.dHKHFpeYk00g93FEEF4BW5xzzHgXXQgg69ejzW0rWak"};
+async function rpc(fn,body){
+  const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),6000);
+  try{ const r=await fetch(API.url+fn,{method:"POST",signal:ctl.signal,headers:{"apikey":API.key,"Authorization":"Bearer "+API.key,"Content-Type":"application/json"},body:JSON.stringify(body||{})});
+    if(!r.ok) throw new Error(r.status); return await r.json(); } finally{ clearTimeout(t); }
+}
+
 const BKEY = "innovation-day-reto-distribuidores-ranking";
-let seen = new Set();
+let seen = new Set(), online = null;
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
-function load(){ try{ return JSON.parse(localStorage.getItem(BKEY)) || []; }catch(e){ return []; } }
-function render(){
-  const b = load(); const el = document.getElementById("list");
+function loadLocal(){ try{ return JSON.parse(localStorage.getItem(BKEY)) || []; }catch(e){ return []; } }
+function paint(b){
+  const el = document.getElementById("list");
   if(!b.length){ el.innerHTML = '<p class="empty">Aún no hay partidas. El primer distribuidor que proteja a Jesús en los 4 momentos aparecerá aquí.</p>'; seen = new Set(); return; }
   const first = seen.size===0;
   el.innerHTML = '<ol>' + b.map((r,i)=>{
-    const id = r.t+"|"+r.n; const isNew = !first && !seen.has(id);
+    const isNew = !first && !seen.has(r.id);
     return `<li class="${isNew?"new":""}"><span class="pos">${i+1}</span><span class="who">${esc(r.n)}${r.c?`<small>${esc(r.c)}</small>`:""}</span><span class="pts">${r.p}</span></li>`;
   }).join("") + '</ol>';
-  seen = new Set(b.map(r=>r.t+"|"+r.n));
+  seen = new Set(b.map(r=>r.id));
 }
-render();
-window.addEventListener("storage", e=>{ if(e.key===BKEY) render(); });
-setInterval(render, 4000);
-document.getElementById("reset").onclick = function(){
-  if(this.dataset.armed){ try{ localStorage.removeItem(BKEY); }catch(e){} delete this.dataset.armed; this.textContent="Borrar ranking"; render(); return; }
-  this.dataset.armed="1"; this.textContent="Toca otra vez para confirmar";
-  setTimeout(()=>{ if(this.dataset.armed){ delete this.dataset.armed; this.textContent="Borrar ranking"; } },4000);
+async function render(){
+  try{
+    const rows = await rpc("innov_ranking");
+    online = true; paint(rows.map(r=>({id:"s"+r.id,n:r.nombre,c:r.distribuidor,p:r.puntos})));
+  }catch(e){
+    online = false; paint(loadLocal().map(r=>({id:"l"+r.t,n:r.n,c:r.c,p:r.p})));
+  }
+  document.getElementById("estado").textContent = online ? "En vivo · todos los dispositivos" : "Sin conexión · solo este dispositivo";
+}
+render(); setInterval(render, 5000);
+const dlg = document.getElementById("rform");
+document.getElementById("reset").onclick = ()=>{ dlg.classList.toggle("hidden"); document.getElementById("rclave").focus(); };
+document.getElementById("rform").onsubmit = async e=>{
+  e.preventDefault(); const msg=document.getElementById("rmsg"); msg.textContent="Reiniciando…";
+  try{ const ok = await rpc("innov_reiniciar",{p_clave:document.getElementById("rclave").value.trim()});
+    if(ok){ try{localStorage.removeItem(BKEY);}catch(_){} msg.textContent="Ranking reiniciado."; document.getElementById("rclave").value=""; seen=new Set(); render(); setTimeout(()=>dlg.classList.add("hidden"),1500); }
+    else msg.textContent="Clave incorrecta. Revisa la clave del stand.";
+  }catch(_){ msg.textContent="Sin conexión. Intenta de nuevo en un momento."; }
 };
 </script>
 </body>

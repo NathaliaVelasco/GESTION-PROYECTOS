@@ -166,6 +166,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:
 .flink{color:var(--gold);font-size:14px;padding:4px}
 @media (max-width:960px){.intro,.stage,.endhero{grid-template-columns:1fr}.jesus{position:static;grid-template-columns:120px 1fr}.jesus img{height:100%;min-height:140px}.endhero img{max-width:260px}}
 @media (max-width:700px){.case-card{grid-template-columns:1fr}.case-card img{max-height:260px}.moments,.route{grid-template-columns:repeat(2,1fr)}.situ .facts,.gains,.outcomes{grid-template-columns:1fr}.hud{gap:12px}}
+@media (max-width:600px){.lockup span{display:none}.hud{font-size:14px}.hud b{font-size:17px}.cover span{font-size:17px;padding:12px 22px}}
 </style>
 </head>
 <body>
@@ -259,6 +260,14 @@ const LEVELS = [
   {min:Math.round(MAX*.5), name:"Aliado estratégico", msg:"Reconoces la mayoría de las soluciones. Repasa tu kit y afina cómo conectas cada producto con el paciente."},
   {min:0, name:"Aliado en formación", msg:"Hoy viste el recorrido completo de Jesús. Visita cada estación del stand para conocer las soluciones de cerca."}
 ];
+
+// ===== Ranking compartido (Supabase) con respaldo local =====
+const API={url:"https://tovzbcwwdxueejgidoze.supabase.co/rest/v1/rpc/",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRvdnpiY3d3ZHh1ZWVqZ2lkb3plIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MDA0NzAsImV4cCI6MjEwODI3NjQ3MH0.dHKHFpeYk00g93FEEF4BW5xzzHgXXQgg69ejzW0rWak"};
+async function rpc(fn,body){
+  const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),6000);
+  try{ const r=await fetch(API.url+fn,{method:"POST",signal:ctl.signal,headers:{"apikey":API.key,"Authorization":"Bearer "+API.key,"Content-Type":"application/json"},body:JSON.stringify(body||{})});
+    if(!r.ok) throw new Error(r.status); return await r.json(); } finally{ clearTimeout(t); }
+}
 
 // ===== Estado y utilidades =====
 let S;
@@ -419,8 +428,12 @@ function finish(){
   S.done=true; renderHud();
   const perfect=S.log.filter(l=>l.full&&l.pitchOk).length;
   const lvl=LEVELS.find(l=>S.score>=l.min);
-  let board=loadBoard(); const entry={n:S.name,c:S.company,p:S.score,t:Date.now()};
-  board.push(entry); board.sort((a,b)=>b.p-a.p||a.t-b.t); board=board.slice(0,10); saveBoard(board);
+  const entry={n:S.name,c:S.company,p:S.score,t:Date.now()};
+  let local=loadBoard(); local.push(entry); local.sort((a,b)=>b.p-a.p||a.t-b.t); saveBoard(local.slice(0,10));
+  const myScore=S.score, myName=S.name;
+  rpc("innov_registrar",{p_nombre:S.name,p_distribuidor:S.company||null,p_puntos:S.score,p_momentos:perfect})
+    .then(id=>rpc("innov_ranking").then(rows=>paintBoard(rows.map(r=>({n:r.nombre,c:r.distribuidor,p:r.puntos,me:r.id===id})),true)))
+    .catch(()=>paintBoard(loadBoard().map(b=>({n:b.n,c:b.c,p:b.p,me:b.t===entry.t})),false));
   view.innerHTML=`<section class="final fade">
    <div class="endhero"><div>
      <p class="eyebrow">${esc(S.name)}${S.company?" · "+esc(S.company):""}</p>
@@ -434,11 +447,16 @@ function finish(){
      <div class="kit">${ROUTE.map((k,i)=>`<div><b>0${i+1} · ${MOM[k].n}</b>${MOM[k].kit}</div>`).join("")}</div></div>
    <p class="closing">Un paciente. Muchas decisiones. <span>Un mejor mañana, juntos.</span></p>
    <div class="board"><h3>Ranking · <a href="ranking.html" class="flink">Ver en pantalla completa</a></h3>
-     <ol>${board.map((b,ix)=>`<li class="${b===entry?"me":""}"><span>${ix+1}. ${esc(b.n)}${b.c?" · "+esc(b.c):""}</span><span>${b.p}</span></li>`).join("")}</ol></div>
+     <ol id="boardList"><li><span>Cargando el ranking del stand…</span></li></ol><p id="boardNote" style="margin:8px 0 0;font-size:14px;color:var(--muted)"></p></div>
    <div class="row"><button class="btn" id="again" type="button">Siguiente distribuidor</button></div>
   </section>`;
   document.getElementById("again").onclick=cover;
   window.scrollTo({top:0});
+}
+function paintBoard(rows,online){
+  const ol=document.getElementById("boardList"); if(!ol) return;
+  ol.innerHTML=rows.map((b,ix)=>`<li class="${b.me?"me":""}"><span>${ix+1}. ${esc(b.n)}${b.c?" · "+esc(b.c):""}</span><span>${b.p}</span></li>`).join("")||"<li><span>Aún no hay partidas.</span></li>";
+  document.getElementById("boardNote").textContent=online?"Ranking en vivo de todos los dispositivos del stand.":"Sin conexión: se muestran solo las partidas de este dispositivo. Tu puntaje se guardó aquí.";
 }
 
 cover();
