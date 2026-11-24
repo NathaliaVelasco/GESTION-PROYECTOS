@@ -56,7 +56,7 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
   <div id="list" aria-live="polite"></div>
   <form id="rform" class="hidden" style="max-width:760px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center" autocomplete="off">
     <label for="rclave">Clave del stand para reiniciar</label>
-    <input id="rclave" inputmode="numeric" maxlength="12" style="font:inherit;font-size:18px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:160px">
+    <input id="rclave" type="password" inputmode="numeric" autocomplete="off" maxlength="12" style="font:inherit;font-size:18px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:160px">
     <button type="submit" style="font:inherit;font-weight:700;background:var(--gold);color:var(--bg);border:0;border-radius:999px;padding:8px 20px;cursor:pointer">Reiniciar</button>
     <span id="rmsg" style="color:var(--muted)"></span>
   </form>
@@ -101,10 +101,13 @@ const dlg = document.getElementById("rform");
 document.getElementById("reset").onclick = ()=>{ dlg.classList.toggle("hidden"); document.getElementById("rclave").focus(); };
 document.getElementById("rform").onsubmit = async e=>{
   e.preventDefault(); const msg=document.getElementById("rmsg"); msg.textContent="Reiniciando…";
-  try{ const ok = await rpc("innov_reiniciar",{p_clave:document.getElementById("rclave").value.trim()});
-    if(ok){ try{localStorage.removeItem(BKEY);}catch(_){} msg.textContent="Ranking reiniciado."; document.getElementById("rclave").value=""; seen=new Set(); render(); setTimeout(()=>dlg.classList.add("hidden"),1500); }
-    else msg.textContent="Clave incorrecta. Revisa la clave del stand.";
-  }catch(_){ msg.textContent="Sin conexión. Intenta de nuevo en un momento."; }
+  const clave=document.getElementById("rclave").value.trim();
+  if(!clave){ msg.textContent="Escribe la clave del stand."; return; }
+  try{ const r = await rpc("innov_reiniciar",{p_clave:clave});
+    if(r==="bloqueado"){ msg.textContent="Demasiados intentos con clave incorrecta. Espera 15 minutos."; return; }
+    if(r==="ok"){ try{localStorage.removeItem(BKEY);}catch(_){} msg.textContent="Ranking reiniciado."; document.getElementById("rclave").value=""; seen=new Set(); render(); setTimeout(()=>dlg.classList.add("hidden"),1500); }
+    else msg.textContent="Clave incorrecta. El ranking no se reinició.";
+  }catch(_){ msg.textContent="Sin conexión: no se puede reiniciar. Intenta de nuevo en un momento."; }
 };
 </script>
 </body>
