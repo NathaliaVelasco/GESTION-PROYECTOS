@@ -41,6 +41,8 @@ li.new{animation:glow 1.6s ease}
 @keyframes glow{from{box-shadow:0 0 0 4px var(--gold)}to{box-shadow:none}}
 .empty{max-width:760px;background:var(--panel);border:1px dashed var(--line);border-radius:16px;padding:28px;color:var(--muted);font-size:20px}
 footer{margin-top:auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:var(--muted);font-size:14px;border-top:1px solid var(--line);padding-top:12px}
+.dev{display:inline-flex;align-items:center;gap:8px}
+.dev img{height:32px;width:auto}
 footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;cursor:pointer;padding:4px;text-decoration:underline}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .hidden{display:none!important}
@@ -61,7 +63,8 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
     <span id="rmsg" style="color:var(--muted)"></span>
   </form>
   <footer>
-    <span>Innovation Day · Noviembre 2026 · Bogotá · Experiencia diseñada por Simoné</span>
+    <span class="dev"><span>Desarrollado por</span><img src="assets/simone-logo.png" alt="Simoné · Desarrollo humano a través del arte" width="480" height="119"></span>
+    <span class="contact">¿Dudas? <a href="mailto:proyectos@experienciasimone.com">proyectos@experienciasimone.com</a> · <a href="mailto:nathalia@experienciasimone.com">nathalia@experienciasimone.com</a> · <a href="mailto:experienciasimone@gmail.com">experienciasimone@gmail.com</a> · <a href="https://wa.me/573217738039">+57 321 773 8039</a></span>
     <span><span id="estado"></span> · <a href="./">Volver al juego</a> · <button id="reset" type="button">Reiniciar ranking</button></span>
   </footer>
 </div>
