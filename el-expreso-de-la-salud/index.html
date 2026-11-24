@@ -702,7 +702,7 @@ function mapa(){
   const won=Object.values(S.cars).filter(c=>c.won).length;
   view.innerHTML=`<div class="pad" style="padding-top:20px"><div class="kicker">Andén principal</div>
     <h1 style="font-size:26px;margin-top:6px">${won===6?"Colección completa":"Sube a un vagón"}</h1>
-    <p class="lead">${won} de 6 insignias ganadas. Tu grupo empieza en el vagón que indique la mediadora.</p></div>
+    <p class="lead">${won} de 6 insignias ganadas. Tu grupo empieza en el vagón que indique el facilitador Solventum.</p></div>
     <div class="rail" style="margin-top:12px">${CARS.map(c=>{const st=S.cars[c.n];const pr=S.prog[c.n];const cls=st?(st.won?"won":"transit"):"";
       return `<button class="carbtn" data-n="${c.n}"><div class="car ${cls}"><img class="pinp" src="${A["pin"+c.n]}" alt="">
         <div class="num">VAGÓN ${c.n}</div><h3>${c.t}</h3><div class="prod">${c.p}</div>
@@ -756,14 +756,14 @@ function vagon(){
       <textarea id="ga" placeholder="Escriban aquí la respuesta acordada"></textarea>
       ${EVENTO?`<button class="btn" id="gsend">Enviar respuesta del grupo</button><p class="note" id="gmsg" aria-live="polite" style="margin:0"></p>`:""}</div>
       ${EVENTO?`<button class="btn ghost" id="gnext">Continuar al rompecabezas</button>`:
-      `<div class="facil"><div class="kicker">Simulación de la mediadora · solo en el demo</div><div style="font-size:14px;margin-top:6px">En el evento esto lo hace la mediadora desde su panel. Respuestas válidas:</div>
+      `<div class="facil"><div class="kicker">Simulación del facilitador Solventum · solo en el demo</div><div style="font-size:14px;margin-top:6px">En el evento esto lo hace el facilitador Solventum desde su panel. Respuestas válidas:</div>
         <ul>${c.gk.map(k=>`<li>${k}</li>`).join("")}</ul>
         <div class="two" style="margin-top:12px"><button class="btn okb" id="gy">Correcta · 4 pts</button><button class="btn nob" id="gn">Incorrecta · 0</button></div></div>`}`;
     if(EVENTO){
       poll(r=>{showCD(r,"grupal");if(r.respuesta&&!$("#ga").value&&document.activeElement!==$("#ga")){$("#ga").value=r.respuesta}
-        if(r.respuesta)$("#gmsg").textContent="Respuesta del grupo enviada. La mediadora la está validando.";});
+        if(r.respuesta)$("#gmsg").textContent="Respuesta del grupo enviada. El facilitador Solventum la está validando.";});
       $("#gsend").onclick=async()=>{const v=$("#ga").value.trim();if(!v){$("#gmsg").textContent="Escriban la respuesta antes de enviarla.";return}
-        $("#gsend").disabled=true;try{await rpc("enviar_grupal",{p_id:S.pid,p_token:S.ptoken,p_vagon:c.n,p_texto:v});$("#gmsg").textContent="Respuesta del grupo enviada. La mediadora la está validando."}
+        $("#gsend").disabled=true;try{await rpc("enviar_grupal",{p_id:S.pid,p_token:S.ptoken,p_vagon:c.n,p_texto:v});$("#gmsg").textContent="Respuesta del grupo enviada. El facilitador Solventum la está validando."}
         catch(e){queue("enviar_grupal",{p_id:S.pid,p_token:S.ptoken,p_vagon:c.n,p_texto:v});$("#gmsg").textContent="Sin conexión: se enviará al volver la señal."}$("#gsend").disabled=false};
       $("#gnext").onclick=()=>next(2);
     }else{$("#gy").onclick=()=>{T.grp=4;next(2)};$("#gn").onclick=()=>{T.grp=0;next(2)}}
@@ -772,9 +772,9 @@ function vagon(){
   if(S.step===2){
     st.innerHTML=`${cdHTML()}<div class="card stack"><div class="qhead"><span class="kicker">Rompecabezas en acrílico · 35 × 25 cm</span><span class="note">4 pts · máximo 3 min</span></div>
       <div class="puzzle" id="pz">${Array.from({length:20},()=>"<i></i>").join("")}<div class="words">${c.w.map(w=>`<span>${w}</span>`).join("")}</div></div>
-      <p class="note" style="margin:0">Armen el rompecabezas en la mesa. La mediadora toma el tiempo: tienen hasta 3 minutos para ganar los 4 puntos. Al terminar, lean en voz alta las palabras clave.</p></div>
+      <p class="note" style="margin:0">Armen el rompecabezas en la mesa. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 4 puntos. Al terminar, lean en voz alta las palabras clave.</p></div>
       ${EVENTO?`<button class="btn ghost" id="pnext">Ver resultado del vagón</button>`:
-      `<div class="facil"><div class="kicker">Simulación de la mediadora · solo en el demo</div>
+      `<div class="facil"><div class="kicker">Simulación del facilitador Solventum · solo en el demo</div>
         <div class="timer" id="tm">3:00</div><div class="ring"><i id="rg" style="width:100%"></i></div>
         <button class="btn" id="start" style="margin-top:10px">Iniciar cronómetro</button>
         <div class="stack" style="margin-top:8px;gap:8px"><button class="btn okb" id="p3" disabled>Completo en 3 min o menos · 4</button><button class="btn nob" id="pn" disabled>No completó · 0</button></div></div>`}`;
@@ -798,13 +798,13 @@ function vagon(){
     const draw=r=>{st.innerHTML=`<div class="card verdict">${r.won?`<img src="${A["pin"+c.n]}" alt="Pin del vagón ${c.n}">`:""}
       <div class="tot">${fmt(r.total)}<span style="font-size:20px;color:var(--muted)"> / 12</span></div>
       <h2 style="font-size:20px;margin:6px 0">${r.won?"Insignia ganada":"Vagón en tránsito"}</h2>
-      <p class="lead" style="margin:0 0 14px">${r.won?"La mediadora perfora tu tiquete y te entrega el pin.":(r.ind+r.grp+r.puz>=8?"Sumaste 8 o más, pero la pregunta individual es obligatoria para ganar el pin.":"Necesitas 8 de 12 y la pregunta individual correcta para ganar el pin.")}</p>
+      <p class="lead" style="margin:0 0 14px">${r.won?"El facilitador Solventum perfora tu tiquete y te entrega el pin.":(r.ind+r.grp+r.puz>=8?"Sumaste 8 o más, pero la pregunta individual es obligatoria para ganar el pin.":"Necesitas 8 de 12 y la pregunta individual correcta para ganar el pin.")}</p>
       <div class="score3"><div><b>${r.ind}</b>Individual</div><div><b>${r.grp}</b>Grupal</div><div><b>${r.puz}</b>Rompecabezas</div></div></div>
       <button class="btn" id="back">Volver al andén</button>`;$("#back").onclick=()=>go("mapa")};
     if(S.cars[c.n])draw(S.cars[c.n]);
     else if(ONLINE()){
-      st.innerHTML=`<div class="card verdict"><div class="spin" aria-hidden="true"></div><h2 style="font-size:20px;margin:10px 0 6px">Esperando la validación de la mediadora</h2>
-        <p class="lead" style="margin:0">Tu resultado aparece aquí apenas la mediadora registre la respuesta grupal y el rompecabezas.</p></div><button class="btn ghost" id="back">Volver al andén</button>`;
+      st.innerHTML=`<div class="card verdict"><div class="spin" aria-hidden="true"></div><h2 style="font-size:20px;margin:10px 0 6px">Esperando la validación del facilitador Solventum</h2>
+        <p class="lead" style="margin:0">Tu resultado aparece aquí apenas el facilitador Solventum registre la respuesta grupal y el rompecabezas.</p></div><button class="btn ghost" id="back">Volver al andén</button>`;
       $("#back").onclick=()=>go("mapa");
       poll(r=>{if(r.grupal!=null&&r.rompecabezas!=null){stopTimers();finishCar({ind:r.individual??T.ind??0,grp:r.grupal,puz:r.rompecabezas,bono:!!r.bono});draw(S.cars[c.n])}});
     }else{st.innerHTML=`<p class="lead">Este vagón no tiene resultado todavía.</p><button class="btn ghost" id="back">Volver al andén</button>`;$("#back").onclick=()=>go("mapa")}
