@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ranking · Innovation Day · Aprendamos juntos</title>
+<title>Ranking · Innovation Day: Reto para distribuidores</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="../img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,8 +49,8 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
 <div class="wrap">
   <header><img src="assets/logo-blanco.png" alt="Solventum"><span>Channel Annual Meeting<em>El arte de construir grandes alianzas</em></span></header>
   <div>
-    <h1>Ranking <b>Cierra el caso</b></h1>
-    <p class="sub">Los distribuidores que mejor conectan cada etapa del viaje del paciente con su solución integral.</p>
+    <h1>Ranking <b>Reto para distribuidores</b></h1>
+    <p class="sub">4 momentos para cuidar y proteger una vida. Los distribuidores que mejor explican la solución integral de Solventum para Jesús.</p>
   </div>
   <div id="list" aria-live="polite"></div>
   <footer>
@@ -59,13 +59,13 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
   </footer>
 </div>
 <script>
-const BKEY = "innovation-day-aprendamos-juntos-ranking";
+const BKEY = "innovation-day-reto-distribuidores-ranking";
 let seen = new Set();
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function load(){ try{ return JSON.parse(localStorage.getItem(BKEY)) || []; }catch(e){ return []; } }
 function render(){
   const b = load(); const el = document.getElementById("list");
-  if(!b.length){ el.innerHTML = '<p class="empty">Aún no hay partidas. El primer distribuidor que cierre los cuatro casos aparecerá aquí.</p>'; seen = new Set(); return; }
+  if(!b.length){ el.innerHTML = '<p class="empty">Aún no hay partidas. El primer distribuidor que proteja a Jesús en los 4 momentos aparecerá aquí.</p>'; seen = new Set(); return; }
   const first = seen.size===0;
   el.innerHTML = '<ol>' + b.map((r,i)=>{
     const id = r.t+"|"+r.n; const isNew = !first && !seen.has(id);
