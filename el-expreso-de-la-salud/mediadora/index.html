@@ -66,7 +66,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--brand);outline-
 .key .ok{color:#0A7F35;font-weight:600}
 details summary{cursor:pointer;font-weight:600;color:var(--night)}
 .note{font-size:12px;color:var(--muted)}
-.res{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center;margin-top:8px}
+.res{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;text-align:center;margin-top:8px}
 .res div{background:#F5F8F7;border-radius:10px;padding:8px 4px;font-size:11px;color:var(--muted)}
 .res b{display:block;font-size:20px;color:var(--night)}
 .hidden{display:none!important}
@@ -101,12 +101,12 @@ const CARS=[
  {n:2,t:"Tratamiento de la herida",s:"Cambio de vía: apósitos o presión negativa",p:"Apósitos avanzados y V.A.C.®",
   c:"Lesión profunda con exudado abundante. Un subgrupo plantea apósitos avanzados y el otro terapia de presión negativa sobre el mismo caso.",
   iq:"¿En qué situación se considera el apósito WHITEFOAM en terapia de presión negativa?",io:["Herida superficial sin exudado","Estructuras delicadas expuestas, como tendón, hueso o vasos, y túneles","Incisión cerrada","Quemadura de primer grado"],ia:1,
-  gq:"Según el IWII 2025 sobre limpieza terapéutica, ¿qué extensión de piel perilesional debe limpiarse?",gk:["Entre 10 y 20 cm alrededor del borde de la herida (validar con IWII 2025)"],
+  gq:"Según las recomendaciones del IWII 2025 sobre limpieza terapéutica de heridas, ¿qué extensión de piel perilesional debe incluirse en la limpieza durante una curación?",gk:["Hasta 20 cm de piel perilesional"],
   w:["Limpieza","Granulación","Exudado","Sellado"]},
  {n:3,t:"Lesión vascular",s:"Ruta vascular: compresión segura",p:"Coban™ 2",
   c:"María Elena, 72 años, hipertensa con insuficiencia venosa crónica. Lesión de 8 meses en tercio distal interno de la pierna izquierda, con edema y exudado en aumento.",
   iq:"¿Qué hallazgo es típico de una úlcera venosa?",io:["Lesión en dedos con bordes en sacabocado y lecho pálido","Lesión en región maleolar interna, bordes irregulares y exudado abundante","Ausencia de pulsos y dolor que mejora al elevar la pierna","Necrosis seca en talón"],ia:1,
-  gq:"Antes de iniciar compresión, mencionen dos aspectos que deben evaluarse.",gk:["Índice tobillo-brazo","Pulsos pedio y tibial posterior","Llenado capilar","Sensibilidad","Estado de la piel y dolor"],
+  gq:"Antes de iniciar la terapia compresiva con el sistema Coban™ 2, mencionen dos aspectos clínicos que deben evaluarse para determinar la seguridad y pertinencia de su aplicación.",gk:["Índice tobillo-brazo","Pulsos pedio y tibial posterior","Llenado capilar","Sensibilidad","Estado de la piel y dolor"],
   w:["Compresión","Perfusión","Edema","Retorno venoso"]},
  {n:4,t:"Pie diabético",s:"Señal de alerta: pie diabético",p:"Veraflo™",
   c:"Paciente de 67 años, panadero, con diabetes tipo 2 de 15 años y neuropatía. Úlcera plantar de 3,5 × 2,8 cm en antepié derecho; rechaza la cirugía.",
@@ -171,7 +171,7 @@ function status(g){
   const out=[];const r=rem(g);
   if(g.fase&&r!=null)out.push(`<span class="chip run">${{individual:"Individual",grupal:"Grupal",rompecabezas:"Rompecabezas"}[g.fase]} ${mmss(r)}</span>`);
   out.push(g.grupal==null?(g.respuesta?`<span class="chip run">Grupal por validar</span>`:`<span class="chip">Grupal sin enviar</span>`):`<span class="chip ${g.grupal?"ok":"no"}">Grupal ${g.grupal?"correcta":"incorrecta"}</span>`);
-  out.push(g.rompecabezas==null?`<span class="chip">Rompecabezas pendiente</span>`:`<span class="chip ${g.rompecabezas?"ok":"no"}">Rompecabezas ${g.rompecabezas?(g.bono?"< 2 min":"a tiempo"):"no completó"}</span>`);
+  out.push(g.rompecabezas==null?`<span class="chip">Rompecabezas pendiente</span>`:`<span class="chip ${g.rompecabezas?"ok":"no"}">Rompecabezas ${g.rompecabezas?"a tiempo":"no completó"}</span>`);
   return out.join("");
 }
 function renderGroups(){const el=$("#groups");if(!el)return;
@@ -192,7 +192,7 @@ function renderSide(tickOnly){
   lastSideKey=key;
   el.innerHTML=`<div class="card" style="border-top:6px solid ${gr[1]}"><div class="kick">Grupo ${gr[0]}</div>
     <div class="timer ${r===0?"over":r!=null&&r<=30?"warn":""}" id="tm" style="margin-top:10px">${g.fase&&r!=null?mmss(r):"0:00"}</div>
-    <div class="tlabel">${g.fase?{individual:"Pregunta individual · 2 minutos",grupal:"Pregunta grupal · 3 minutos",rompecabezas:"Rompecabezas · 3 minutos (bono si es en menos de 2)"}[g.fase]:"Ningún cronómetro activo"}</div>
+    <div class="tlabel">${g.fase?{individual:"Pregunta individual · 2 minutos",grupal:"Pregunta grupal · 3 minutos",rompecabezas:"Rompecabezas · 3 minutos"}[g.fase]:"Ningún cronómetro activo"}</div>
     <div class="tbar"><i id="tb" style="width:${dur&&r!=null?r/dur*100:0}%"></i></div>
     <div class="step"><h3>1. Pregunta individual</h3><p class="note" style="margin:0 0 8px">${g.respondieron??0} de ${g.integrantes??0} personas ya respondieron en su celular.</p>
       <button class="btn dark" data-f="individual" data-s="120">Iniciar 2:00</button></div>
@@ -200,16 +200,14 @@ function renderSide(tickOnly){
       <p class="note" style="margin:10px 0 4px">Respuesta enviada${g.respondio?` por ${esc(g.respondio)}`:""}:</p><div class="ans">${g.respuesta?esc(g.respuesta):"Todavía no han enviado la respuesta."}</div>
       <div class="two" style="margin-top:8px"><button class="btn" id="gy">Correcta · 4</button><button class="btn no" id="gn">Incorrecta · 0</button></div></div>
     <div class="step"><h3>3. Rompecabezas</h3><button class="btn dark" data-f="rompecabezas" data-s="180">Iniciar 3:00</button>
-      <div class="stack" style="margin-top:8px"><button class="btn" id="p2" ${g.fase==="rompecabezas"&&r!=null&&r<60?"disabled":""}>Completo en menos de 2 min · 4 + 0,5</button>
-      <button class="btn mid" id="p3">Completo entre 2 y 3 min · 4</button><button class="btn no" id="pn">No completó · 0</button></div></div>
-    <div class="step"><h3>Resultado del grupo</h3><div class="res"><div><b>${g.grupal==null?"–":g.grupal}</b>Grupal</div><div><b>${g.rompecabezas==null?"–":g.rompecabezas}</b>Rompecabezas</div><div><b>${g.bono?"+0,5":"–"}</b>Bono</div></div>
+      <div class="stack" style="margin-top:8px"><button class="btn" id="p3">Completo en 3 min o menos · 4</button><button class="btn no" id="pn">No completó · 0</button></div></div>
+    <div class="step"><h3>Resultado del grupo</h3><div class="res"><div><b>${g.grupal==null?"–":g.grupal}</b>Grupal</div><div><b>${g.rompecabezas==null?"–":g.rompecabezas}</b>Rompecabezas</div></div>
       <p class="note" style="margin:8px 0 0">Los puntos llegan a todas las personas del grupo. Cada una suma además su pregunta individual.</p></div>
     <p class="err" id="serr" aria-live="polite"></p></div>`;
   el.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>act(()=>rpc("mediadora_fase",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_fase:b.dataset.f,p_seg:+b.dataset.s})));
   $("#gy").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:4,p_rompecabezas:null,p_bono:null}));
   $("#gn").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:0,p_rompecabezas:null,p_bono:null}));
-  $("#p2").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:null,p_rompecabezas:4,p_bono:true}));
-  $("#p3").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:null,p_rompecabezas:4,p_bono:false}));
+    $("#p3").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:null,p_rompecabezas:4,p_bono:false}));
   $("#pn").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:null,p_rompecabezas:0,p_bono:false}));
 }
 async function act(fn){$("#serr").textContent="";document.querySelectorAll("#side button").forEach(b=>b.disabled=true);
