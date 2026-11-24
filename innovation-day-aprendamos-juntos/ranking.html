@@ -74,6 +74,8 @@ async function rpc(fn,body){
 }
 
 const BKEY = "innovation-day-reto-distribuidores-ranking";
+const CIERRE = Date.parse("2026-11-29T05:00:00Z");
+let finalMode = false;
 let seen = new Set(), online = null;
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function loadLocal(){ try{ return JSON.parse(localStorage.getItem(BKEY)) || []; }catch(e){ return []; } }
@@ -88,6 +90,8 @@ function paint(b){
   seen = new Set(b.map(r=>r.id));
 }
 async function render(){
+  if(finalMode) return;
+  if(Date.now() >= CIERRE){ showClosed(); return; }
   try{
     const rows = await rpc("innov_ranking");
     online = true; paint(rows.map(r=>({id:"s"+r.id,n:r.nombre,c:r.distribuidor,p:r.puntos})));
@@ -95,6 +99,29 @@ async function render(){
     online = false; paint(loadLocal().map(r=>({id:"l"+r.t,n:r.n,c:r.c,p:r.p})));
   }
   document.getElementById("estado").textContent = online ? "En vivo · todos los dispositivos" : "Sin conexión · solo este dispositivo";
+}
+function showClosed(){
+  if(document.getElementById("closedBox")) return;
+  document.getElementById("list").innerHTML = `<div class="empty" id="closedBox">
+    <p style="margin:0 0 10px;color:var(--ink);font-size:22px">El Reto para distribuidores finalizó el 28 de noviembre de 2026. Gracias por participar.</p>
+    <form id="fform" autocomplete="off" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:16px">
+      <label for="fclave">Ranking final (solo Simoné)</label>
+      <input id="fclave" type="password" autocapitalize="characters" autocomplete="off" maxlength="12" style="font:inherit;font-size:18px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:160px">
+      <button type="submit" style="font:inherit;font-weight:700;background:var(--gold);color:var(--bg);border:0;border-radius:999px;padding:8px 20px;cursor:pointer">Ver</button>
+      <span id="fmsg"></span>
+    </form></div>`;
+  document.getElementById("estado").textContent = "Reto finalizado";
+  document.getElementById("reset").classList.add("hidden");
+  document.getElementById("fform").onsubmit = async e=>{
+    e.preventDefault(); const m=document.getElementById("fmsg"); m.textContent="Cargando…";
+    try{ const rows = await rpc("innov_ranking_privado",{p_clave:document.getElementById("fclave").value.trim()});
+      if(!rows.length){ m.textContent="Clave incorrecta o sin partidas."; return; }
+      finalMode = true; seen = new Set();
+      paint(rows.map(r=>({id:"f"+r.id,n:r.nombre,c:r.distribuidor,p:r.puntos})));
+      document.querySelector("h1").innerHTML = 'Ranking final <b>Reto para distribuidores</b>';
+      document.getElementById("estado").textContent = "Ranking final · " + rows.length + " partidas";
+    }catch(_){ m.textContent="Sin conexión. Intenta de nuevo."; }
+  };
 }
 render(); setInterval(render, 5000);
 const dlg = document.getElementById("rform");

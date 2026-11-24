@@ -47,6 +47,8 @@ h2{font-size:clamp(24px,3.2vw,34px);line-height:1.15}
 
 /* Portada */
 .cover{position:fixed;inset:0;z-index:20;border:0;padding:0;margin:0;width:100%;background:#011B12 url("assets/kv-portada.webp") center/contain no-repeat;display:flex;align-items:flex-end;justify-content:center}
+.cover.closed{cursor:default}
+.cover.closed span{animation:none;max-width:min(92vw,820px);text-align:center;line-height:1.3}
 .cover span{margin-bottom:5vh;background:var(--gold);color:var(--bg);font-weight:700;font-size:clamp(18px,2.2vw,26px);border-radius:999px;padding:14px 34px;box-shadow:0 0 0 6px rgba(220,195,105,.25)}
 @media (orientation:portrait){.cover{background-image:url("assets/kv-portada.webp"),url("assets/kv-ondas.webp");background-size:100% auto,cover;background-position:center 30%,center}}
 @media (prefers-reduced-motion:no-preference){.cover span{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 0 14px rgba(220,195,105,.08)}}.fade{animation:f .35s ease both}@keyframes f{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}}
@@ -252,6 +254,9 @@ const MOM = {
      kit:"Proteger cada acceso: Tegaderm™ CHG, PICC/CVC, Curos™ y Cavilon™."}
 };
 const ROUTE = ["E","P","C","H"];
+// Cierre del reto: 28 de noviembre de 2026, 11:59 p. m. hora de Bogotá
+const CIERRE = Date.parse("2026-11-29T05:00:00Z");
+const cerrado = ()=>Date.now() >= CIERRE;
 const PTS = {pick:25, wrong:10, full:25, pitch:100};
 const correctCount = ROUTE.reduce((a,k)=>a+MOM[k].shelf.filter(id=>P[id].m===k).length,0);
 const MAX = correctCount*PTS.pick + ROUTE.length*(PTS.full+PTS.pitch);
@@ -266,7 +271,7 @@ const API={url:"https://tovzbcwwdxueejgidoze.supabase.co/rest/v1/rpc/",key:"eyJh
 async function rpc(fn,body){
   const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),6000);
   try{ const r=await fetch(API.url+fn,{method:"POST",signal:ctl.signal,headers:{"apikey":API.key,"Authorization":"Bearer "+API.key,"Content-Type":"application/json"},body:JSON.stringify(body||{})});
-    if(!r.ok) throw new Error(r.status); return await r.json(); } finally{ clearTimeout(t); }
+    if(!r.ok){ const e=new Error("http "+r.status); e.status=r.status; throw e; } return await r.json(); } finally{ clearTimeout(t); }
 }
 
 // ===== Estado y utilidades =====
@@ -285,8 +290,14 @@ function renderHud(){
   hud.innerHTML=`<span>Momento <b>${S.i+1}/4</b></span><span>Puntos <b>${S.score}</b></span>`;
 }
 
+// ===== Cierre =====
+function closedScreen(){
+  S=null; renderHud();
+  view.innerHTML=`<div class="cover closed" role="status"><span>El Reto para distribuidores finalizó el 28 de noviembre de 2026. Gracias por participar.</span></div>`;
+}
 // ===== Portada =====
 function cover(){
+  if(cerrado()) return closedScreen();
   S=null; renderHud();
   view.innerHTML=`<button class="cover" id="cv" type="button" aria-label="Innovation Day. Toca para empezar el reto para distribuidores"><span>Toca para empezar · Reto para distribuidores</span></button>`;
   document.getElementById("cv").onclick=intro;
@@ -331,7 +342,7 @@ function intro(){
      </article>
    </div>
   </section>`;
-  const go=()=>{const n=document.getElementById("nm").value.trim(); if(!n){document.getElementById("nm").focus();return;}
+  const go=()=>{ if(cerrado()) return closedScreen(); const n=document.getElementById("nm").value.trim(); if(!n){document.getElementById("nm").focus();return;}
     S={name:n, company:document.getElementById("co").value.trim(), i:0, score:0, log:[]}; play();};
   document.getElementById("go").onclick=go;
   document.getElementById("f").onsubmit=e=>{e.preventDefault();go();};
@@ -433,7 +444,8 @@ function finish(){
   const myScore=S.score, myName=S.name;
   rpc("innov_registrar",{p_nombre:S.name,p_distribuidor:S.company||null,p_puntos:S.score,p_momentos:perfect})
     .then(id=>rpc("innov_ranking").then(rows=>paintBoard(rows.map(r=>({n:r.nombre,c:r.distribuidor,p:r.puntos,me:r.id===id})),true)))
-    .catch(()=>paintBoard(loadBoard().map(b=>({n:b.n,c:b.c,p:b.p,me:b.t===entry.t})),false));
+    .catch(e=>{ if(e&&e.status===400){ const ol=document.getElementById("boardList"); if(ol) ol.innerHTML="<li><span>El reto ya cerró: este puntaje no se sumó al ranking.</span></li>"; document.getElementById("boardNote").textContent=""; return; }
+      paintBoard(loadBoard().map(b=>({n:b.n,c:b.c,p:b.p,me:b.t===entry.t})),false); });
   view.innerHTML=`<section class="final fade">
    <div class="endhero"><div>
      <p class="eyebrow">${esc(S.name)}${S.company?" · "+esc(S.company):""}</p>
