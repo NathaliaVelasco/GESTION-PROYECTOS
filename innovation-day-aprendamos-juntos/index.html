@@ -42,6 +42,10 @@ h2{font-size:clamp(24px,3.2vw,34px);line-height:1.15}
 .btn{border:0;border-radius:999px;background:var(--brand);color:var(--bg);font-weight:700;font-size:20px;padding:16px 32px;min-height:56px}
 .btn:disabled{opacity:.4;cursor:default}
 .btn.gold{background:var(--gold)}
+a.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:rgba(220,195,105,.12);border:2px solid var(--gold);border-radius:20px;padding:18px 22px}
+.dl p{margin:0;font-size:16px;color:var(--muted)}
+@media (max-width:640px){.dl{grid-template-columns:1fr}}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .hidden{display:none!important}
 
@@ -465,6 +469,7 @@ function finish(){
    <p class="closing">Un paciente. Muchas decisiones. <span>Un mejor mañana, juntos.</span></p>
    <div class="board"><h3>Ranking · <a href="ranking.html" class="flink">Ver en pantalla completa</a></h3>
      <ol id="boardList"><li><span>Cargando el ranking del stand…</span></li></ol><p id="boardNote" style="margin:8px 0 0;font-size:14px;color:var(--muted)"></p></div>
+   <div class="dl"><a class="btn gold" href="assets/informe-caso-jesus.pdf" download="Informe-caso-Jesus-Innovation-Day.pdf">⬇ Descargar informe del caso (PDF)</a><p>Llévate en tu celular la infografía del recorrido de Jesús: los 4 momentos, las soluciones de Solventum y las cifras clave.</p></div>
    <div class="row"><button class="btn" id="again" type="button">Siguiente distribuidor</button></div>
   </section>`;
   document.getElementById("again").onclick=cover;
