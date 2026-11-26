@@ -219,7 +219,7 @@ footer{align-items:center}
   <footer>
     <span class="dev"><span>Desarrollado por</span><img src="assets/simone-logo.png" alt="Simoné · Desarrollo humano a través del arte" width="480" height="119"></span>
     <span class="contact">¿Dudas? <a href="mailto:proyectos@experienciasimone.com">proyectos@experienciasimone.com</a> · <a href="mailto:nathalia@experienciasimone.com">nathalia@experienciasimone.com</a> · <a href="mailto:experienciasimone@gmail.com">experienciasimone@gmail.com</a> · <a href="https://wa.me/573217738039">+57 321 773 8039</a></span>
-    <a href="ranking.html" class="flink">Ver ranking</a>
+    <span><a href="raspa.html" class="flink">Raspa y gana</a> · <a href="ranking.html" class="flink">Ver ranking</a></span>
   </footer>
 </div>
 
@@ -317,6 +317,7 @@ async function rpc(fn,body){
 let S;
 const view=document.getElementById("view"), hud=document.getElementById("hud");
 const BKEY="innovation-day-reto-distribuidores-ranking";
+const TKEY="innovation-day-raspa-tokens";
 const loadBoard=()=>{try{return JSON.parse(localStorage.getItem(BKEY))||[];}catch(e){return [];}};
 const saveBoard=b=>{try{localStorage.setItem(BKEY,JSON.stringify(b));}catch(e){}};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -481,7 +482,8 @@ function finish(){
   const entry={n:S.name,c:S.company,p:S.score,t:Date.now()};
   let local=loadBoard(); local.push(entry); local.sort((a,b)=>b.p-a.p||a.t-b.t); saveBoard(local.slice(0,10));
   const myScore=S.score, myName=S.name;
-  rpc("innov_registrar",{p_nombre:S.name,p_distribuidor:S.company||null,p_puntos:S.score,p_momentos:perfect})
+  rpc("innov_registrar2",{p_nombre:S.name,p_distribuidor:S.company||null,p_puntos:S.score,p_momentos:perfect})
+    .then(res=>{ const id=res.id; try{ const m=JSON.parse(localStorage.getItem(TKEY)||"[]"); m.push({k:res.token,n:S.name,c:S.company||"",p:S.score,t:Date.now()}); localStorage.setItem(TKEY,JSON.stringify(m.slice(-10))); }catch(_){} return id; })
     .then(id=>rpc("innov_ranking").then(rows=>paintBoard(rows.map(r=>({n:r.nombre,c:r.distribuidor,p:r.puntos,me:r.id===id})),true)))
     .catch(e=>{ if(e&&e.status===400){ const ol=document.getElementById("boardList"); if(ol) ol.innerHTML="<li><span>El reto ya cerró: este puntaje no se sumó al ranking.</span></li>"; document.getElementById("boardNote").textContent=""; return; }
       paintBoard(loadBoard().map(b=>({n:b.n,c:b.c,p:b.p,me:b.t===entry.t})),false); });
@@ -499,6 +501,7 @@ function finish(){
    <p class="closing">Un paciente. Muchas decisiones. <span>Un mejor mañana, juntos.</span></p>
    <div class="board"><h3>Ranking · <a href="ranking.html" class="flink">Ver en pantalla completa</a></h3>
      <ol id="boardList"><li><span>Cargando el ranking del stand…</span></li></ol><p id="boardNote" style="margin:8px 0 0;font-size:14px;color:var(--muted)"></p></div>
+   <div class="dl"><a class="btn gold" href="raspa.html">🎁 Raspa y gana</a><p>Si quedas entre los 10 primeros, al cierre del reto descubres aquí tu premio. Vuelve a esta opción desde este mismo celular cuando lo anuncien en el stand.</p></div>
    <div class="dl"><a class="btn gold" href="assets/informe-caso-jesus.pdf" download="Informe-caso-Jesus-Innovation-Day.pdf">⬇ Descarga ingreso INNOVATION DAY</a><p>Llévate en tu celular la infografía del recorrido de Jesús: los 4 momentos, las soluciones de Solventum y las cifras clave.</p></div>
    <div class="row"><button class="btn" id="again" type="button">Siguiente distribuidor</button></div>
   </section>`;

@@ -56,6 +56,7 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
     <p class="sub">4 momentos para cuidar y proteger una vida. Los distribuidores que mejor explican la solución integral de Solventum para Jesús.</p>
   </div>
   <div id="list" aria-live="polite"></div>
+  <div id="ganadores" class="hidden" style="max-width:760px;background:linear-gradient(90deg,rgba(5,221,77,.18),var(--panel));border:2px solid var(--brand);border-radius:16px;padding:16px 20px"></div>
   <a id="informe" href="assets/informe-caso-jesus.pdf" download="Informe-caso-Jesus-Innovation-Day.pdf" style="max-width:760px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--gold);color:var(--bg);font-weight:700;font-size:clamp(18px,2.2vh,22px);text-decoration:none;border-radius:999px;padding:14px 28px">⬇ Descarga ingreso INNOVATION DAY</a>
   <form id="rform" class="hidden" style="max-width:760px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center" autocomplete="off">
     <label for="rclave">Clave del stand para reiniciar</label>
@@ -63,10 +64,21 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
     <button type="submit" style="font:inherit;font-weight:700;background:var(--gold);color:var(--bg);border:0;border-radius:999px;padding:8px 20px;cursor:pointer">Reiniciar</button>
     <span id="rmsg" style="color:var(--muted)"></span>
   </form>
+  <form id="aform" class="hidden" style="max-width:760px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px" autocomplete="off">
+    <strong style="font-size:20px">Activar raspa y gana · top 10</strong>
+    <label for="apremios">Premios, uno por línea. Se reparten al azar entre los 10 primeros; si hay menos premios que ganadores, la lista se repite.</label>
+    <textarea id="apremios" rows="6" style="font:inherit;font-size:17px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px"></textarea>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <label for="aclave">Clave del stand</label>
+      <input id="aclave" type="password" autocapitalize="characters" autocomplete="off" maxlength="12" style="font:inherit;font-size:18px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:160px">
+      <button type="submit" style="font:inherit;font-weight:700;background:var(--brand);color:var(--bg);border:0;border-radius:999px;padding:8px 20px;cursor:pointer">Congelar top 10 y activar</button>
+    </div>
+    <span id="amsg" style="color:var(--muted)"></span>
+  </form>
   <footer>
     <span class="dev"><span>Desarrollado por</span><img src="assets/simone-logo.png" alt="Simoné · Desarrollo humano a través del arte" width="480" height="119"></span>
     <span class="contact">¿Dudas? <a href="mailto:proyectos@experienciasimone.com">proyectos@experienciasimone.com</a> · <a href="mailto:nathalia@experienciasimone.com">nathalia@experienciasimone.com</a> · <a href="mailto:experienciasimone@gmail.com">experienciasimone@gmail.com</a> · <a href="https://wa.me/573217738039">+57 321 773 8039</a></span>
-    <span><span id="estado"></span> · <a href="./">Volver al juego</a> · <button id="reset" type="button">Reiniciar ranking</button></span>
+    <span><span id="estado"></span> · <a href="./">Volver al juego</a> · <button id="activar" type="button">Raspa y gana</button> · <button id="reset" type="button">Reiniciar ranking</button></span>
   </footer>
 </div>
 <script>
@@ -127,7 +139,31 @@ function showClosed(){
     }catch(_){ m.textContent="Sin conexión. Intenta de nuevo."; }
   };
 }
-render(); setInterval(render, 5000);
+async function renderRaspa(){
+  try{ const e = await rpc("innov_raspa_estado"); const box=document.getElementById("ganadores");
+    if(!e.activo){ box.classList.add("hidden"); return; }
+    box.classList.remove("hidden");
+    box.innerHTML = `<p style="margin:0 0 6px;font-weight:700;font-size:clamp(20px,2.6vh,28px)">🎁 ¡Raspa y gana activado!</p>
+      <p style="margin:0 0 10px;color:var(--muted);font-size:clamp(15px,1.9vh,19px)">Ganadores: abran el juego en el mismo celular con el que jugaron y toquen «Raspa y gana».</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;font-size:clamp(15px,1.9vh,19px)">${e.ganadores.map(g=>`<span>${g.puesto}. ${esc(g.nombre)} ${g.raspado?"✅":"⏳"}</span>`).join("")}</div>`;
+  }catch(_){}
+}
+render(); renderRaspa(); setInterval(render, 5000); setInterval(renderRaspa, 5000);
+const af = document.getElementById("aform");
+document.getElementById("activar").onclick = ()=>{ af.classList.toggle("hidden"); document.getElementById("apremios").focus(); };
+af.onsubmit = async e=>{
+  e.preventDefault(); const m=document.getElementById("amsg");
+  const premios=document.getElementById("apremios").value.split("\n").map(x=>x.trim()).filter(Boolean);
+  const clave=document.getElementById("aclave").value.trim();
+  if(!premios.length){ m.textContent="Escribe al menos un premio."; return; }
+  if(!clave){ m.textContent="Escribe la clave del stand."; return; }
+  m.textContent="Activando…";
+  try{ const r = await rpc("innov_activar_raspa",{p_clave:clave,p_premios:premios});
+    const t={ok:"Listo: el top 10 quedó congelado y los premios se repartieron al azar.",clave_incorrecta:"Clave incorrecta. No se activó.",bloqueado:"Demasiados intentos con clave incorrecta. Espera 15 minutos.",ya_activo:"El raspa y gana ya está activo. Para repetirlo hay que reiniciar el ranking.",sin_premios:"Escribe al menos un premio.",sin_partidas:"Aún no hay partidas en el ranking."};
+    m.textContent = t[r] || ("Respuesta inesperada: "+r);
+    if(r==="ok"){ document.getElementById("aclave").value=""; renderRaspa(); setTimeout(()=>af.classList.add("hidden"),2500); }
+  }catch(err){ m.textContent = err&&err.status ? "El servidor no pudo activar (error "+err.status+"). Avísale a Simoné." : "Sin conexión. Intenta de nuevo."; }
+};
 const dlg = document.getElementById("rform");
 document.getElementById("reset").onclick = ()=>{ dlg.classList.toggle("hidden"); document.getElementById("rclave").focus(); };
 document.getElementById("rform").onsubmit = async e=>{
@@ -136,7 +172,7 @@ document.getElementById("rform").onsubmit = async e=>{
   if(!clave){ msg.textContent="Escribe la clave del stand."; return; }
   try{ const r = await rpc("innov_reiniciar",{p_clave:clave});
     if(r==="bloqueado"){ msg.textContent="Demasiados intentos con clave incorrecta. Espera 15 minutos."; return; }
-    if(r==="ok"){ try{localStorage.removeItem(BKEY);}catch(_){} msg.textContent="Ranking reiniciado."; document.getElementById("rclave").value=""; seen=new Set(); render(); setTimeout(()=>dlg.classList.add("hidden"),1500); }
+    if(r==="ok"){ try{localStorage.removeItem(BKEY);}catch(_){} msg.textContent="Ranking reiniciado."; document.getElementById("rclave").value=""; seen=new Set(); render(); renderRaspa(); setTimeout(()=>dlg.classList.add("hidden"),1500); }
     else msg.textContent="Clave incorrecta. El ranking no se reinició.";
   }catch(e){ msg.textContent = e&&e.status ? "El servidor no pudo reiniciar el ranking (error "+e.status+"). Avísale a Simoné." : "Sin conexión: no se puede reiniciar. Intenta de nuevo en un momento."; }
 };
