@@ -48,15 +48,18 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
 .hidden{display:none!important}
 .rg{max-width:760px;display:grid;gap:14px}
 .rg h2{margin:0;font-size:clamp(26px,3.4vh,36px)} .rg h2 b{color:var(--brand)}
-.rg .lst{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+.rg .lst{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
 .rg .w{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:clamp(17px,2.3vh,24px)}
 .rg .w b{color:var(--brand)} .rg .w small{display:block;color:var(--muted)}
 .rg .w.ok{border-color:var(--brand)}
 .mine{display:grid;gap:12px;background:var(--panel);border:2px solid var(--brand);border-radius:18px;padding:16px}
-.card{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:4/3;max-height:380px;border:3px solid var(--brand);user-select:none;-webkit-user-select:none}
-.prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:20px;background:radial-gradient(circle at 50% 35%,#fff 0%,#E8FFF3 55%,#BFFDE3 100%);color:#01332B}
-.prize small{font-size:14px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#19A591}
-.prize strong{font-size:clamp(26px,7vw,42px);line-height:1.1}
+.card{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:4/5;max-height:560px;width:100%;max-width:440px;justify-self:center;border:3px solid var(--brand);user-select:none;-webkit-user-select:none}
+.prize{position:absolute;inset:0;display:grid;grid-template-rows:1fr auto;justify-items:center;align-items:center;gap:10px;padding:18px 18px 20px;text-align:center;background:radial-gradient(circle at 30% 40%,#0B5A3A 0%,#01332B 60%,#011B12 100%);color:#fff}
+.prize img{height:100%;max-height:100%;width:auto;max-width:100%;object-fit:contain;min-height:0;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5))}
+.prize div{display:grid;gap:6px}
+.prize small{font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#05DD4D}
+.prize strong{font-size:clamp(20px,5.4vw,28px);line-height:1.15}
+.prize span{font-size:clamp(13px,3.4vw,16px);color:#BFFDE3}
 #sc{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer;transition:opacity .6s}
 #sc.gone{opacity:0;pointer-events:none}
 .ghost{font:inherit;font-weight:700;background:none;color:var(--brand);border:2px solid var(--brand);border-radius:999px;padding:10px 20px;cursor:pointer;justify-self:start}
@@ -82,13 +85,13 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
     <span id="rmsg" style="color:var(--muted)"></span>
   </form>
   <form id="aform" class="hidden" style="max-width:760px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px" autocomplete="off">
-    <strong style="font-size:20px">Activar raspa y gana · top 10</strong>
-    <label for="apremios">Premios, uno por línea. Se reparten al azar entre los 10 primeros; si hay menos premios que ganadores, la lista se repite.</label>
-    <textarea id="apremios" rows="6" style="font:inherit;font-size:17px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px"></textarea>
+    <strong style="font-size:20px">Activar raspa y gana · top 3</strong>
+    <label for="apremios">Premio de los 3 primeros puestos (si escribes varios, uno por línea, se reparten al azar).</label>
+    <textarea id="apremios" rows="2" style="font:inherit;font-size:17px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px">Libro «Manejo Integral del Abdomen Abierto»</textarea>
     <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
       <label for="aclave">Clave del stand</label>
       <input id="aclave" type="password" autocapitalize="characters" autocomplete="off" maxlength="12" style="font:inherit;font-size:18px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:160px">
-      <button type="submit" style="font:inherit;font-weight:700;background:var(--brand);color:var(--bg);border:0;border-radius:999px;padding:8px 20px;cursor:pointer">Congelar top 10 y activar</button>
+      <button type="submit" style="font:inherit;font-weight:700;background:var(--brand);color:var(--bg);border:0;border-radius:999px;padding:8px 20px;cursor:pointer">Congelar top 3 y activar</button>
     </div>
     <span id="amsg" style="color:var(--muted)"></span>
   </form>
@@ -172,10 +175,11 @@ async function renderRaspa(){
     else myCard=false;
   }
   if(!document.getElementById("rgList")){
-    box.innerHTML=`<div class="rg"><h2>🎁 Raspa y gana · <b>Top 10</b></h2>
+    box.innerHTML=`<div class="rg"><h2>🎁 Raspa y gana · <b>Top 3</b></h2>
       <div id="rgMine"></div>
-      <p style="margin:0;color:var(--muted);font-size:clamp(15px,1.9vh,19px)">Los 10 primeros: abran este ranking en el celular con el que jugaron para raspar su tarjeta.</p>
-      <div class="lst" id="rgList"></div></div>`;
+      <p style="margin:0;color:var(--muted);font-size:clamp(15px,1.9vh,19px)">Los 3 primeros: abran este ranking en el celular con el que jugaron para raspar su tarjeta.</p>
+      <div class="lst" id="rgList"></div>
+      <div style="display:flex;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px"><img src="assets/libro-miaa.webp" alt="" style="height:clamp(90px,14vh,150px);width:auto;border-radius:6px"><span style="font-size:clamp(16px,2.1vh,22px)"><small style="display:block;color:var(--brand);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.7em">Premio</small>Libro «Manejo Integral del Abdomen Abierto»</span></div></div>`;
     if(myCard) showCard(myCard);
   }
   document.getElementById("rgList").innerHTML=e.ganadores.map(g=>`<div class="w ${g.raspado?"ok":""}"><b>${g.puesto}.</b> ${esc(g.nombre)}<small>${g.raspado?"✅ "+esc(g.premio||"Premio descubierto"):"⏳ Por raspar"}</small></div>`).join("");
@@ -183,7 +187,7 @@ async function renderRaspa(){
 function showCard(w){
   const m=document.getElementById("rgMine");
   m.innerHTML=`<div class="mine"><p style="margin:0;font-size:20px"><b>¡Felicitaciones, ${esc(w.nombre)}!</b> Quedaste en el puesto <b style="color:var(--brand)">${w.puesto}</b>.</p>
-    <div class="card" id="card"><div class="prize"><small>Tu premio</small><strong>${esc(w.premio)}</strong><span>Puesto ${w.puesto} · Reto para distribuidores</span></div><canvas id="sc" role="img" aria-label="Tarjeta para raspar. Pasa el dedo para descubrir tu premio."></canvas></div>
+    <div class="card" id="card"><div class="prize"><img src="assets/libro-miaa.webp" alt="Libro Manejo Integral del Abdomen Abierto"><div><small>Tu premio</small><strong>${esc(w.premio)}</strong><span>Puesto ${w.puesto} · Reto para distribuidores</span></div></div><canvas id="sc" role="img" aria-label="Tarjeta para raspar. Pasa el dedo para descubrir tu premio."></canvas></div>
     <button class="ghost" id="reveal" type="button">Descubrir sin raspar</button>
     <p id="claim" hidden style="margin:0;border-left:6px solid var(--brand);padding-left:14px;font-size:18px">Muestra esta pantalla en el stand de Solventum para reclamar tu premio.</p></div>`;
   const cv=document.getElementById("sc"), card=document.getElementById("card");
@@ -224,7 +228,7 @@ af.onsubmit = async e=>{
   if(!clave){ m.textContent="Escribe la clave del stand."; return; }
   m.textContent="Activando…";
   try{ const r = await rpc("innov_activar_raspa",{p_clave:clave,p_premios:premios});
-    const t={ok:"Listo: el top 10 quedó congelado y los premios se repartieron al azar.",clave_incorrecta:"Clave incorrecta. No se activó.",bloqueado:"Demasiados intentos con clave incorrecta. Espera 15 minutos.",ya_activo:"El raspa y gana ya está activo. Para repetirlo hay que reiniciar el ranking.",sin_premios:"Escribe al menos un premio.",sin_partidas:"Aún no hay partidas en el ranking."};
+    const t={ok:"Listo: el top 3 quedó congelado y el raspa y gana está activo.",clave_incorrecta:"Clave incorrecta. No se activó.",bloqueado:"Demasiados intentos con clave incorrecta. Espera 15 minutos.",ya_activo:"El raspa y gana ya está activo. Para repetirlo hay que reiniciar el ranking.",sin_premios:"Escribe al menos un premio.",sin_partidas:"Aún no hay partidas en el ranking."};
     m.textContent = t[r] || ("Respuesta inesperada: "+r);
     if(r==="ok"){ document.getElementById("aclave").value=""; renderRaspa(); setTimeout(()=>af.classList.add("hidden"),2500); }
   }catch(err){ m.textContent = err&&err.status ? "El servidor no pudo activar (error "+err.status+"). Avísale a Simoné." : "Sin conexión. Intenta de nuevo."; }
