@@ -46,6 +46,23 @@ footer{margin-top:auto;display:flex;flex-wrap:wrap;justify-content:space-between
 footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;cursor:pointer;padding:4px;text-decoration:underline}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .hidden{display:none!important}
+.rg{max-width:760px;display:grid;gap:14px}
+.rg h2{margin:0;font-size:clamp(26px,3.4vh,36px)} .rg h2 b{color:var(--brand)}
+.rg .lst{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+.rg .w{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:clamp(17px,2.3vh,24px)}
+.rg .w b{color:var(--brand)} .rg .w small{display:block;color:var(--muted)}
+.rg .w.ok{border-color:var(--brand)}
+.mine{display:grid;gap:12px;background:var(--panel);border:2px solid var(--brand);border-radius:18px;padding:16px}
+.card{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:4/3;max-height:380px;border:3px solid var(--brand);user-select:none;-webkit-user-select:none}
+.prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:20px;background:radial-gradient(circle at 50% 35%,#fff 0%,#E8FFF3 55%,#BFFDE3 100%);color:#01332B}
+.prize small{font-size:14px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:#19A591}
+.prize strong{font-size:clamp(26px,7vw,42px);line-height:1.1}
+#sc{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer;transition:opacity .6s}
+#sc.gone{opacity:0;pointer-events:none}
+.ghost{font:inherit;font-weight:700;background:none;color:var(--brand);border:2px solid var(--brand);border-radius:999px;padding:10px 20px;cursor:pointer;justify-self:start}
+.conf{position:fixed;top:-20px;width:10px;height:16px;border-radius:2px;pointer-events:none;animation:fall linear forwards;z-index:9}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@media (prefers-reduced-motion:reduce){.conf{display:none}#sc{transition:none}}
 </style>
 </head>
 <body>
@@ -55,8 +72,8 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
     <h1>Ranking <b>Reto para distribuidores</b></h1>
     <p class="sub">4 momentos para cuidar y proteger una vida. Los distribuidores que mejor explican la solución integral de Solventum para Jesús.</p>
   </div>
+  <div id="ganadores" class="hidden"></div>
   <div id="list" aria-live="polite"></div>
-  <div id="ganadores" class="hidden" style="max-width:760px;background:linear-gradient(90deg,rgba(5,221,77,.18),var(--panel));border:2px solid var(--brand);border-radius:16px;padding:16px 20px"></div>
   <a id="informe" href="assets/informe-caso-jesus.pdf" download="Informe-caso-Jesus-Innovation-Day.pdf" style="max-width:760px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--gold);color:var(--bg);font-weight:700;font-size:clamp(18px,2.2vh,22px);text-decoration:none;border-radius:999px;padding:14px 28px">⬇ Descarga ingreso INNOVATION DAY</a>
   <form id="rform" class="hidden" style="max-width:760px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center" autocomplete="off">
     <label for="rclave">Clave del stand para reiniciar</label>
@@ -78,7 +95,7 @@ footer a,footer button{color:var(--gold);background:none;border:0;font:inherit;c
   <footer>
     <span class="dev"><span>Desarrollado por</span><img src="assets/simone-logo.png" alt="Simoné · Desarrollo humano a través del arte" width="480" height="119"></span>
     <span class="contact">¿Dudas? <a href="mailto:proyectos@experienciasimone.com">proyectos@experienciasimone.com</a> · <a href="mailto:nathalia@experienciasimone.com">nathalia@experienciasimone.com</a> · <a href="mailto:experienciasimone@gmail.com">experienciasimone@gmail.com</a> · <a href="https://wa.me/573217738039">+57 321 773 8039</a></span>
-    <span><span id="estado"></span> · <a href="./">Volver al juego</a> · <button id="activar" type="button">Raspa y gana</button> · <button id="reset" type="button">Reiniciar ranking</button></span>
+    <span><span id="estado"></span> · <a href="./">Volver al juego</a> · <button id="activar" type="button">Activar raspa y gana</button> · <button id="reset" type="button">Reiniciar ranking</button></span>
   </footer>
 </div>
 <script>
@@ -139,14 +156,62 @@ function showClosed(){
     }catch(_){ m.textContent="Sin conexión. Intenta de nuevo."; }
   };
 }
+const TKEY="innovation-day-raspa-tokens";
+const mine=()=>{ try{ return JSON.parse(localStorage.getItem(TKEY)||"[]"); }catch(_){ return []; } };
+let myCard=null; // {k,nombre,puesto,premio,raspado}
 async function renderRaspa(){
-  try{ const e = await rpc("innov_raspa_estado"); const box=document.getElementById("ganadores");
-    if(!e.activo){ box.classList.add("hidden"); return; }
-    box.classList.remove("hidden");
-    box.innerHTML = `<p style="margin:0 0 6px;font-weight:700;font-size:clamp(20px,2.6vh,28px)">🎁 ¡Raspa y gana activado!</p>
-      <p style="margin:0 0 10px;color:var(--muted);font-size:clamp(15px,1.9vh,19px)">Ganadores: abran el juego en el mismo celular con el que jugaron y toquen «Raspa y gana».</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;font-size:clamp(15px,1.9vh,19px)">${e.ganadores.map(g=>`<span>${g.puesto}. ${esc(g.nombre)} ${g.raspado?"✅":"⏳"}</span>`).join("")}</div>`;
-  }catch(_){}
+  let e; try{ e = await rpc("innov_raspa_estado"); }catch(_){ return; }
+  const box=document.getElementById("ganadores");
+  const lst=document.getElementById("list");
+  if(!e.activo){ box.classList.add("hidden"); box.innerHTML=""; myCard=null; lst.classList.remove("hidden"); return; }
+  box.classList.remove("hidden"); lst.classList.add("hidden");
+  if(!myCard){
+    const toks=mine();
+    if(toks.length){ try{ const res=await Promise.all(toks.map(x=>rpc("innov_mi_raspa",{p_token:x.k}).then(r=>({...r,k:x.k}))));
+      myCard=res.filter(r=>r.estado==="ganador").sort((a,b)=>a.puesto-b.puesto)[0]||false; }catch(_){} }
+    else myCard=false;
+  }
+  if(!document.getElementById("rgList")){
+    box.innerHTML=`<div class="rg"><h2>🎁 Raspa y gana · <b>Top 10</b></h2>
+      <div id="rgMine"></div>
+      <p style="margin:0;color:var(--muted);font-size:clamp(15px,1.9vh,19px)">Los 10 primeros: abran este ranking en el celular con el que jugaron para raspar su tarjeta.</p>
+      <div class="lst" id="rgList"></div></div>`;
+    if(myCard) showCard(myCard);
+  }
+  document.getElementById("rgList").innerHTML=e.ganadores.map(g=>`<div class="w ${g.raspado?"ok":""}"><b>${g.puesto}.</b> ${esc(g.nombre)}<small>${g.raspado?"✅ "+esc(g.premio||"Premio descubierto"):"⏳ Por raspar"}</small></div>`).join("");
+}
+function showCard(w){
+  const m=document.getElementById("rgMine");
+  m.innerHTML=`<div class="mine"><p style="margin:0;font-size:20px"><b>¡Felicitaciones, ${esc(w.nombre)}!</b> Quedaste en el puesto <b style="color:var(--brand)">${w.puesto}</b>.</p>
+    <div class="card" id="card"><div class="prize"><small>Tu premio</small><strong>${esc(w.premio)}</strong><span>Puesto ${w.puesto} · Reto para distribuidores</span></div><canvas id="sc" role="img" aria-label="Tarjeta para raspar. Pasa el dedo para descubrir tu premio."></canvas></div>
+    <button class="ghost" id="reveal" type="button">Descubrir sin raspar</button>
+    <p id="claim" hidden style="margin:0;border-left:6px solid var(--brand);padding-left:14px;font-size:18px">Muestra esta pantalla en el stand de Solventum para reclamar tu premio.</p></div>`;
+  const cv=document.getElementById("sc"), card=document.getElementById("card");
+  const done=()=>{ if(cv.classList.contains("gone")) return; cv.classList.add("gone"); const b=document.getElementById("reveal"); if(b) b.remove(); document.getElementById("claim").hidden=false; confetti(); rpc("innov_raspar",{p_token:w.k}).then(renderRaspa).catch(()=>{}); };
+  document.getElementById("reveal").onclick=done;
+  if(w.raspado){ cv.classList.add("gone"); document.getElementById("reveal").remove(); document.getElementById("claim").hidden=false; return; }
+  const dpr=Math.min(window.devicePixelRatio||1,2), r=card.getBoundingClientRect();
+  cv.width=r.width*dpr; cv.height=r.height*dpr;
+  const ctx=cv.getContext("2d"); ctx.scale(dpr,dpr); const W=r.width,H=r.height;
+  const g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,"#05DD4D"); g.addColorStop(.5,"#19A591"); g.addColorStop(1,"#01332B");
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H); ctx.fillStyle="rgba(255,255,255,.12)";
+  for(let y=10;y<H;y+=18) for(let x=(y/18%2)*9;x<W;x+=18){ ctx.beginPath(); ctx.arc(x,y,2,0,7); ctx.fill(); }
+  ctx.fillStyle="#fff"; ctx.textAlign="center"; ctx.textBaseline="middle"; const FF=getComputedStyle(document.body).fontFamily;
+  ctx.font=`700 ${Math.round(W/10)}px ${FF}`; ctx.fillText("RASPA AQUÍ",W/2,H/2-W/24);
+  ctx.font=`400 ${Math.round(W/24)}px ${FF}`; ctx.fillText("Pasa el dedo para descubrir tu premio",W/2,H/2+W/16);
+  ctx.globalCompositeOperation="destination-out"; ctx.lineCap="round"; ctx.lineJoin="round"; ctx.lineWidth=Math.max(36,W/9);
+  let down=false,last=null,moves=0;
+  const pos=e=>{ const b=cv.getBoundingClientRect(); return {x:e.clientX-b.left,y:e.clientY-b.top}; };
+  const cleared=()=>{ const d=ctx.getImageData(0,0,cv.width,cv.height).data; let t=0,c=0; for(let i=3;i<d.length;i+=160){ t++; if(d[i]===0) c++; } return c/t; };
+  cv.addEventListener("pointerdown",e=>{ down=true; last=pos(e); cv.setPointerCapture(e.pointerId); ctx.beginPath(); ctx.arc(last.x,last.y,ctx.lineWidth/2,0,7); ctx.fill(); });
+  cv.addEventListener("pointermove",e=>{ if(!down) return; const p=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; if(++moves%12===0 && cleared()>0.5) done(); });
+  const up=()=>{ down=false; if(cleared()>0.5) done(); }; cv.addEventListener("pointerup",up); cv.addEventListener("pointercancel",up);
+}
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cols=["#05DD4D","#1CCF93","#19A591","#BFFDE3","#FFFFFF"];
+  for(let i=0;i<70;i++){ const s=document.createElement("i"); s.className="conf"; s.style.left=Math.random()*100+"vw"; s.style.background=cols[i%cols.length];
+    s.style.animationDuration=(2+Math.random()*2.5)+"s"; s.style.animationDelay=(Math.random()*.6)+"s"; document.body.appendChild(s); setTimeout(()=>s.remove(),5500); }
 }
 render(); renderRaspa(); setInterval(render, 5000); setInterval(renderRaspa, 5000);
 const af = document.getElementById("aform");
