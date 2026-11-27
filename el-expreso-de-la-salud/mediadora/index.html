@@ -177,7 +177,7 @@ async function resultsView(){
 let RES=[];
 async function loadRes(){try{const r=await rpc("resultados_facilitador",{p_clave:clave});if(r&&r.error){$("#bOut").click();return}RES=r||[];drawRes()}catch(e){$("#rt").innerHTML=`<p class="note">Sin conexión. Reintentando…</p>`}}
 function calc(p){const e=(p.entrada||[]).filter(x=>x.ok).length*PQ,s=p.salida?(p.salida||[]).filter(x=>x.ok).length*PQ:null;
-  const v=(p.vagones||[]).map(x=>({v:x.v,b:x.ind+x.grp+x.puz,won:x.ind+x.grp+x.puz>=8&&x.ind===4}));
+  const v=(p.vagones||[]).map(x=>({v:x.v,b:x.ind+x.grp+x.puz,won:x.ind+x.grp+x.puz>=10}));
   const vs=v.reduce((a,x)=>a+x.b,0);return{e,s,v,vs,ins:v.filter(x=>x.won).length,tot:e+vs+(s||0)}}
 const f1=x=>x==null?"–":(Math.round(x*10)/10).toString().replace(".",",");
 function drawRes(){const q=($("#rq").value||"").toLowerCase(),g=$("#rg").value;
@@ -237,16 +237,16 @@ function renderSide(tickOnly){
       <button class="btn dark" data-f="individual" data-s="120">Iniciar 2:00</button></div>
     <div class="step"><h3>2. Pregunta grupal</h3><button class="btn dark" data-f="grupal" data-s="180">Iniciar 3:00</button>
       <p class="note" style="margin:10px 0 4px">Respuesta enviada${g.respondio?` por ${esc(g.respondio)}`:""}:</p><div class="ans">${g.respuesta?esc(g.respuesta):"Todavía no han enviado la respuesta."}</div>
-      <div class="two" style="margin-top:8px"><button class="btn" id="gy">Correcta · 4</button><button class="btn no" id="gn">Incorrecta · 0</button></div></div>
+      <div class="two" style="margin-top:8px"><button class="btn" id="gy">Correcta · 5</button><button class="btn no" id="gn">Incorrecta · 0</button></div></div>
     <div class="step"><h3>3. ${vag===1?"Fichas de valoración":"Rompecabezas"}</h3><button class="btn dark" data-f="rompecabezas" data-s="180">Iniciar 3:00</button>
-      <div class="stack" style="margin-top:8px"><button class="btn" id="p3">Completo en 3 min o menos · 4</button><button class="btn no" id="pn">No completó · 0</button></div></div>
+      <div class="stack" style="margin-top:8px"><button class="btn" id="p3">Completo en 3 min o menos · 2</button><button class="btn no" id="pn">No completó · 0</button></div></div>
     <div class="step"><h3>Resultado del grupo</h3><div class="res"><div><b>${g.grupal==null?"–":g.grupal}</b>Grupal</div><div><b>${g.rompecabezas==null?"–":g.rompecabezas}</b>${vag===1?"Fichas":"Rompecabezas"}</div></div>
       <p class="note" style="margin:8px 0 0">Los puntos llegan a todas las personas del grupo. Cada una suma además su pregunta individual.</p></div>
     <p class="err" id="serr" aria-live="polite"></p></div>`;
   el.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>act(()=>rpc("mediadora_fase",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_fase:b.dataset.f,p_seg:+b.dataset.s})));
-  $("#gy").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:4,p_rompecabezas:null,p_bono:null}));
+  $("#gy").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:5,p_rompecabezas:null,p_bono:null}));
   $("#gn").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:0,p_rompecabezas:null,p_bono:null}));
-    $("#p3").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:null,p_rompecabezas:4,p_bono:false}));
+    $("#p3").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:null,p_rompecabezas:2,p_bono:false}));
   $("#pn").onclick=()=>act(()=>rpc("mediadora_registrar",{p_clave:clave,p_vagon:vag,p_grupo:sel,p_grupal:null,p_rompecabezas:0,p_bono:false}));
 }
 async function act(fn){$("#serr").textContent="";document.querySelectorAll("#side button").forEach(b=>b.disabled=true);

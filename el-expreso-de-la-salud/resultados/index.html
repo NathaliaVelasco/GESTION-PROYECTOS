@@ -168,14 +168,14 @@ function ejemploData(){const r=rng(27112026),pick=a=>a[Math.floor(r()*a.length)]
 function calc(D){
   const P=D.map(p=>{const ent=(p.entrada||[]),sal=(p.salida||[]),vag=(p.vagones||[]);
     const e=ent.filter(x=>x.ok).length*PQ,s=sal.filter(x=>x.ok).length*PQ,v=vag.reduce((a,x)=>a+x.ind+x.grp+x.puz,0),b=0;
-    const ins=vag.filter(x=>x.ind===4&&x.ind+x.grp+x.puz>=8).length;
+    const ins=vag.filter(x=>x.ind+x.grp+x.puz>=10).length;
     return{...p,e,s,v,b,total:e+s+v+b,ins,hasE:ent.length>0,hasS:sal.length>0}});
   const withE=P.filter(p=>p.hasE),withS=P.filter(p=>p.hasS),both=P.filter(p=>p.hasE&&p.hasS);
   const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
   const tema=TEMAS.map((t,k)=>{const pe=withE.map(p=>p.entrada.find(x=>x.q===k)).filter(Boolean),ps=withS.map(p=>p.salida.find(x=>x.q===k)).filter(Boolean);
     return{t,e:pe.length?pe.filter(x=>x.ok).length/pe.length:0,s:ps.length?ps.filter(x=>x.ok).length/ps.length:0}});
   const vag=VAGONES.map((t,k)=>{const rows=P.map(p=>(p.vagones||[]).find(x=>x.v===k+1)).filter(Boolean);
-    return{t,n:rows.length,won:rows.filter(x=>x.ind===4&&x.ind+x.grp+x.puz>=8).length,ind:avg(rows.map(x=>x.ind)),grp:avg(rows.map(x=>x.grp)),puz:avg(rows.map(x=>x.puz)),bono:rows.length?rows.filter(x=>x.bono).length/rows.length:0}});
+    return{t,n:rows.length,won:rows.filter(x=>x.ind+x.grp+x.puz>=10).length,ind:avg(rows.map(x=>x.ind)),grp:avg(rows.map(x=>x.grp)),puz:avg(rows.map(x=>x.puz)),bono:rows.length?rows.filter(x=>x.bono).length/rows.length:0}});
   const grp=GROUPS.map((g,i)=>{const m=P.filter(p=>p.grupo===i);return{g,n:m.length,e:avg(m.filter(p=>p.hasE).map(p=>p.e)),s:avg(m.filter(p=>p.hasS).map(p=>p.s)),total:avg(m.map(p=>p.total)),ins:avg(m.map(p=>p.ins))}}).filter(x=>x.n);
   return{P,n:P.length,eAvg:avg(withE.map(p=>p.e)),sAvg:avg(withS.map(p=>p.s)),mejora:avg(both.map(p=>p.s-p.e)),tot:avg(P.map(p=>p.total)),ins:P.reduce((a,p)=>a+p.ins,0),tema,vag,grp,both:both.length,
     mejoraron:both.filter(p=>p.s>p.e).length};
@@ -217,7 +217,7 @@ function render(){
   <section><h2>Comparativo por pregunta</h2><p class="sub">Porcentaje de respuestas correctas en cada una de las ${TEMAS.length} preguntas de la prueba de entrada y de salida (las mismas en ambas). El número verde es la diferencia en puntos porcentuales.</p>
     <div class="legend"><span><i style="background:#9DB3AC"></i>Entrada (taquilla)</span><span><i style="background:#05DD4D"></i>Salida (puerta)</span></div>
     ${temaChart(R.tema)}</section>
-  <section><h2>Insignias por vagón</h2><p class="sub">Cada vagón entrega su propia insignia: 8 de 12 puntos o más y la pregunta individual correcta.</p>
+  <section><h2>Insignias por vagón</h2><p class="sub">Cada vagón entrega su propia insignia: de 10 a 12 puntos.</p>
     <div class="pins">${R.vag.map((v,k)=>`<div class="pin"><img src="${PINS[k]}" alt=""><div class="v">VAGÓN ${k+1}</div><div class="t">${VCORTO[k]}</div><div class="p">${v.n?pct(v.won/v.n):"–"}</div><div class="s">${v.won} de ${v.n} ganaron</div></div>`).join("")}</div>
     <div class="scroll" style="margin-top:14px"><table><thead><tr><th>Vagón</th><th class="n">Individual</th><th class="n">Grupal</th><th class="n">Rompecabezas</th><th class="n">Promedio / 12</th></tr></thead><tbody>
     ${R.vag.map((v,k)=>`<tr><td>${k+1} · ${v.t}</td><td class="n">${v.n?pct(v.ind/4):"–"}</td><td class="n">${v.n?pct(v.grp/4):"–"}</td><td class="n">${v.n?pct(v.puz/4):"–"}</td><td class="n">${v.n?f1(v.ind+v.grp+v.puz):"–"}</td></tr>`).join("")}

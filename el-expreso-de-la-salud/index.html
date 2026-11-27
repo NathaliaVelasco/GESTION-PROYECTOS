@@ -39,7 +39,9 @@ h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0
 .chip{display:flex;align-items:center;gap:8px;padding:3px 10px 3px 3px;border-radius:99px;background:rgba(5,221,77,.12);
   border:1px solid rgba(5,221,77,.35);font-size:13px;font-variant-numeric:tabular-nums}
 .chip img{width:26px;height:26px;border-radius:50%}
-.chip b{color:var(--brand)}
+.chip b{color:var(--brand);white-space:nowrap}
+#chipName{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cins{display:flex;align-items:center;gap:2px}.cins:empty{display:none}.cins img{width:18px;height:18px;border-radius:0;object-fit:contain;margin-left:-9px}.cins img:first-child{margin-left:0}.cins em{font-style:normal;font-size:12px;color:var(--mint);margin-left:2px}
 /* barra de demo */
 .demo{display:flex;gap:6px;overflow-x:auto;padding:8px 16px;background:var(--deep);border-bottom:1px solid var(--line);font-size:12px}
 .demo span{color:var(--muted);white-space:nowrap;align-self:center;font-family:var(--f-mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
@@ -288,7 +290,7 @@ table.cmp td.c,table.cmp th.c{text-align:center;width:62px}
     <img class="solv" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIxMzkuOTUgMTQwLjAyIDExMDYuMDggMjc2Ljg0Ij4KPHBhdGggZmlsbC1ydWxlPSJub256ZXJvIiBmaWxsPSJyZ2IoMS41Njg2MDQlLCA2OS40MTIyMzElLCAzMi41NDg1MjMlKSIgZmlsbC1vcGFjaXR5PSIxIiBkPSJNIDIyOS40MDIzNDQgMTkxLjMwNDY4OCBDIDIyOS40MDIzNDQgMTcyLjAyNzM0NCAyMTUuNTE5NTMxIDE1OS42ODc1IDE5NS44NTkzNzUgMTU5LjY4NzUgQyAxNzYuMTkxNDA2IDE1OS42ODc1IDE2MS4xNTYyNSAxNzMuOTUzMTI1IDE2MS4xNTYyNSAxOTQuNzczNDM4IEMgMTYxLjE1NjI1IDIxNS41OTc2NTYgMTc2LjE5MTQwNiAyMzAuMjUgMjAxLjI1MzkwNiAyMzAuMjUgTCAyNDMuNjY3OTY5IDIzMC4yNSBDIDMwMy40MzM1OTQgMjMwLjI1IDM0Mi4zNzUgMjcwLjczNDM3NSAzNDIuMzc1IDMyMy41NTg1OTQgQyAzNDIuMzc1IDM3Ni43Njk1MzEgMzAyLjI3NzM0NCA0MTYuODY3MTg4IDI0Ny41MjM0MzggNDE2Ljg2NzE4OCBDIDE5MS42MTcxODggNDE2Ljg2NzE4OCAxNTIuNjcxODc1IDM3OC4zMDg1OTQgMTUyLjY3MTg3NSAzMjUuMTAxNTYyIEMgMTUyLjY3MTg3NSAzMDUuODIwMzEyIDE1OS4yMjY1NjIgMjg1LjM4NjcxOSAxNjkuMjUzOTA2IDI3MC4zNDc2NTYgTCAxOTIgMjcwLjM0NzY1NiBDIDE4MC40MzM1OTQgMjg1LjM4NjcxOSAxNzQuMjY1NjI1IDMwNC4yODEyNSAxNzQuMjY1NjI1IDMyMy41NTg1OTQgQyAxNzQuMjY1NjI1IDM2NS41ODU5MzggMjA0LjcyNjU2MiAzOTYuODE2NDA2IDI0Ny41MjM0MzggMzk2LjgxNjQwNiBDIDI5MC4zMjQyMTkgMzk2LjgxNjQwNiAzMjAuNzg1MTU2IDM2NS41ODU5MzggMzIwLjc4NTE1NiAzMjMuNTU4NTk0IEMgMzIwLjc4NTE1NiAyODEuNTMxMjUgMjkwLjMyNDIxOSAyNTAuMzAwNzgxIDI0My42Njc5NjkgMjUwLjMwMDc4MSBMIDIwMS42NDA2MjUgMjUwLjMwMDc4MSBDIDE1OS42MTMyODEgMjUwLjMwMDc4MSAxMzkuOTQ5MjE5IDIyNS4yMzQzNzUgMTM5Ljk0OTIxOSAxOTQuNzczNDM4IEMgMTM5Ljk0OTIxOSAxNjQuNjk5MjE5IDE2NS4wMTE3MTkgMTQwLjAyMzQzOCAxOTUuODU5Mzc1IDE0MC4wMjM0MzggQyAyMjkuNzg5MDYyIDE0MC4wMjM0MzggMjUwLjYwOTM3NSAxNjIuNzczNDM4IDI1MC42MDkzNzUgMTg5LjM3ODkwNiBDIDI1MC42MDkzNzUgMTkyLjYwNTQ2OSAyNTAuMjQyMTg4IDE5Ni45MDIzNDQgMjQ5LjI2MTcxOSAxOTkuNzg5MDYyIEwgMjI4LjI0NjA5NCAxOTkuNzg5MDYyIEMgMjI4Ljg5NDUzMSAxOTcuNDYwOTM4IDIyOS40MDIzNDQgMTkzLjYxNzE4OCAyMjkuNDAyMzQ0IDE5MS4zMDQ2ODggIi8+CjxwYXRoIGZpbGwtcnVsZT0ibm9uemVybyIgZmlsbD0icmdiKDEwMCUsIDEwMCUsIDEwMCUpIiBmaWxsLW9wYWNpdHk9IjEiIGQ9Ik0gNDQxLjEyNSAyNDAuNTk3NjU2IEMgNDI1LjkyOTY4OCAyNDAuNTk3NjU2IDQxNy43MzQzNzUgMjQ2Ljk5NjA5NCA0MTcuNzM0Mzc1IDI1NS43OTI5NjkgQyA0MTcuNzM0Mzc1IDI2My43ODkwNjIgNDI0LjMzMjAzMSAyNjcuMzg2NzE5IDQzNS43MjY1NjIgMjY5LjU4NTkzOCBMIDQ1NC4zMjAzMTIgMjczLjE4MzU5NCBDIDQ3NS4zMTI1IDI3Ny4xODM1OTQgNDgzLjcwNzAzMSAyODcuOTgwNDY5IDQ4My43MDcwMzEgMzAyLjU3NDIxOSBDIDQ4My43MDcwMzEgMzIwLjU2NjQwNiA0NjguNzE0ODQ0IDMzMS45NjQ4NDQgNDQzLjkyMTg3NSAzMzEuOTY0ODQ0IEMgNDE5LjkzMzU5NCAzMzEuOTY0ODQ0IDQwMi4xMzY3MTkgMzIxLjk2ODc1IDQwMS4zMzk4NDQgMjk4Ljc3NzM0NCBMIDQxNS45MzM1OTQgMjk4Ljc3NzM0NCBDIDQxNy45MzM1OTQgMzEzLjU3MDMxMiA0MjkuMTI4OTA2IDMxOS4xNjc5NjkgNDQ0LjUyMzQzOCAzMTkuMTY3OTY5IEMgNDU4LjcxODc1IDMxOS4xNjc5NjkgNDY4LjMxMjUgMzEzLjk2ODc1IDQ2OC4zMTI1IDMwMy41NzQyMTkgQyA0NjguMzEyNSAyOTQuMzc4OTA2IDQ2Mi4xMTcxODggMjg4Ljc4MTI1IDQ0OS4zMjAzMTIgMjg2LjU4MjAzMSBMIDQzMC43MjY1NjIgMjgzLjM4MjgxMiBDIDQxMS43MzQzNzUgMjgwLjE4MzU5NCA0MDMuMTM2NzE5IDI3MC41ODU5MzggNDAzLjEzNjcxOSAyNTYuOTkyMTg4IEMgNDAzLjEzNjcxOSAyMzkuNzk2ODc1IDQxNi43MzQzNzUgMjI3LjgwMDc4MSA0NDEuMTI1IDIyNy44MDA3ODEgQyA0NjIuMTE3MTg4IDIyNy44MDA3ODEgNDc5LjEwOTM3NSAyMzcuNTk3NjU2IDQ4MC4zMDg1OTQgMjU3Ljk5MjE4OCBMIDQ2NS45MTQwNjIgMjU3Ljk5MjE4OCBDIDQ2NC4zMTY0MDYgMjQ3Ljk5NjA5NCA0NTUuNzE4NzUgMjQwLjU5NzY1NiA0NDEuMTI1IDI0MC41OTc2NTYgTSA1NDMuMjg1MTU2IDI0MS4xOTUzMTIgQyA1MjMuNDkyMTg4IDI0MS4xOTUzMTIgNTA5LjMwMDc4MSAyNTYuNTg5ODQ0IDUwOS4zMDA3ODEgMjc5Ljc4MTI1IEMgNTA5LjMwMDc4MSAzMDIuOTcyNjU2IDUyMy40OTIxODggMzE4LjM2NzE4OCA1NDMuMjg1MTU2IDMxOC4zNjcxODggQyA1NjMuMjgxMjUgMzE4LjM2NzE4OCA1NzcuMjczNDM4IDMwMi45NzI2NTYgNTc3LjI3MzQzOCAyNzkuNzgxMjUgQyA1NzcuMjczNDM4IDI1Ni41ODk4NDQgNTYzLjI4MTI1IDI0MS4xOTUzMTIgNTQzLjI4NTE1NiAyNDEuMTk1MzEyIE0gNTQzLjI4NTE1NiAzMzEuOTY0ODQ0IEMgNTE1LjA5NzY1NiAzMzEuOTY0ODQ0IDQ5NS4zMDQ2ODggMzA5Ljk3MjY1NiA0OTQuNTAzOTA2IDI3OS43ODEyNSBDIDQ5My43MDMxMjUgMjQ5LjU5Mzc1IDUxNS42OTUzMTIgMjI3LjgwMDc4MSA1NDMuMjg1MTU2IDIyNy44MDA3ODEgQyA1NzEuNjc1NzgxIDIyNy44MDA3ODEgNTkyLjI2OTUzMSAyNDkuNTkzNzUgNTkyLjI2OTUzMSAyNzkuNzgxMjUgQyA1OTIuMjY5NTMxIDMwOS45NzI2NTYgNTcxLjA3ODEyNSAzMzEuOTY0ODQ0IDU0My4yODUxNTYgMzMxLjk2NDg0NCBNIDYwNy42NjQwNjIgMzI4Ljk2NDg0NCBMIDYyMi40NTcwMzEgMzI4Ljk2NDg0NCBMIDYyMi40NTcwMzEgMTg5LjAxNTYyNSBMIDYwNy42NjQwNjIgMTg5LjAxNTYyNSBaIE0gNjgyLjAzNTE1NiAzMTAuNTcwMzEyIEwgNzEyLjAyMzQzOCAyMzAuNjAxNTYyIEwgNzI3LjIxODc1IDIzMC42MDE1NjIgTCA2ODkuMDMxMjUgMzI4Ljk2NDg0NCBMIDY3Mi40Mzc1IDMyOC45NjQ4NDQgTCA2MzQuMjUzOTA2IDIzMC42MDE1NjIgTCA2NDkuODQ3NjU2IDIzMC42MDE1NjIgTCA2NzkuODM1OTM4IDMxMC41NzAzMTIgQyA2ODAuMDM1MTU2IDMxMS4xNzE4NzUgNjgwLjQzNzUgMzExLjM3MTA5NCA2ODAuODM1OTM4IDMxMS4zNzEwOTQgQyA2ODEuNDM3NSAzMTEuMzcxMDk0IDY4MS44MzU5MzggMzExLjE3MTg3NSA2ODIuMDM1MTU2IDMxMC41NzAzMTIgTSA3NDQuODEyNSAyNzAuMTg3NSBDIDc0NC44MTI1IDI3MS41ODU5MzggNzQ1LjgxMjUgMjcxLjk4NDM3NSA3NDYuODEyNSAyNzEuOTg0Mzc1IEwgODAzLjk5MjE4OCAyNzEuOTg0Mzc1IEMgODA1LjM5MDYyNSAyNzEuOTg0Mzc1IDgwNi4xOTE0MDYgMjcxLjM4NjcxOSA4MDYuMTkxNDA2IDI2OS43ODUxNTYgQyA4MDUuNzg5MDYyIDI1Mi45OTIxODggNzkzLjM5NDUzMSAyNDEuMTk1MzEyIDc3Ni44MDA3ODEgMjQxLjE5NTMxMiBDIDc2MC4wMDc4MTIgMjQxLjE5NTMxMiA3NDcuMDExNzE5IDI1My4xOTE0MDYgNzQ0LjgxMjUgMjcwLjE4NzUgTSA4ODUuOTYwOTM4IDIyNy44MDA3ODEgQyA5MDYuMzUxNTYyIDIyNy44MDA3ODEgOTE5Ljk0OTIxOSAyNDEuNzk2ODc1IDkxOS45NDkyMTkgMjY0LjE4NzUgTCA5MTkuOTQ5MjE5IDMyOC45NjQ4NDQgTCA5MDQuOTUzMTI1IDMyOC45NjQ4NDQgTCA5MDQuOTUzMTI1IDI2OC4xODc1IEMgOTA0Ljk1MzEyNSAyNTAuNzkyOTY5IDg5Ni41NTg1OTQgMjQwLjk5NjA5NCA4ODAuNzYxNzE5IDI0MC45OTYwOTQgQyA4NjMuMzY3MTg4IDI0MC45OTYwOTQgODUyLjE3MTg3NSAyNTQuMTkxNDA2IDg1Mi4xNzE4NzUgMjcwLjE4NzUgTCA4NTIuMTcxODc1IDMyOC45NjQ4NDQgTCA4MzcuMTc5Njg4IDMyOC45NjQ4NDQgTCA4MzcuMTc5Njg4IDIzMC42MDE1NjIgTCA4NTEuMzc1IDIzMC42MDE1NjIgTCA4NTEuMzc1IDI0Ni41OTM3NSBDIDg1MS4zNzUgMjQ4LjE5NTMxMiA4NTMuMTcxODc1IDI0OC4zOTQ1MzEgODUzLjc3MzQzOCAyNDcuMTk1MzEyIEMgODYxLjk2ODc1IDIzMi4zOTg0MzggODcyLjU2NjQwNiAyMjcuODAwNzgxIDg4NS45NjA5MzggMjI3LjgwMDc4MSBNIDEwMzUuNTAzOTA2IDMzMS45NjQ4NDQgQyAxMDE1LjMxMjUgMzMxLjk2NDg0NCAxMDAxLjcxODc1IDMxNy43Njk1MzEgMTAwMS43MTg3NSAyOTUuNTc4MTI1IEwgMTAwMS43MTg3NSAyMzAuNjAxNTYyIEwgMTAxNi43MTA5MzggMjMwLjYwMTU2MiBMIDEwMTYuNzEwOTM4IDI5MS4zNzg5MDYgQyAxMDE2LjcxMDkzOCAzMDguNzczNDM4IDEwMjUuMTA5Mzc1IDMxOC41NzAzMTIgMTA0MC45MDIzNDQgMzE4LjU3MDMxMiBDIDEwNTguMjk2ODc1IDMxOC41NzAzMTIgMTA2OS40OTIxODggMzA1LjM3NSAxMDY5LjQ5MjE4OCAyODkuMzc4OTA2IEwgMTA2OS40OTIxODggMjMwLjYwMTU2MiBMIDEwODQuMjg5MDYyIDIzMC42MDE1NjIgTCAxMDg0LjI4OTA2MiAzMjguOTY0ODQ0IEwgMTA3MC4yOTI5NjkgMzI4Ljk2NDg0NCBMIDEwNzAuMjkyOTY5IDMxMy4xNzE4NzUgQyAxMDcwLjI5Mjk2OSAzMTEuMzcxMDk0IDEwNjguNDkyMTg4IDMxMC45NzI2NTYgMTA2Ny42OTUzMTIgMzEyLjM3MTA5NCBDIDEwNTkuNjk1MzEyIDMyNy4xNjQwNjIgMTA0OS4xMDE1NjIgMzMxLjk2NDg0NCAxMDM1LjUwMzkwNiAzMzEuOTY0ODQ0IE0gMTIxMi44Mzk4NDQgMjI3LjgwMDc4MSBDIDEyMzIuNjMyODEyIDIyNy44MDA3ODEgMTI0Ni4wMjczNDQgMjQxLjE5NTMxMiAxMjQ2LjAyNzM0NCAyNjMuMzkwNjI1IEwgMTI0Ni4wMjczNDQgMzI4Ljk2NDg0NCBMIDEyMzEuMDM1MTU2IDMyOC45NjQ4NDQgTCAxMjMxLjAzNTE1NiAyNjcuNzg5MDYyIEMgMTIzMS4wMzUxNTYgMjUxLjM5NDUzMSAxMjIzLjgzNTkzOCAyNDEuNTk3NjU2IDEyMDguMjQyMTg4IDI0MS41OTc2NTYgQyAxMTkyLjI0NjA5NCAyNDEuNTk3NjU2IDExODIuMjUgMjUzLjE5MTQwNiAxMTgyLjI1IDI2OS45ODgyODEgTCAxMTgyLjI1IDMyOC45NjQ4NDQgTCAxMTY3LjQ1NzAzMSAzMjguOTY0ODQ0IEwgMTE2Ny40NTcwMzEgMjY3Ljc4OTA2MiBDIDExNjcuNDU3MDMxIDI1MS4zOTQ1MzEgMTE2MC4wNTg1OTQgMjQxLjU5NzY1NiAxMTQ0LjQ2NDg0NCAyNDEuNTk3NjU2IEMgMTEyOC40NzI2NTYgMjQxLjU5NzY1NiAxMTE4LjQ3NjU2MiAyNTMuOTkyMTg4IDExMTguNDc2NTYyIDI2OS45ODgyODEgTCAxMTE4LjQ3NjU2MiAzMjguOTY0ODQ0IEwgMTEwMy42Nzk2ODggMzI4Ljk2NDg0NCBMIDExMDMuNjc5Njg4IDIzMC42MDE1NjIgTCAxMTE3Ljg3NSAyMzAuNjAxNTYyIEwgMTExNy44NzUgMjQ0LjE5NTMxMiBDIDExMTcuODc1IDI0NS43OTY4NzUgMTExOS40NzY1NjIgMjQ1Ljk5NjA5NCAxMTIwLjI3MzQzOCAyNDQuNzk2ODc1IEMgMTEyOC4yNjk1MzEgMjMxLjgwMDc4MSAxMTM3LjQ2ODc1IDIyNy44MDA3ODEgMTE0OS4yNjU2MjUgMjI3LjgwMDc4MSBDIDExNjEuNjYwMTU2IDIyNy44MDA3ODEgMTE3Mi4yNTM5MDYgMjMzLjgwMDc4MSAxMTc4LjY1MjM0NCAyNDYuNTkzNzUgQyAxMTc5LjI1MzkwNiAyNDcuNTkzNzUgMTE4MC44NTE1NjIgMjQ3Ljc5Mjk2OSAxMTgxLjQ1MzEyNSAyNDYuNTkzNzUgQyAxMTg4LjY0ODQzOCAyMzMuNjAxNTYyIDExOTkuMjQ2MDk0IDIyNy44MDA3ODEgMTIxMi44Mzk4NDQgMjI3LjgwMDc4MSBNIDk3NS4zMjgxMjUgMzE1LjU3MDMxMiBMIDk4Ny43MjI2NTYgMzE1LjU3MDMxMiBMIDk4Ny43MjI2NTYgMzI4Ljk2NDg0NCBMIDk3NS41MjczNDQgMzI4Ljk2NDg0NCBDIDk1Mi4xMzY3MTkgMzI4Ljk2NDg0NCA5NDQuMzM5ODQ0IDMxOC43Njk1MzEgOTQ0LjMzOTg0NCAyOTkuNTc0MjE5IEwgOTQ0LjMzOTg0NCAyNDUuOTk2MDk0IEMgOTQ0LjMzOTg0NCAyNDQuNTk3NjU2IDk0My41MzkwNjIgMjQzLjk5NjA5NCA5NDIuMTQwNjI1IDI0My45OTYwOTQgTCA5MjcuNTQ2ODc1IDI0My45OTYwOTQgTCA5MjcuNTQ2ODc1IDIzMC42MDE1NjIgTCA5NDIuMTQwNjI1IDIzMC42MDE1NjIgQyA5NDMuNTM5MDYyIDIzMC42MDE1NjIgOTQ0LjMzOTg0NCAyMzAgOTQ0LjMzOTg0NCAyMjguNjAxNTYyIEwgOTQ0LjMzOTg0NCAyMDIuMDExNzE5IEwgOTU5LjEzMjgxMiAyMDIuMDExNzE5IEwgOTU5LjEzMjgxMiAyMjguNjAxNTYyIEMgOTU5LjEzMjgxMiAyMzAgOTU5LjczNDM3NSAyMzAuNjAxNTYyIDk2MS4xMzI4MTIgMjMwLjYwMTU2MiBMIDk4Ny43MjI2NTYgMjMwLjYwMTU2MiBMIDk4Ny43MjI2NTYgMjQzLjk5NjA5NCBMIDk2MS4xMzI4MTIgMjQzLjk5NjA5NCBDIDk1OS43MzQzNzUgMjQzLjk5NjA5NCA5NTkuMTMyODEyIDI0NC41OTc2NTYgOTU5LjEzMjgxMiAyNDUuOTk2MDk0IEwgOTU5LjEzMjgxMiAzMDEuMTc1NzgxIEMgOTU5LjEzMjgxMiAzMTIuOTY4NzUgOTYxLjUzMTI1IDMxNS41NzAzMTIgOTc1LjMyODEyNSAzMTUuNTcwMzEyIE0gNzQ2LjAxMTcxOSAyODMuOTgwNDY5IEMgNzQ1LjAxMTcxOSAyODMuOTgwNDY5IDc0NC40MTQwNjIgMjg0Ljc4MTI1IDc0NC40MTQwNjIgMjg1Ljc4MTI1IEMgNzQ1LjYxMzI4MSAzMDQuMzc1IDc1OC44MDg1OTQgMzE4LjU3MDMxMiA3NzcgMzE4LjU3MDMxMiBDIDc5MS43OTY4NzUgMzE4LjU3MDMxMiA4MDAuNzkyOTY5IDMxMi4zNzEwOTQgODA1LjM5MDYyNSAzMDIuNTc0MjE5IEwgODIwLjE4MzU5NCAzMDIuNTc0MjE5IEMgODE0LjU4NTkzOCAzMjEuNzY1NjI1IDc5Ny43OTI5NjkgMzMxLjk2NDg0NCA3NzcgMzMxLjk2NDg0NCBDIDc0Ny4wMTE3MTkgMzMxLjk2NDg0NCA3MjkuNjE3MTg4IDMxMC4zNzEwOTQgNzI5LjYxNzE4OCAyNzkuMTgzNTk0IEMgNzI5LjYxNzE4OCAyNTAuMzk0NTMxIDc0OS42MDkzNzUgMjI4IDc3Ni44MDA3ODEgMjI4IEMgODAyLjk5MjE4OCAyMjggODIxLjM4MjgxMiAyNDYuNTkzNzUgODIxLjM4MjgxMiAyNzMuOTg0Mzc1IEMgODIxLjM4MjgxMiAyNzYuOTg0Mzc1IDgyMS4zODI4MTIgMjgwLjE4MzU5NCA4MjAuOTg0Mzc1IDI4My45ODA0NjkgWiBNIDc0Ni4wMTE3MTkgMjgzLjk4MDQ2OSAiLz4KPC9zdmc+Cg==" alt="Solventum">
     <div class="ttl">El Expreso de la Salud</div>
     <span class="sync" id="sync" aria-live="polite"></span>
-    <div class="chip hidden" id="chip"><img id="chipImg" alt=""><span id="chipName"></span><b id="chipPts">0</b></div>
+    <div class="chip hidden" id="chip"><img id="chipImg" alt=""><span id="chipName"></span><b id="chipPts">0</b><span id="chipIns" class="cins"></span></div>
   </header>
   <nav class="demo" id="demobar" aria-label="Navegación del demo">
     <span>Demo</span>
@@ -404,7 +406,7 @@ const L="ABCD";
 function points(){let p=(S.entry||0)+(S.exit||0);for(const k in S.cars){p+=S.cars[k].total||0}return p}
 function ticketNo(){let h=7;for(const ch of (S.avatar||""))h=(h*31+ch.charCodeAt(0))%997;return String(h).padStart(3,"0")}
 function chip(){const c=$("#chip");if(!S.avatar){c.classList.add("hidden");return}
-  c.classList.remove("hidden");syncBadge();$("#chipImg").src=avImg(S.avatar);$("#chipName").textContent=(S.avatar||"").split(" ")[0];$("#chipPts").textContent=fmt(points())+" pts"}
+  c.classList.remove("hidden");syncBadge();$("#chipImg").src=avImg(S.avatar);$("#chipName").textContent=(S.avatar||"").split(" ")[0];$("#chipPts").textContent=fmt(points())+" pts";const wn=Object.keys(S.cars||{}).filter(k=>S.cars[k].won);$("#chipIns").innerHTML=wn.length?`<img src="${A["pin"+wn[wn.length-1]]}" alt=""><em>${wn.length}</em>`:"";$("#chipIns").title=wn.length+(wn.length===1?" insignia ganada":" insignias ganadas")}
 function avImg(n){return S.avatarImg||""}
 function go(s){if(typeof stopTimers==="function")stopTimers();S.scene=s;render();window.scrollTo({top:0});if(s==="mapa"&&typeof syncPending==="function")syncPending()}
 document.querySelectorAll(".demo button").forEach(b=>b.onclick=()=>{
@@ -791,27 +793,29 @@ function vagon(){
   const next=n=>{S.step=n;setProg(c.n,n);vagon()};
 
   if(S.step===0&&!T.seen){
-    st.innerHTML=`${pasHTML(c.n,true)}${cdHTML()}<button class="btn" id="seen">Ya conocemos el caso · ir a la pregunta individual</button>`;
+    st.innerHTML=`${pasHTML(c.n,true)}${cdHTML()}<button class="btn" id="seen">Ya conocemos el caso · ir a la pregunta individual</button><button class="btn ghost" id="vback">Volver al andén · me equivoqué de vagón</button>`;
+    $("#vback").onclick=()=>go("mapa");
     poll(r=>{showCD(r,"individual");if(r.individual!=null&&T.ind==null){T.ind=r.individual;T.seen=true;next(1)}});
     $("#seen").onclick=()=>{T.seen=true;vagon();window.scrollTo(0,0)};
     return;
   }
   if(S.step===0){
     st.innerHTML=`${pasHTML(c.n,false)}${cdHTML()}
-      <div class="card"><div class="qhead"><span class="kicker">Pregunta individual · responde sin consultar</span><span class="note">4 pts</span></div>
+      <div class="card"><div class="qhead"><span class="kicker">Pregunta individual · responde sin consultar</span><span class="note">5 pts</span></div>
       <p class="q">${c.iq}</p><div class="opts">${c.io.map((o,i)=>`<button class="opt" data-i="${i}"><b>${L[i]}</b><span>${o}</span></button>`).join("")}</div>
-      <div class="feedback" aria-live="polite"></div></div>`;
+      <div class="feedback" aria-live="polite"></div></div><button class="btn ghost" id="vback">Volver al andén · me equivoqué de vagón</button>`;
+    $("#vback").onclick=()=>go("mapa");
     poll(r=>{showCD(r,"individual");if(r.individual!=null&&T.ind==null){T.ind=r.individual;next(1)}});
-    st.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,ok=i===c.ia;T.ind=ok?4:0;
+    st.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,ok=i===c.ia;T.ind=ok?5:0;
       st.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(!EVENTO&&+x.dataset.i===c.ia)x.classList.add("ok")});
       const f=st.querySelector(".feedback");
       if(EVENTO){b.classList.add("pick");f.className="feedback";f.textContent="Respuesta registrada";saveInd(c.n,T.ind)}
-      else{if(!ok)b.classList.add("no");f.className="feedback "+(ok?"ok":"no");f.textContent=ok?"Correcta · +4 puntos":"Incorrecta · 0 puntos"}
+      else{if(!ok)b.classList.add("no");f.className="feedback "+(ok?"ok":"no");f.textContent=ok?"Correcta · +5 puntos":"Incorrecta · 0 puntos"}
       setTimeout(()=>next(1),EVENTO?700:1100)});
   }
 
   if(S.step===1){
-    st.innerHTML=`${pasHTML(c.n,false)}${cdHTML()}<div class="card stack"><div class="qhead"><span class="kicker">Pregunta grupal · 3 minutos</span><span class="note">4 pts para todo el grupo</span></div>
+    st.innerHTML=`${pasHTML(c.n,false)}${cdHTML()}<div class="card stack"><div class="qhead"><span class="kicker">Pregunta grupal · 3 minutos</span><span class="note">5 pts para todo el grupo</span></div>
       <p class="q" style="margin:0">${c.gq}</p>
       <label for="ga" class="note">Respuesta del grupo: la escribe y la envía una sola persona del grupo</label>
       <textarea id="ga" placeholder="Escriban aquí la respuesta acordada"></textarea>
@@ -819,7 +823,7 @@ function vagon(){
       ${EVENTO?`<button class="btn ghost" id="gnext">Continuar ${c.n===1?"a las fichas":"al rompecabezas"}</button>`:
       `<div class="facil"><div class="kicker">Simulación del facilitador Solventum · solo en el demo</div><div style="font-size:14px;margin-top:6px">En el evento esto lo hace el facilitador Solventum desde su panel. Respuestas válidas:</div>
         <ul>${c.gk.map(k=>`<li>${k}</li>`).join("")}</ul>
-        <div class="two" style="margin-top:12px"><button class="btn okb" id="gy">Correcta · 4 pts</button><button class="btn nob" id="gn">Incorrecta · 0</button></div></div>`}`;
+        <div class="two" style="margin-top:12px"><button class="btn okb" id="gy">Correcta · 5 pts</button><button class="btn nob" id="gn">Incorrecta · 0</button></div></div>`}`;
     if(EVENTO){
       poll(r=>{showCD(r,"grupal");if(r.respuesta&&!$("#ga").value&&document.activeElement!==$("#ga")){$("#ga").value=r.respuesta}
         if(r.respuesta)$("#gmsg").textContent="Respuesta del grupo enviada. El facilitador Solventum la está validando.";});
@@ -827,19 +831,19 @@ function vagon(){
         $("#gsend").disabled=true;try{await rpc("enviar_grupal",{p_id:S.pid,p_token:S.ptoken,p_vagon:c.n,p_texto:v});$("#gmsg").textContent="Respuesta del grupo enviada. El facilitador Solventum la está validando."}
         catch(e){queue("enviar_grupal",{p_id:S.pid,p_token:S.ptoken,p_vagon:c.n,p_texto:v});$("#gmsg").textContent="Sin conexión: se enviará al volver la señal."}$("#gsend").disabled=false};
       $("#gnext").onclick=()=>next(2);
-    }else{$("#gy").onclick=()=>{T.grp=4;next(2)};$("#gn").onclick=()=>{T.grp=0;next(2)}}
+    }else{$("#gy").onclick=()=>{T.grp=5;next(2)};$("#gn").onclick=()=>{T.grp=0;next(2)}}
   }
 
   if(S.step===2){
     const F=c.n===1;
-    st.innerHTML=`${cdHTML()}<div class="card stack"><div class="qhead"><span class="kicker">${F?"Fichas de valoración sobre la mesa":"Rompecabezas en acrílico · 35 × 25 cm"}</span><span class="note">4 pts · máximo 3 min</span></div>
+    st.innerHTML=`${cdHTML()}<div class="card stack"><div class="qhead"><span class="kicker">${F?"Fichas de valoración sobre la mesa":"Rompecabezas en acrílico · 35 × 25 cm"}</span><span class="note">2 pts · máximo 3 min</span></div>
       ${F?`<div class="mesa" id="pz"></div><button class="btn ghost" id="shuf" style="align-self:flex-start">Desordenar las fichas</button>`:`<div class="puzzle pz2" id="pz">${pzSVG(c.n)}<div class="words">${c.w.map(w=>`<span>${w}</span>`).join("")}</div></div>`}
-      <p class="note" style="margin:0">${F?"Las fichas están en desorden sobre la mesa. Organícenlas bajo los 7 títulos según el caso de Luis Lorenzo y descarten las que no corresponden. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 4 puntos.":"Armen el rompecabezas en la mesa. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 4 puntos. Al terminar, lean en voz alta las palabras clave."}</p></div>
+      <p class="note" style="margin:0">${F?"Las fichas están en desorden sobre la mesa. Organícenlas bajo los 7 títulos según el caso de Luis Lorenzo y descarten las que no corresponden. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 2 puntos.":"Armen el rompecabezas en la mesa. El facilitador Solventum toma el tiempo: tienen hasta 3 minutos para ganar los 2 puntos. Al terminar, lean en voz alta las palabras clave."}</p></div>
       ${EVENTO?`<button class="btn ghost" id="pnext">Ver resultado del vagón</button>`:
       `<div class="facil"><div class="kicker">Simulación del facilitador Solventum · solo en el demo</div>
         <div class="timer" id="tm">3:00</div><div class="ring"><i id="rg" style="width:100%"></i></div>
         <button class="btn" id="start" style="margin-top:10px">Iniciar cronómetro</button>
-        <div class="stack" style="margin-top:8px;gap:8px"><button class="btn okb" id="p3" disabled>Completo en 3 min o menos · 4</button><button class="btn nob" id="pn" disabled>No completó · 0</button></div></div>`}`;
+        <div class="stack" style="margin-top:8px;gap:8px"><button class="btn okb" id="p3" disabled>Completo en 3 min o menos · 2</button><button class="btn nob" id="pn" disabled>No completó · 0</button></div></div>`}`;
     if(F){mesa($("#pz"));$("#shuf").onclick=()=>mesa($("#pz"))}
     const pieces=[...st.querySelectorAll("#pz .pc")].sort(()=>Math.random()-.5);
     if(EVENTO){
@@ -853,15 +857,15 @@ function vagon(){
           $("#tm").className="timer"+(left<=0?" over":left<=60?" warn":"");if(k<pieces.length&&left%2===0)pieces[k++].classList.add("in");
           if(left<=0){clearInterval(timerId);timerId=null;$("#p3").disabled=true}},250)};
       const fin=(p,b)=>{stopTimers();T.puz=p;T.bono=b;if(p){pieces.forEach(x=>x.classList.add("in"));$("#pz").classList.add("solved")}setTimeout(()=>{finishCar(T);S.step=3;vagon()},p?1200:300)};
-      $("#p3").onclick=()=>fin(4,false);$("#pn").onclick=()=>fin(0,false);
+      $("#p3").onclick=()=>fin(2,false);$("#pn").onclick=()=>fin(0,false);
     }
   }
 
   if(S.step===3){
     const draw=r=>{st.innerHTML=`<div class="card verdict">${r.won?`<img src="${A["pin"+c.n]}" alt="Pin del vagón ${c.n}">`:""}
       <div class="tot">${fmt(r.total)}<span style="font-size:20px;color:var(--muted)"> / 12</span></div>
-      <h2 style="font-size:20px;margin:6px 0">${r.won?"Insignia ganada":"Vagón en tránsito"}</h2>
-      <p class="lead" style="margin:0 0 14px">${r.won?"El facilitador Solventum perfora tu tiquete y te entrega el pin.":(r.ind+r.grp+r.puz>=8?"Sumaste 8 o más, pero la pregunta individual es obligatoria para ganar el pin.":"Necesitas 8 de 12 y la pregunta individual correcta para ganar el pin.")}</p>
+      <h2 style="font-size:20px;margin:6px 0">${r.won?"¡Ganaste una insignia!":"Vagón en tránsito"}</h2>
+      <p class="lead" style="margin:0 0 14px">${r.won?"La insignia de este vagón ya está en tu tiquete.":"Necesitas de 10 a 12 puntos para ganar la insignia del vagón."}</p>
       <div class="score3"><div><b>${r.ind}</b>Individual</div><div><b>${r.grp}</b>Grupal</div><div><b>${r.puz}</b>${c.n===1?"Fichas":"Rompecabezas"}</div></div></div>
       <button class="btn" id="back">Volver al andén</button>`;$("#back").onclick=()=>go("mapa")};
     if(S.cars[c.n])draw(S.cars[c.n]);
@@ -874,7 +878,7 @@ function vagon(){
   }
 }
 function finishCar(T){const c=S.cur;const base=(T.ind||0)+(T.grp||0)+(T.puz||0);const total=base;
-  S.cars[c]={ind:T.ind||0,grp:T.grp||0,puz:T.puz||0,bono:!!T.bono,total,won:base>=8&&T.ind===4};delete S.prog[c];saveSes();chip()}
+  S.cars[c]={ind:T.ind||0,grp:T.grp||0,puz:T.puz||0,bono:!!T.bono,total,won:base>=10};delete S.prog[c];saveSes();chip()}
 async function syncPending(){if(!ONLINE())return;for(const n of Object.keys(S.prog)){if(S.prog[n]<1)continue;try{const r=await rpc("estado_vagon",{p_id:S.pid,p_token:S.ptoken,p_vagon:+n});
   if(r.grupal!=null&&r.rompecabezas!=null){const keep=S.cur;S.cur=+n;finishCar({ind:r.individual??0,grp:r.grupal,puz:r.rompecabezas,bono:!!r.bono});S.cur=keep;if(S.scene==="mapa")mapa()}}catch(e){}}}
 

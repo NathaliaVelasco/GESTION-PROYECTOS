@@ -152,10 +152,10 @@ function calc(D){
   const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
   const P=D.map(p=>{const ent=p.entrada||[],sal=p.salida||[],vag=p.vagones||[];
     const e=ent.filter(x=>x.ok).length*PQ,s=sal.filter(x=>x.ok).length*PQ,base=vag.reduce((a,x)=>a+x.ind+x.grp+x.puz,0);
-    return{...p,e,s,total:e+s+base,ins:vag.filter(x=>x.ind===4&&x.ind+x.grp+x.puz>=8).length,hasE:ent.length>0,hasS:sal.length>0}});
+    return{...p,e,s,total:e+s+base,ins:vag.filter(x=>x.ind+x.grp+x.puz>=10).length,hasE:ent.length>0,hasS:sal.length>0}});
   const wE=P.filter(p=>p.hasE),wS=P.filter(p=>p.hasS),both=P.filter(p=>p.hasE&&p.hasS);
   const preg=PREG.map((t,k)=>{const a=wE.map(p=>p.entrada.find(x=>x.q===k)).filter(Boolean),b=wS.map(p=>p.salida.find(x=>x.q===k)).filter(Boolean);return{t,e:a.length?a.filter(x=>x.ok).length/a.length:0,s:b.length?b.filter(x=>x.ok).length/b.length:0}});
-  const vag=VCORTO.map((t,k)=>{const rows=P.map(p=>(p.vagones||[]).find(x=>x.v===k+1)).filter(Boolean);return{t,n:rows.length,won:rows.filter(x=>x.ind===4&&x.ind+x.grp+x.puz>=8).length}});
+  const vag=VCORTO.map((t,k)=>{const rows=P.map(p=>(p.vagones||[]).find(x=>x.v===k+1)).filter(Boolean);return{t,n:rows.length,won:rows.filter(x=>x.ind+x.grp+x.puz>=10).length}});
   const grp=GROUPS.map((g,i)=>{const m=P.filter(p=>p.grupo===i);return{g,n:m.length,total:avg(m.map(p=>p.total)),ins:avg(m.map(p=>p.ins))}}).filter(x=>x.n).sort((a,b)=>b.total-a.total);
   return{P,n:P.length,salieron:wS.length,ins:P.reduce((a,p)=>a+p.ins,0),eAvg:avg(wE.map(p=>p.e)),sAvg:avg(wS.map(p=>p.s)),preg,vag,grp,
     completos:P.filter(p=>p.ins===6),mejora:[...both].sort((a,b)=>(b.s-b.e)-(a.s-a.e)||b.total-a.total).slice(0,3),top:[...P].sort((a,b)=>b.total-a.total).slice(0,3)};
@@ -180,7 +180,7 @@ function slides(R){
 `${head("Ranking por grupo"+ex,"El podio de los vagones","Puntaje promedio sobre 100")}
  <div class="body">${R.grp.length?`<div class="podium">${R.grp.map((x,i)=>`<div class="col"><div class="pos">${i+1}.º</div>
    <div class="bar" data-h="${Math.max(12,x.total)}" style="height:0;background:${x.g[1]}">${fmt(x.total)}</div><div class="nm">${x.g[0]}</div><div class="sm">${x.n} personas · ${fmt(x.ins)} insignias</div></div>`).join("")}</div>`:`<div class="empty">Todavía no hay resultados por grupo.</div>`}</div>`,
-`${head("Insignias por vagón"+ex,"Cada vagón entrega su propio pin","Se gana con 8 de 12 puntos y la pregunta individual correcta")}
+`${head("Insignias por vagón"+ex,"Cada vagón entrega su propio pin","Se gana con 10 a 12 puntos")}
  <div class="body"><div class="pins">${R.vag.map((v,k)=>`<div class="pin"><img src="${PINS[k]}" alt=""><div class="p">${v.n?pct(v.won/v.n):0} %</div><div class="t">${v.t}</div><div class="s">${v.won} de ${v.n}</div></div>`).join("")}</div></div>`,
 `${head("Reconocimientos"+ex,"Pasajeros destacados","")}
  <div class="body"><div class="rec">
